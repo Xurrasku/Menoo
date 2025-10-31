@@ -1,0 +1,190 @@
+{
+  "navigation": {
+    "brand": "nordQR",
+    "menus": "Menús",
+    "statistics": "Estadístiques",
+    "qr": "Codi QR",
+    "settings": "Configuració",
+    "viewMenu": "Veure menú",
+    "actions": "Accions",
+    "newMenu": "Nou menú",
+    "upgrade": "Millora el pla"
+  },
+  "dashboard": {
+    "menusTitle": "Menús",
+    "menusSubtitle": "Gestiona els menús del teu restaurant des d'un únic panell.",
+    "addMenu": "Afegeix menú",
+    "menuCategories": "{count, plural, one {# categoria} other {# categories}}",
+    "table": {
+      "name": "Nom",
+      "items": "Plats",
+      "availability": "Disponibilitat",
+      "visibility": "Visibilitat"
+    },
+    "availability": {
+      "everyday": "Cada dia"
+    },
+    "visibility": {
+      "visible": "Publicat",
+      "hidden": "Ocult"
+    },
+    "userMenu": {
+      "profile": "Perfil",
+      "preferences": "Preferències",
+      "help": "Centre d'ajuda",
+      "signOut": "Tancar sessió"
+    },
+    "rowActions": {
+      "edit": "Edita",
+      "duplicate": "Duplica",
+      "archive": "Arxiva"
+    },
+    "menuDetail": {
+      "back": "Els meus menús",
+      "title": "El nostre menú",
+      "untitledCategory": "Categoria sense títol",
+      "collapse": "Contraure",
+      "emptyDescription": "Els plats d'aquesta categoria apareixeran aquí.",
+      "newDish": "Nou plat",
+      "newCategory": "Nova categoria",
+      "categoryModal": {
+        "title": "Nova categoria",
+        "nameLabel": "Nom de la categoria",
+        "descriptionLabel": "Descripció",
+        "save": "Desa",
+        "cancel": "Cancel·la"
+      },
+      "dishModal": {
+        "title": "Nou plat",
+        "nameLabel": "Nom del plat",
+        "descriptionLabel": "Descripció",
+        "priceLabel": "Preu",
+        "priceHint": "Afegeix variants",
+        "imageUpload": "Puja una imatge",
+        "imageHelper": "o fes clic per cercar un fitxer",
+        "labelsTitle": "Etiquetes",
+        "allergensTitle": "Al·lèrgens",
+        "save": "Desa",
+        "cancel": "Cancel·la"
+      }
+    },
+    "qr": {
+      "title": "Codi QR",
+      "subtitle": "Genera i personalitza codis QR per als teus menús en segons.",
+      "copyLink": "Copiar enllaç",
+      "copied": "Enllaç copiat",
+      "frame": {
+        "title": "Marc",
+        "subtitle": "Decideix on es mostra l'etiqueta al voltant del codi.",
+        "typeLabel": "Tipus de marc",
+        "options": {
+          "bottom": "Inferior",
+          "top": "Superior",
+          "none": "Sense marc"
+        },
+        "backgroundColor": "Color de fons",
+        "textLabel": "Text",
+        "textColor": "Color del text",
+        "fontFamily": "Tipografia",
+        "textSize": "Mida del text"
+      },
+      "style": {
+        "title": "Forma i color",
+        "subtitle": "Ajusta l'aparença del teu codi QR.",
+        "qrColor": "Color del codi",
+        "qrBackground": "Color de fons del codi"
+      },
+      "download": {
+        "presetLabel": "Format de descàrrega",
+        "cta": "Descarregar QR",
+        "pdfSmall": "PDF amb 16 QR petits",
+        "pdfSmallDescription": "Perfecte per a cartes plastificades o displays de taula.",
+        "pdfLarge": "PDF amb 4 QR grans",
+        "pdfLargeDescription": "Ideal per a pòsters o cartelleria d'aparador.",
+        "stickers": "Pack d'adhesius",
+        "stickersDescription": "Mides pensades per imprimir adhesius resistents.",
+        "tableDisplay": "Display de taula",
+        "tableDisplayDescription": "Mesures preparades per a porta-menús verticals.",
+        "svg": "Fitxer vectorial (SVG)",
+        "svgDescription": "Qualitat màxima per a impremtes i dissenyadors."
+      },
+      "promo": {
+        "title": "Demana els teus adhesius QR gratis",
+        "description": "T'enviem adhesius plastificats perquè els col·loquis a les taules del teu restaurant.",
+        "note": "Només necessites un menú publicat amb més de 20 plats."
+      },
+      "reset": "Reiniciar ajustos",
+      "previewAlt": "Previsualització del codi QR"
+    }
+  },
+  "settings": {
+    "subtitle": "Configura la informació del restaurant, les integracions i les preferències d'idioma.",
+    "badges": {
+      "soon": "Aviat"
+    },
+    "sections": {
+      "general": {
+        "title": "General",
+        "description": "Tots els detalls sobre el teu local."
+      },
+      "appearance": {
+        "title": "Aparença",
+        "description": "Personalitza l'aspecte i l'aparença dels menús."
+      },
+      "languages": {
+        "title": "Idiomes del menú",
+        "description": "Presenta els menús en idiomes addicionals."
+      },
+      "reviews": {
+        "title": "Valoracions",
+        "description": "Rep ressenyes dels teus clients."
+      },
+      "wifi": {
+        "title": "Wi-Fi",
+        "description": "Permet que els teus clients es connectin a la teva xarxa Wi-Fi."
+      },
+      "extra": {
+        "title": "Informació extra",
+        "description": "Mostra un text amb informació addicional a la pàgina pública."
+      },
+      "social": {
+        "title": "Xarxes socials",
+        "description": "Mostra als teus clients els enllaços als teus perfils."
+      }
+    },
+    "preview": {
+      "time": "05:28 PM",
+      "restaurant": "marcoslol",
+      "section": "Aperitius",
+      "cta": "Valora la teva experiència",
+      "items": {
+        "caprese": {
+          "name": "Amanida caprese",
+          "description": "Una amanida italiana senzilla amb tomàquet i mozzarella fresca."
+        },
+        "gazpacho": {
+          "name": "Gaspatxo",
+          "description": "Gaspatxo tradicional servit ben fred."
+        },
+        "onionRings": {
+          "name": "Anelles de ceba",
+          "description": "Anelles de ceba cruixents amb salsa de la casa."
+        }
+      }
+    }
+  },
+  "auth": {
+    "signIn": {
+      "title": "Accedeix al teu compte",
+      "subtitle": "Gestiona menús, QR i subscripcions des d'un únic panell.",
+      "cta": "Encara no tens compte?",
+      "ctaLink": "Crea'n un"
+    },
+    "signUp": {
+      "title": "Crea el teu compte",
+      "subtitle": "Digitalitza la carta del teu restaurant en minuts.",
+      "cta": "Ja tens compte?",
+      "ctaLink": "Inicia sessió"
+    }
+  }
+}

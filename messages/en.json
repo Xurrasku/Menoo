@@ -1,0 +1,190 @@
+{
+  "navigation": {
+    "brand": "nordQR",
+    "menus": "Menus",
+    "statistics": "Analytics",
+    "qr": "QR Code",
+    "settings": "Settings",
+    "viewMenu": "View menu",
+    "actions": "Actions",
+    "newMenu": "New menu",
+    "upgrade": "Upgrade plan"
+  },
+  "dashboard": {
+    "menusTitle": "Menus",
+    "menusSubtitle": "Manage your restaurant menus from a single dashboard.",
+    "addMenu": "Add menu",
+    "menuCategories": "{count, plural, one {# category} other {# categories}}",
+    "table": {
+      "name": "Name",
+      "items": "Dishes",
+      "availability": "Availability",
+      "visibility": "Visibility"
+    },
+    "availability": {
+      "everyday": "Every day"
+    },
+    "visibility": {
+      "visible": "Visible",
+      "hidden": "Hidden"
+    },
+    "userMenu": {
+      "profile": "Profile",
+      "preferences": "Preferences",
+      "help": "Help center",
+      "signOut": "Sign out"
+    },
+    "rowActions": {
+      "edit": "Edit",
+      "duplicate": "Duplicate",
+      "archive": "Archive"
+    },
+    "menuDetail": {
+      "back": "My menus",
+      "title": "Our menu",
+      "untitledCategory": "Untitled category",
+      "collapse": "Collapse",
+      "emptyDescription": "Dishes in this category will appear here.",
+      "newDish": "New dish",
+      "newCategory": "New category",
+      "categoryModal": {
+        "title": "New category",
+        "nameLabel": "Category name",
+        "descriptionLabel": "Description",
+        "save": "Save",
+        "cancel": "Cancel"
+      },
+      "dishModal": {
+        "title": "New dish",
+        "nameLabel": "Dish name",
+        "descriptionLabel": "Description",
+        "priceLabel": "Price",
+        "priceHint": "Add variants",
+        "imageUpload": "Upload an image",
+        "imageHelper": "or click to browse a file",
+        "labelsTitle": "Tags",
+        "allergensTitle": "Allergens",
+        "save": "Save",
+        "cancel": "Cancel"
+      }
+    },
+    "qr": {
+      "title": "QR Code",
+      "subtitle": "Generate and customize QR codes for your menus in seconds.",
+      "copyLink": "Copy link",
+      "copied": "Link copied",
+      "frame": {
+        "title": "Frame",
+        "subtitle": "Decide where the label is placed around the QR.",
+        "typeLabel": "Frame type",
+        "options": {
+          "bottom": "Bottom",
+          "top": "Top",
+          "none": "None"
+        },
+        "backgroundColor": "Background color",
+        "textLabel": "Text",
+        "textColor": "Text color",
+        "fontFamily": "Font family",
+        "textSize": "Text size"
+      },
+      "style": {
+        "title": "Shape & color",
+        "subtitle": "Adjust the visual style of your QR code.",
+        "qrColor": "Code color",
+        "qrBackground": "Code background"
+      },
+      "download": {
+        "presetLabel": "Download format",
+        "cta": "Download QR",
+        "pdfSmall": "PDF with 16 small QRs",
+        "pdfSmallDescription": "Perfect for laminated menus or table tents.",
+        "pdfLarge": "PDF with 4 large QRs",
+        "pdfLargeDescription": "Ideal for posters and storefront signage.",
+        "stickers": "Sticker pack",
+        "stickersDescription": "Sized to print durable adhesive stickers.",
+        "tableDisplay": "Table display",
+        "tableDisplayDescription": "Ready-to-print for upright table stands.",
+        "svg": "Vector file (SVG)",
+        "svgDescription": "Maximum quality for print shops and designers."
+      },
+      "promo": {
+        "title": "Request free QR stickers",
+        "description": "We ship laminated QR stickers for your tables at no extra cost.",
+        "note": "You only need one published menu with over 20 dishes."
+      },
+      "reset": "Reset settings",
+      "previewAlt": "QR code preview"
+    }
+  },
+  "settings": {
+    "subtitle": "Configure restaurant details, integrations, and language preferences.",
+    "badges": {
+      "soon": "Coming soon"
+    },
+    "sections": {
+      "general": {
+        "title": "General",
+        "description": "Keep every venue detail up to date."
+      },
+      "appearance": {
+        "title": "Appearance",
+        "description": "Customize the look and feel of your menus."
+      },
+      "languages": {
+        "title": "Menu languages",
+        "description": "Offer your menus in additional languages."
+      },
+      "reviews": {
+        "title": "Reviews",
+        "description": "Collect feedback from your guests."
+      },
+      "wifi": {
+        "title": "Wi-Fi",
+        "description": "Let guests connect to your Wi-Fi network."
+      },
+      "extra": {
+        "title": "Extra information",
+        "description": "Display additional notes on the public menu page."
+      },
+      "social": {
+        "title": "Social media",
+        "description": "Share links to your social profiles."
+      }
+    },
+    "preview": {
+      "time": "05:28 PM",
+      "restaurant": "marcoslol",
+      "section": "Starters",
+      "cta": "Rate your experience",
+      "items": {
+        "caprese": {
+          "name": "Caprese salad",
+          "description": "A simple Italian salad with tomatoes and fresh mozzarella."
+        },
+        "gazpacho": {
+          "name": "Gazpacho",
+          "description": "Traditional chilled tomato soup with herbs."
+        },
+        "onionRings": {
+          "name": "Onion rings",
+          "description": "Crispy onion rings served with house sauce."
+        }
+      }
+    }
+  },
+  "auth": {
+    "signIn": {
+      "title": "Sign in to your account",
+      "subtitle": "Manage menus, QR codes and billing from one place.",
+      "cta": "Don't have an account?",
+      "ctaLink": "Create one"
+    },
+    "signUp": {
+      "title": "Create your account",
+      "subtitle": "Launch your digital menu in under two minutes.",
+      "cta": "Already have an account?",
+      "ctaLink": "Sign in"
+    }
+  }
+}

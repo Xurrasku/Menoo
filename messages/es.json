@@ -1,0 +1,190 @@
+{
+  "navigation": {
+    "brand": "nordQR",
+    "menus": "Menús",
+    "statistics": "Estadísticas",
+    "qr": "Código QR",
+    "settings": "Configuración",
+    "viewMenu": "Ver menú",
+    "actions": "Acciones",
+    "newMenu": "Nuevo menú",
+    "upgrade": "Mejorar plan"
+  },
+  "dashboard": {
+    "menusTitle": "Menús",
+    "menusSubtitle": "Gestiona los menús de tu restaurante desde un único panel.",
+    "addMenu": "Añadir menú",
+    "menuCategories": "{count, plural, one {# categoría} other {# categorías}}",
+    "table": {
+      "name": "Nombre",
+      "items": "Platos",
+      "availability": "Disponibilidad",
+      "visibility": "Visibilidad"
+    },
+    "availability": {
+      "everyday": "Todos los días"
+    },
+    "visibility": {
+      "visible": "Publicado",
+      "hidden": "Oculto"
+    },
+    "userMenu": {
+      "profile": "Perfil",
+      "preferences": "Preferencias",
+      "help": "Centro de ayuda",
+      "signOut": "Cerrar sesión"
+    },
+    "rowActions": {
+      "edit": "Editar",
+      "duplicate": "Duplicar",
+      "archive": "Archivar"
+    },
+    "menuDetail": {
+      "back": "Mis menús",
+      "title": "Nuestro menú",
+      "untitledCategory": "Categoría sin título",
+      "collapse": "Contraer",
+      "emptyDescription": "Los platos de esta categoría aparecerán aquí.",
+      "newDish": "Nuevo plato",
+      "newCategory": "Nueva categoría",
+      "categoryModal": {
+        "title": "Nueva categoría",
+        "nameLabel": "Nombre de la categoría",
+        "descriptionLabel": "Descripción",
+        "save": "Guardar",
+        "cancel": "Cancelar"
+      },
+      "dishModal": {
+        "title": "Nuevo plato",
+        "nameLabel": "Nombre del plato",
+        "descriptionLabel": "Descripción",
+        "priceLabel": "Precio",
+        "priceHint": "Agregar variantes",
+        "imageUpload": "Sube una imagen",
+        "imageHelper": "o haz clic para buscar un archivo",
+        "labelsTitle": "Etiquetas",
+        "allergensTitle": "Alérgenos",
+        "save": "Guardar",
+        "cancel": "Cancelar"
+      }
+    },
+    "qr": {
+      "title": "Código QR",
+      "subtitle": "Genera y personaliza códigos QR para tus menús en cuestión de segundos.",
+      "copyLink": "Copiar enlace",
+      "copied": "Enlace copiado",
+      "frame": {
+        "title": "Marco",
+        "subtitle": "Elige cómo se muestra el texto alrededor del código.",
+        "typeLabel": "Tipo de marco",
+        "options": {
+          "bottom": "Inferior",
+          "top": "Superior",
+          "none": "Ninguno"
+        },
+        "backgroundColor": "Color de fondo",
+        "textLabel": "Texto",
+        "textColor": "Color del texto",
+        "fontFamily": "Fuente tipográfica",
+        "textSize": "Tamaño del texto"
+      },
+      "style": {
+        "title": "Forma y color",
+        "subtitle": "Personaliza la apariencia del código QR.",
+        "qrColor": "Color del código",
+        "qrBackground": "Color de fondo del código"
+      },
+      "download": {
+        "presetLabel": "Formato de descarga",
+        "cta": "Descargar QR",
+        "pdfSmall": "PDF con 16 QR pequeños",
+        "pdfSmallDescription": "Perfecto para cartas plastificadas o displays de sobremesa.",
+        "pdfLarge": "PDF con 4 QR grandes",
+        "pdfLargeDescription": "Ideal para pósters o cartelería en escaparates.",
+        "stickers": "Pack de adhesivos",
+        "stickersDescription": "Descarga pensado para imprimir pegatinas resistentes.",
+        "tableDisplay": "Display de mesa",
+        "tableDisplayDescription": "Medidas preparadas para porta-menús verticales.",
+        "svg": "Archivo vectorial (SVG)",
+        "svgDescription": "Máxima calidad para imprentas y trabajos gráficos."
+      },
+      "promo": {
+        "title": "Pide tus QR adhesivos gratis",
+        "description": "Te enviamos QR adhesivos plastificados para que los distribuyas en las mesas de tu restaurante.",
+        "note": "El único requisito es tener un menú con más de 20 platos."
+      },
+      "reset": "Reiniciar ajustes",
+      "previewAlt": "Previsualización del código QR"
+    }
+  },
+  "settings": {
+    "subtitle": "Configura la información del restaurante, integraciones y preferencias de idioma.",
+    "badges": {
+      "soon": "Próximamente"
+    },
+    "sections": {
+      "general": {
+        "title": "General",
+        "description": "Todos los detalles sobre tu local."
+      },
+      "appearance": {
+        "title": "Apariencia",
+        "description": "Personaliza el aspecto y la apariencia de los menús."
+      },
+      "languages": {
+        "title": "Idiomas del menú",
+        "description": "Presenta los menús en idiomas adicionales."
+      },
+      "reviews": {
+        "title": "Valoraciones",
+        "description": "Recibe reseñas de tus clientes."
+      },
+      "wifi": {
+        "title": "Wi-Fi",
+        "description": "Permite que tus clientes se conecten a tu red Wi-Fi."
+      },
+      "extra": {
+        "title": "Información extra",
+        "description": "Muestra un texto con información adicional en la página pública."
+      },
+      "social": {
+        "title": "Redes sociales",
+        "description": "Muestra a tus clientes los enlaces a tus perfiles."
+      }
+    },
+    "preview": {
+      "time": "05:28 PM",
+      "restaurant": "marcoslol",
+      "section": "Aperitivos",
+      "cta": "Valora tu experiencia",
+      "items": {
+        "caprese": {
+          "name": "Ensalada caprese",
+          "description": "Una sencilla ensalada italiana hecha con tomate y mozzarella fresca."
+        },
+        "gazpacho": {
+          "name": "Gazpacho",
+          "description": "Gazpacho tradicional servido bien frío."
+        },
+        "onionRings": {
+          "name": "Aros de cebolla",
+          "description": "Crujientes aros de cebolla con salsa casera."
+        }
+      }
+    }
+  },
+  "auth": {
+    "signIn": {
+      "title": "Accede a tu cuenta",
+      "subtitle": "Gestiona menús, QR y suscripciones desde un único panel.",
+      "cta": "¿No tienes cuenta?",
+      "ctaLink": "Crear una"
+    },
+    "signUp": {
+      "title": "Crea tu cuenta",
+      "subtitle": "Empieza a digitalizar tus menús en menos de dos minutos.",
+      "cta": "¿Ya tienes cuenta?",
+      "ctaLink": "Inicia sesión"
+    }
+  }
+}
