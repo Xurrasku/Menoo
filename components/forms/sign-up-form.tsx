@@ -2,11 +2,13 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
+import { GoogleIcon } from "@/components/icons/google";
 import {
   Form,
   FormControl,
@@ -16,7 +18,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AUTH_PROVIDERS, buildPostAuthRedirect } from "@/lib/auth/config";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+
+import { useOAuthHandler } from "./use-oauth-handler";
 
 const signUpSchema = z
   .object({
@@ -36,11 +41,18 @@ type SignUpValues = z.infer<typeof signUpSchema>;
 type SignUpFormProps = {
   locale: string;
   redirectTo?: string;
+  initialError?: string | null;
 };
 
-export function SignUpForm({ locale, redirectTo = "/dashboard/menus" }: SignUpFormProps) {
+export function SignUpForm({
+  locale,
+  redirectTo = "/dashboard/restaurant",
+  initialError = null,
+}: SignUpFormProps) {
   const router = useRouter();
-  const [serverMessage, setServerMessage] = useState<string | null>(null);
+  const t = useTranslations();
+  const tCommon = useTranslations("auth.common");
+  const [serverMessage, setServerMessage] = useState<string | null>(initialError);
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<SignUpValues>({
@@ -57,11 +69,14 @@ export function SignUpForm({ locale, redirectTo = "/dashboard/menus" }: SignUpFo
 
     try {
       const supabase = createSupabaseBrowserClient();
+      const targetPath = buildPostAuthRedirect({ locale, destination: redirectTo });
+      const callbackUrl = new URL(`${window.location.origin}/${locale}/auth/callback`);
+      callbackUrl.searchParams.set("redirect_to", targetPath);
       const { error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
         options: {
-          emailRedirectTo: `${window.location.origin}/${locale}/auth/callback`,
+          emailRedirectTo: callbackUrl.toString(),
         },
       });
 
@@ -71,7 +86,7 @@ export function SignUpForm({ locale, redirectTo = "/dashboard/menus" }: SignUpFo
       }
 
       startTransition(() => {
-        router.replace(`/${locale}${redirectTo.startsWith("/") ? redirectTo : `/${redirectTo}`}`);
+        router.replace(targetPath);
       });
     } catch (error) {
       setServerMessage(
@@ -82,11 +97,49 @@ export function SignUpForm({ locale, redirectTo = "/dashboard/menus" }: SignUpFo
     }
   };
 
+  const { isOAuthLoading, activeProvider, handleOAuthSignIn } = useOAuthHandler({
+    locale,
+    redirectTo,
+    onError: setServerMessage,
+    fallbackErrorMessage: tCommon("oauthError"),
+  });
+
   const isSubmitting = form.formState.isSubmitting || isPending;
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <div className="space-y-4">
+          {AUTH_PROVIDERS.map((provider) => {
+            const isProviderLoading = isOAuthLoading && activeProvider === provider.id;
+            const buttonLabel = isProviderLoading
+              ? tCommon("redirecting")
+              : t(provider.labelKey);
+
+            return (
+              <Button
+                key={provider.id}
+                type="button"
+                variant="outline"
+                className="w-full justify-center gap-3"
+                disabled={isOAuthLoading || isSubmitting}
+                onClick={() => handleOAuthSignIn(provider.id)}
+              >
+                <GoogleIcon className="h-4 w-4" aria-hidden />
+                <span>{buttonLabel}</span>
+              </Button>
+            );
+          })}
+
+          <div className="flex items-center gap-3">
+            <span className="h-px flex-1 bg-slate-200" />
+            <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              {tCommon("orContinueWithEmail")}
+            </span>
+            <span className="h-px flex-1 bg-slate-200" />
+          </div>
+        </div>
+
         <FormField
           control={form.control}
           name="email"

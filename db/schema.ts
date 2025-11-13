@@ -97,8 +97,11 @@ export const items = pgTable("items", {
   name: varchar("name", { length: 120 }).notNull(),
   description: text("description"),
   priceCents: integer("price_cents").notNull(),
+  currency: varchar("currency", { length: 3 }).default("EUR").notNull(),
   imageUrl: text("image_url"),
+  isVisible: boolean("is_visible").default(true).notNull(),
   tags: text("tags").array(),
+  allergens: text("allergens").array(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),

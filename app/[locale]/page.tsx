@@ -12,6 +12,6 @@ export default async function LocaleIndex({ params }: Params) {
   const { locale } = await params;
   const targetLocale = locale ?? defaultLocale;
 
-  redirect(`/${targetLocale}/dashboard/menus`);
+  redirect(`/${targetLocale}/dashboard/restaurant`);
 }
 

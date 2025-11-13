@@ -10,6 +10,19 @@
     "newMenu": "Nou menú",
     "upgrade": "Millora el pla"
   },
+  "restaurantOnboarding": {
+    "title": "Configura el teu restaurant",
+    "subtitle": "Farem servir aquestes dades per personalitzar l'experiència i crear el domini del menú.",
+    "nameLabel": "Nom del restaurant",
+    "namePlaceholder": "Ex. La Bodega d'en Joan",
+    "cuisineLabel": "Tipus de cuina (opcional)",
+    "addressLabel": "Adreça (opcional)",
+    "submitCta": "Desa i continua",
+    "domainPreviewLabel": "Domini del menú",
+    "redirecting": "Redirigint...",
+    "success": "Restaurant desat! Et portem als teus menús...",
+    "errorFallback": "No hem pogut desar el restaurant. Torna-ho a provar."
+  },
   "dashboard": {
     "menusTitle": "Menús",
     "menusSubtitle": "Gestiona els menús del teu restaurant des d'un únic panell.",
@@ -32,7 +45,10 @@
       "profile": "Perfil",
       "preferences": "Preferències",
       "help": "Centre d'ajuda",
-      "signOut": "Tancar sessió"
+      "signOut": "Tancar sessió",
+      "signingOut": "Tancant sessió...",
+      "signOutError": "No s'ha pogut tancar la sessió. Torna-ho a provar.",
+      "userFallback": "Usuari sense nom"
     },
     "rowActions": {
       "edit": "Edita",
@@ -47,6 +63,9 @@
       "emptyDescription": "Els plats d'aquesta categoria apareixeran aquí.",
       "newDish": "Nou plat",
       "newCategory": "Nova categoria",
+      "save": "Desa el menú",
+      "saving": "Desant...",
+      "saveError": "No hem pogut desar el menú. Torna-ho a provar.",
       "categoryModal": {
         "title": "Nova categoria",
         "nameLabel": "Nom de la categoria",
@@ -173,7 +192,40 @@
       }
     }
   },
+  "billing": {
+    "page": {
+      "title": "Facturació",
+      "subtitle": "Repassa els avantatges de Pro i gestiona la subscripció abans de fer el salt.",
+      "cta": "Veure avantatges Pro",
+      "backToSettings": "Torna a configuració",
+      "finePrint": "Stripe gestiona els pagaments de forma segura. Pots cancel·lar quan vulguis."
+    },
+    "pro": {
+      "name": "Pla Pro",
+      "price": "8 € / mes",
+      "description": "Desbloqueja menús il·limitats, analítiques avançades i codis QR personalitzats.",
+      "features": {
+        "menus": "Menús il·limitats",
+        "analytics": "Analítiques i estadístiques avançades",
+        "qr": "QR amb marca personalitzada",
+        "support": "Suport prioritari per correu"
+      },
+      "cta": "Millora a Pro",
+      "ctaShort": "Millora el pla",
+      "loading": "Obrint Stripe...",
+      "error": "No hem pogut iniciar el pagament. Torna-ho a provar més tard."
+    }
+  },
   "auth": {
+    "common": {
+      "continueWithGoogle": "Continua amb Google",
+      "redirecting": "Redirigint...",
+      "orContinueWithEmail": "O inicia sessió amb el teu email",
+      "oauthError": "No s'ha pogut iniciar sessió amb Google. Torna-ho a provar."
+    },
+    "providers": {
+      "google": "Continua amb Google"
+    },
     "signIn": {
       "title": "Accedeix al teu compte",
       "subtitle": "Gestiona menús, QR i subscripcions des d'un únic panell.",

@@ -10,6 +10,19 @@
     "newMenu": "New menu",
     "upgrade": "Upgrade plan"
   },
+  "restaurantOnboarding": {
+    "title": "Set up your restaurant",
+    "subtitle": "We use these details to personalise your menu experience and generate its domain.",
+    "nameLabel": "Restaurant name",
+    "namePlaceholder": "e.g. La Bodega de Juan",
+    "cuisineLabel": "Cuisine (optional)",
+    "addressLabel": "Address (optional)",
+    "submitCta": "Save and continue",
+    "domainPreviewLabel": "Your menu domain",
+    "redirecting": "Redirecting...",
+    "success": "Restaurant saved! Taking you to your menus...",
+    "errorFallback": "We couldn't save your restaurant. Please try again."
+  },
   "dashboard": {
     "menusTitle": "Menus",
     "menusSubtitle": "Manage your restaurant menus from a single dashboard.",
@@ -32,7 +45,10 @@
       "profile": "Profile",
       "preferences": "Preferences",
       "help": "Help center",
-      "signOut": "Sign out"
+      "signOut": "Sign out",
+      "signingOut": "Signing out...",
+      "signOutError": "We couldn't sign you out. Please try again.",
+      "userFallback": "Account"
     },
     "rowActions": {
       "edit": "Edit",
@@ -47,6 +63,9 @@
       "emptyDescription": "Dishes in this category will appear here.",
       "newDish": "New dish",
       "newCategory": "New category",
+      "save": "Save menu",
+      "saving": "Saving...",
+      "saveError": "We couldn't save the menu. Please try again.",
       "categoryModal": {
         "title": "New category",
         "nameLabel": "Category name",
@@ -173,7 +192,40 @@
       }
     }
   },
+  "billing": {
+    "page": {
+      "title": "Billing",
+      "subtitle": "Keep your Menoo subscription in sync and review the Pro benefits before upgrading.",
+      "cta": "See Pro benefits",
+      "backToSettings": "Back to settings",
+      "finePrint": "Billing is securely handled by Stripe. You can cancel anytime."
+    },
+    "pro": {
+      "name": "Pro plan",
+      "price": "€8 / month",
+      "description": "Unlock unlimited menus, advanced analytics, and custom QR designs.",
+      "features": {
+        "menus": "Unlimited menus",
+        "analytics": "Advanced analytics & insights",
+        "qr": "Custom QR branding",
+        "support": "Priority email support"
+      },
+      "cta": "Upgrade to Pro",
+      "ctaShort": "Upgrade plan",
+      "loading": "Opening Stripe...",
+      "error": "We couldn't start the checkout. Please try again later."
+    }
+  },
   "auth": {
+    "common": {
+      "continueWithGoogle": "Continue with Google",
+      "redirecting": "Redirecting...",
+      "orContinueWithEmail": "Or continue with your email",
+      "oauthError": "We couldn't complete the Google sign-in. Please try again."
+    },
+    "providers": {
+      "google": "Continue with Google"
+    },
     "signIn": {
       "title": "Sign in to your account",
       "subtitle": "Manage menus, QR codes and billing from one place.",

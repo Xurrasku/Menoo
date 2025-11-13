@@ -6,6 +6,9 @@ import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MainNav } from "@/components/dashboard/main-nav";
 import { UserMenu } from "@/components/dashboard/user-menu";
+import { getBillingPagePath } from "@/lib/billing/paths";
+import { DASHBOARD_EDGE_PADDING } from "@/lib/constants/layout";
+import { cn } from "@/lib/utils";
 
 type ShellLayoutProps = {
   children: ReactNode;
@@ -20,6 +23,11 @@ export default async function ShellLayout({ children, params }: ShellLayoutProps
     locale,
     namespace: "navigation",
   });
+  const tBilling = await getTranslations({
+    locale,
+    namespace: "billing",
+  });
+  const billingPath = getBillingPagePath(locale);
   const navItems = [
     {
       label: tNavigation("menus"),
@@ -50,10 +58,15 @@ export default async function ShellLayout({ children, params }: ShellLayoutProps
   return (
     <div>
       <header className="fixed inset-x-0 top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex h-20 w-full max-w-[1440px] items-center gap-6">
+        <div
+          className={cn(
+            "flex h-20 w-full items-center gap-6",
+            DASHBOARD_EDGE_PADDING
+          )}
+        >
           <Link
             href={`/${locale}/dashboard/menus`}
-            className="text-lg font-semibold text-primary"
+            className="flex-shrink-0 text-lg font-semibold text-primary"
           >
             <span className="rounded-full bg-primary/10 px-4 py-1 text-sm font-semibold uppercase tracking-wider">
               {tNavigation("brand")}
@@ -64,20 +77,24 @@ export default async function ShellLayout({ children, params }: ShellLayoutProps
             <MainNav items={navItems} />
           </div>
 
-          <div className="ml-auto flex items-center gap-3">
+          <div className="flex flex-shrink-0 items-center gap-3">
             <Button
+              asChild
               variant="ghost"
-              className="hidden items-center gap-2 rounded-full border border-primary/10 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary hover:bg-primary/15 md:flex"
+              size="sm"
+              className="hidden items-center gap-2 rounded-full border border-primary/10 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/15 md:flex"
             >
-              <Sparkles className="h-4 w-4" />
-              {tNavigation("upgrade")}
+              <Link href={billingPath}>
+                <Sparkles className="h-4 w-4" />
+                {tBilling("pro.ctaShort")}
+              </Link>
             </Button>
-            <UserMenu />
+            <UserMenu locale={locale} />
           </div>
         </div>
       </header>
 
-      <div className="pt-[120px]">{children}</div>
+      <main className={cn("pt-[120px]", DASHBOARD_EDGE_PADDING)}>{children}</main>
     </div>
   );
 }

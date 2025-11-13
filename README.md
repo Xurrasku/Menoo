@@ -60,3 +60,4 @@ See `.env.example` for all required keys: Supabase, Stripe, UploadThing, PostHog
 - Configure Stripe webhook to point at `/api/webhooks/stripe` (Node runtime only).
 - UploadThing requires `UPLOADTHING_APP_ID` and `UPLOADTHING_SECRET`.
 - Keep Supabase RLS policies aligned with the Drizzle schema for tenant isolation.
+- Enable the Google provider in Supabase Auth and configure the redirect URLs used in Google Cloud / Supabase (e.g. `http://localhost:3000/ca/auth/callback`, `http://localhost:3000/es/auth/callback`). Add one entry per supported locale in production as well.

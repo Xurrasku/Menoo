@@ -33,3 +33,8 @@ export function getMockMenuDetail(menuId: string): MenuDetail | null {
   return mockMenuDetails[menuId] ?? null;
 }
 
+
+
+
+
+

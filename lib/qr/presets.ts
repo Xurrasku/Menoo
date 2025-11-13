@@ -85,3 +85,8 @@ export function resolveDownloadConfig(
   } satisfies QrRequestConfig;
 }
 
+
+
+
+
+

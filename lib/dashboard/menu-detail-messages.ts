@@ -16,6 +16,9 @@ export async function getMenuDetailMessages(locale: string): Promise<MenuDetailM
     emptyDescription: tMenuDetail("emptyDescription"),
     newDish: tMenuDetail("newDish"),
     newCategory: tMenuDetail("newCategory"),
+    save: tMenuDetail("save"),
+    saving: tMenuDetail("saving"),
+    saveError: tMenuDetail("saveError"),
     categoryModal: {
       title: tMenuDetail("categoryModal.title"),
       nameLabel: tMenuDetail("categoryModal.nameLabel"),

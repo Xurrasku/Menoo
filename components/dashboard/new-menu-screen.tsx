@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { MenuNameEditor } from "@/components/dashboard/menu-name-editor";
 import { CategoryCard, type Dish as CategoryDish } from "@/components/dashboard/category-card";
 import { cn } from "@/lib/utils";
+import type { MenuDetailData } from "@/lib/menus/service";
 
 export type MenuDetailMessages = {
   back: string;
@@ -18,6 +20,9 @@ export type MenuDetailMessages = {
   newDish: string;
   newCategory: string;
   collapse: string;
+  save: string;
+  saving: string;
+  saveError: string;
   categoryModal: {
     title: string;
     nameLabel: string;
@@ -65,6 +70,7 @@ type DishFormState = {
 type NewMenuScreenProps = {
   locale: string;
   menu: MenuDetailMessages;
+  initialMenu?: MenuDetailData | null;
 };
 
 const LABEL_OPTIONS: Record<string, string[]> = {
@@ -173,10 +179,33 @@ const DEFAULT_CATEGORIES: Category[] = [
   },
 ];
 
-export function NewMenuScreen({ locale, menu }: NewMenuScreenProps) {
-  const [categories, setCategories] = useState<Category[]>(() =>
-    DEFAULT_CATEGORIES.map((category) => ({ ...category, dishes: [...category.dishes] }))
-  );
+export function NewMenuScreen({ locale, menu, initialMenu }: NewMenuScreenProps) {
+  const router = useRouter();
+  const [menuTitle, setMenuTitle] = useState(() => initialMenu?.name ?? menu.title);
+  const [categories, setCategories] = useState<Category[]>(() => {
+    if (initialMenu) {
+      return initialMenu.categories.map((category) => ({
+        id: category.id,
+        name: category.name,
+        description: category.description,
+        dishes: category.dishes.map((dish) => ({
+          id: dish.id,
+          name: dish.name,
+          description: dish.description,
+          price: dish.price,
+          currency: dish.currency,
+          thumbnail: dish.thumbnail,
+          isVisible: dish.isVisible,
+          labels: [...dish.labels],
+          allergens: [...dish.allergens],
+        })),
+      }));
+    }
+
+    return DEFAULT_CATEGORIES.map((category) => ({ ...category, dishes: [...category.dishes] }));
+  });
+  const [isSaving, setIsSaving] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
   const [isDishModalOpen, setDishModalOpen] = useState(false);
@@ -311,12 +340,13 @@ export function NewMenuScreen({ locale, menu }: NewMenuScreenProps) {
               </span>
             </span>
             <MenuNameEditor
-              menuId="new-menu"
-              initialValue={menu.title}
+              menuId={initialMenu?.id ?? "new-menu"}
+              initialValue={menuTitle}
               className="flex-1"
               textClassName="text-3xl font-semibold text-slate-900"
               inputClassName="text-3xl font-semibold text-slate-900"
               buttonClassName="p-1 text-slate-400 hover:text-slate-900"
+              onChange={(_menuId, value) => setMenuTitle(value)}
             />
           </div>
 
@@ -396,6 +426,26 @@ export function NewMenuScreen({ locale, menu }: NewMenuScreenProps) {
           </div>
         </div>
       </div>
+
+      <div className="sticky bottom-8 z-40 flex justify-end">
+        <Button
+          type="button"
+          className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/30 transition hover:bg-primary/90"
+          disabled={isSaving}
+          onClick={() => {
+            if (isSaving) return;
+            void handleSaveMenu();
+          }}
+        >
+          {isSaving ? menu.saving : menu.save}
+        </Button>
+      </div>
+
+      {errorMessage ? (
+        <div className="rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm font-medium text-destructive">
+          {errorMessage}
+        </div>
+      ) : null}
 
       {isCategoryModalOpen ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/30 backdrop-blur-sm">
@@ -599,7 +649,7 @@ export function NewMenuScreen({ locale, menu }: NewMenuScreenProps) {
                 className="rounded-full border border-slate-200 px-5 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
                 onClick={() => {
                   setDishModalOpen(false);
-                  resetDishModal();
+                  resetDishForm();
                 }}
               >
                 {menu.dishModal.cancel}
@@ -617,4 +667,55 @@ export function NewMenuScreen({ locale, menu }: NewMenuScreenProps) {
       ) : null}
     </div>
   );
+
+  async function handleSaveMenu() {
+    setErrorMessage(null);
+    setIsSaving(true);
+
+    try {
+      const payload = {
+        name: menuTitle.trim() || menu.title,
+        categories: categories.map((category) => ({
+          id: category.id,
+          name: category.name,
+          description: category.description,
+          dishes: category.dishes.map((dish) => ({
+            id: dish.id,
+            name: dish.name,
+            description: dish.description,
+            price: dish.price,
+            currency: dish.currency,
+            thumbnail: dish.thumbnail,
+            isVisible: dish.isVisible,
+            labels: dish.labels,
+            allergens: dish.allergens,
+          })),
+        })),
+      };
+
+      const response = await fetch("/api/menus", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const error = (await response.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(error?.error ?? response.statusText);
+      }
+
+      router.push(`/${locale}/dashboard/menus`);
+      setIsSaving(false);
+    } catch (error) {
+      console.error("Failed to save menu", error);
+      setErrorMessage(
+        error instanceof Error && error.message
+          ? error.message
+          : menu.saveError
+      );
+      setIsSaving(false);
+    }
+  }
 }

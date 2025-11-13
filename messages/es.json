@@ -10,6 +10,19 @@
     "newMenu": "Nuevo menú",
     "upgrade": "Mejorar plan"
   },
+  "restaurantOnboarding": {
+    "title": "Configura tu restaurante",
+    "subtitle": "Usaremos estos datos para personalizar tu experiencia y crear el dominio del menú.",
+    "nameLabel": "Nombre del restaurante",
+    "namePlaceholder": "Ej. La Bodega de Juan",
+    "cuisineLabel": "Tipo de cocina (opcional)",
+    "addressLabel": "Dirección (opcional)",
+    "submitCta": "Guardar y continuar",
+    "domainPreviewLabel": "Dominio de tu menú",
+    "redirecting": "Redirigiendo...",
+    "success": "¡Restaurante guardado! Te llevamos a tus menús...",
+    "errorFallback": "No hemos podido guardar tu restaurante. Inténtalo de nuevo."
+  },
   "dashboard": {
     "menusTitle": "Menús",
     "menusSubtitle": "Gestiona los menús de tu restaurante desde un único panel.",
@@ -32,7 +45,10 @@
       "profile": "Perfil",
       "preferences": "Preferencias",
       "help": "Centro de ayuda",
-      "signOut": "Cerrar sesión"
+      "signOut": "Cerrar sesión",
+      "signingOut": "Cerrando sesión...",
+      "signOutError": "No pudimos cerrar la sesión. Inténtalo de nuevo.",
+      "userFallback": "Cuenta sin nombre"
     },
     "rowActions": {
       "edit": "Editar",
@@ -47,6 +63,9 @@
       "emptyDescription": "Los platos de esta categoría aparecerán aquí.",
       "newDish": "Nuevo plato",
       "newCategory": "Nueva categoría",
+      "save": "Guardar menú",
+      "saving": "Guardando...",
+      "saveError": "No pudimos guardar el menú. Inténtalo de nuevo.",
       "categoryModal": {
         "title": "Nueva categoría",
         "nameLabel": "Nombre de la categoría",
@@ -173,7 +192,40 @@
       }
     }
   },
+  "billing": {
+    "page": {
+      "title": "Facturación",
+      "subtitle": "Consulta los beneficios de Pro y gestiona tu suscripción antes de mejorar el plan.",
+      "cta": "Ver beneficios Pro",
+      "backToSettings": "Volver a configuración",
+      "finePrint": "Stripe gestiona los pagos de forma segura. Puedes cancelar en cualquier momento."
+    },
+    "pro": {
+      "name": "Plan Pro",
+      "price": "8 € / mes",
+      "description": "Desbloquea menús ilimitados, analíticas avanzadas y códigos QR personalizados.",
+      "features": {
+        "menus": "Menús ilimitados",
+        "analytics": "Analíticas y métricas avanzadas",
+        "qr": "QR con marca personalizada",
+        "support": "Soporte prioritario por email"
+      },
+      "cta": "Mejorar a Pro",
+      "ctaShort": "Mejorar plan",
+      "loading": "Abriendo Stripe...",
+      "error": "No pudimos iniciar el pago. Inténtalo de nuevo más tarde."
+    }
+  },
   "auth": {
+    "common": {
+      "continueWithGoogle": "Continuar con Google",
+      "redirecting": "Redirigiendo...",
+      "orContinueWithEmail": "O continúa con tu correo",
+      "oauthError": "No pudimos completar el acceso con Google. Inténtalo de nuevo."
+    },
+    "providers": {
+      "google": "Continuar con Google"
+    },
     "signIn": {
       "title": "Accede a tu cuenta",
       "subtitle": "Gestiona menús, QR y suscripciones desde un único panel.",

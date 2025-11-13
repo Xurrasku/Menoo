@@ -1,19 +1,41 @@
+import { randomUUID } from "node:crypto";
 import { NextRequest } from "next/server";
 import { count, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/lib/db";
-import { categories, items, menus } from "@/db/schema";
+import { buildMenuPersistencePayload, type MenuDraft } from "@/lib/menus/persistence";
+import { categories, items, menus, restaurants } from "@/db/schema";
 import { mockMenus } from "@/lib/mock/menus";
 
 const menuQuerySchema = z.object({
   restaurantId: z.string().uuid().optional(),
 });
 
+const dishSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1),
+  description: z.string().optional().default(""),
+  price: z.number().nonnegative(),
+  currency: z.string().optional(),
+  thumbnail: z.string().optional(),
+  isVisible: z.boolean().optional(),
+  labels: z.array(z.string()).optional().default([]),
+  allergens: z.array(z.string()).optional().default([]),
+});
+
+const categorySchema = z.object({
+  id: z.string(),
+  name: z.string().min(1),
+  description: z.string().optional().default(""),
+  dishes: z.array(dishSchema),
+});
+
 const menuCreateSchema = z.object({
-  restaurantId: z.string().uuid(),
+  restaurantId: z.string().uuid().optional(),
   name: z.string().min(1),
   isDefault: z.boolean().optional().default(false),
+  categories: z.array(categorySchema).default([]),
 });
 
 export type MenuCreateInput = z.infer<typeof menuCreateSchema>;
@@ -86,12 +108,124 @@ export async function POST(request: NextRequest) {
       { status: 503 }
     );
   }
+  const draft: MenuDraft = {
+    name: result.data.name,
+    restaurantId: result.data.restaurantId,
+    isDefault: result.data.isDefault,
+    categories: result.data.categories.map((category) => ({
+      id: category.id,
+      name: category.name,
+      description: category.description ?? "",
+      dishes: category.dishes.map((dish) => ({
+        id: dish.id,
+        name: dish.name,
+        description: dish.description ?? "",
+        price: dish.price,
+        currency: dish.currency,
+        thumbnail: dish.thumbnail,
+        isVisible: dish.isVisible,
+        labels: dish.labels,
+        allergens: dish.allergens,
+      })),
+    })),
+  };
 
-  const [createdMenu] = await db
-    .insert(menus)
-    .values(result.data)
-    .returning();
+  try {
+    const persistence = buildMenuPersistencePayload(draft);
 
-  return Response.json({ data: createdMenu }, { status: 201 });
+    const data = await db.transaction(async (tx) => {
+      const targetRestaurantId = persistence.menu.restaurantId ?? (await ensureDemoRestaurant(tx));
+
+      const [createdMenu] = await tx
+        .insert(menus)
+        .values({
+          name: persistence.menu.name,
+          restaurantId: targetRestaurantId,
+          isDefault: persistence.menu.isDefault,
+        })
+        .returning();
+
+      const categoryIdByIndex: string[] = [];
+      const createdCategories = [];
+
+      for (const category of persistence.categories) {
+        const [createdCategory] = await tx
+          .insert(categories)
+          .values({
+            menuId: createdMenu.id,
+            name: category.name,
+            position: category.position,
+            description: category.description,
+          })
+          .returning();
+
+        categoryIdByIndex.push(createdCategory.id);
+        createdCategories.push(createdCategory);
+      }
+
+      const createdItems = [];
+
+      for (const item of persistence.items) {
+        const categoryId = categoryIdByIndex[item.categoryIndex];
+        if (!categoryId) continue;
+
+        const [createdItem] = await tx
+          .insert(items)
+          .values({
+            categoryId,
+            name: item.name,
+            description: item.description,
+            priceCents: item.priceCents,
+            currency: item.currency,
+            imageUrl: item.thumbnail,
+            isVisible: item.isVisible,
+            tags: item.labels,
+            allergens: item.allergens,
+          })
+          .returning();
+
+        createdItems.push(createdItem);
+      }
+
+      return {
+        menu: createdMenu,
+        categories: createdCategories,
+        items: createdItems,
+      };
+    });
+
+    return Response.json({ data }, { status: 201 });
+  } catch (error) {
+    console.error("Failed to create menu", error);
+    return Response.json({ error: "Unable to create menu" }, { status: 500 });
+  }
+}
+
+type TransactionClient = Parameters<Parameters<typeof db.transaction>[0]>[0];
+
+async function ensureDemoRestaurant(tx: TransactionClient) {
+  const DEMO_SLUG = "demo-restaurant";
+  const DEFAULT_OWNER_USER_ID = process.env.DEMO_OWNER_USER_ID ?? "00000000-0000-4000-8000-000000000000";
+
+  const existing = await tx
+    .select({ id: restaurants.id })
+    .from(restaurants)
+    .where(eq(restaurants.slug, DEMO_SLUG))
+    .limit(1);
+
+  if (existing[0]) {
+    return existing[0].id;
+  }
+
+  const [created] = await tx
+    .insert(restaurants)
+    .values({
+      ownerUserId: DEFAULT_OWNER_USER_ID,
+      name: "Demo restaurant",
+      slug: DEMO_SLUG,
+    })
+    .returning({ id: restaurants.id });
+
+  return created.id ?? randomUUID();
 }
 

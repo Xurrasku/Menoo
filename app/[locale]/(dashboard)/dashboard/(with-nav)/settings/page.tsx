@@ -1,10 +1,13 @@
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { ChevronRight, Flame } from "lucide-react";
+import { ChevronRight, Flame, Sparkles } from "lucide-react";
 
 import {
   SETTINGS_SECTIONS,
   type SettingsSection,
 } from "./sections";
+import { Button } from "@/components/ui/button";
+import { getBillingPagePath } from "@/lib/billing/paths";
 
 type SettingsPageProps = {
   params: Promise<{
@@ -13,6 +16,7 @@ type SettingsPageProps = {
 };
 
 type SettingsTranslator = Awaited<ReturnType<typeof getTranslations>>;
+type BillingTranslator = Awaited<ReturnType<typeof getTranslations>>;
 
 const PREVIEW_ITEMS: Array<{
   id: "caprese" | "gazpacho" | "onionRings";
@@ -36,6 +40,10 @@ export default async function SettingsPage({
     locale,
     namespace: "settings",
   });
+  const tBilling = await getTranslations({
+    locale,
+    namespace: "billing",
+  });
 
   return (
     <section className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px]">
@@ -56,9 +64,10 @@ export default async function SettingsPage({
         </div>
       </div>
 
-      <div className="hidden items-center justify-center lg:flex">
+      <aside className="hidden flex-col gap-6 lg:flex">
+        <BillingTeaser locale={locale} t={tBilling} />
         <SettingsPreview t={tSettings} />
-      </div>
+      </aside>
     </section>
   );
 }
@@ -99,6 +108,40 @@ function SettingsSectionRow({
       </div>
       <ChevronRight className="h-5 w-5 text-slate-300 transition group-hover:text-primary" />
     </button>
+  );
+}
+
+function BillingTeaser({
+  locale,
+  t,
+}: {
+  locale: string;
+  t: BillingTranslator;
+}) {
+  const billingPath = getBillingPagePath(locale);
+
+  return (
+    <div className="rounded-3xl border border-primary/20 bg-white p-8 shadow-xl shadow-primary/10">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col gap-2">
+          <span className="inline-flex w-fit items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
+            {t("pro.name")}
+          </span>
+          <h3 className="text-3xl font-bold text-slate-900">{t("pro.price")}</h3>
+          <p className="text-sm text-slate-500">{t("pro.description")}</p>
+        </div>
+        <span className="hidden rounded-full bg-primary/10 p-3 text-primary sm:inline-flex">
+          <Sparkles className="h-5 w-5" />
+        </span>
+      </div>
+
+      <Button
+        asChild
+        className="mt-8 w-full justify-center rounded-2xl bg-primary px-6 py-4 text-base font-semibold text-white shadow-lg shadow-primary/30 transition hover:bg-primary/90"
+      >
+        <Link href={billingPath}>{t("page.cta")}</Link>
+      </Button>
+    </div>
   );
 }
 

@@ -10,3 +10,8 @@ export type MenuDetail = {
   categories: MenuCategory[];
 };
 
+
+
+
+
+

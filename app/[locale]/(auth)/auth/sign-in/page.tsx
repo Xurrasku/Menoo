@@ -1,17 +1,27 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
-import { SignUpForm } from "@/components/forms/sign-up-form";
+import { SignInForm } from "@/components/forms/sign-in-form";
 
-type SignUpPageProps = {
+type SignInPageProps = {
   params: Promise<{
     locale: string;
   }>;
+  searchParams?: Promise<{
+    redirect_to?: string;
+    error?: string;
+  }>;
 };
 
-export default async function SignUpPage({ params }: SignUpPageProps) {
+export default async function SignInPage({ params, searchParams }: SignInPageProps) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "auth.signUp" });
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const redirectParam = resolvedSearchParams.redirect_to;
+  const redirectTo = redirectParam && redirectParam.length > 0
+    ? redirectParam
+    : "/dashboard/restaurant";
+  const initialError = resolvedSearchParams.error ?? null;
+  const t = await getTranslations({ locale, namespace: "auth.signIn" });
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-100 px-4 py-16">
@@ -21,12 +31,12 @@ export default async function SignUpPage({ params }: SignUpPageProps) {
           <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
         </div>
 
-        <SignUpForm locale={locale} />
+        <SignInForm locale={locale} redirectTo={redirectTo} initialError={initialError} />
 
         <p className="mt-8 text-center text-sm text-muted-foreground">
-          {t("cta")} {" "}
+          {t("cta")}{" "}
           <Link
-            href={`/${locale}/auth/sign-in`}
+            href={`/${locale}/auth/sign-up`}
             className="font-semibold text-primary hover:text-primary/80"
           >
             {t("ctaLink")}
@@ -36,4 +46,5 @@ export default async function SignUpPage({ params }: SignUpPageProps) {
     </div>
   );
 }
+
 

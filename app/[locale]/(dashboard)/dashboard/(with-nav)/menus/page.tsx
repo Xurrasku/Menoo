@@ -20,17 +20,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { mockMenus } from "@/lib/mock/menus";
 import { MenuNameEditor } from "@/components/dashboard/menu-name-editor";
+import { listMenus } from "@/lib/menus/service";
+import { resolveLocaleFromParams, type LocaleParamsInput } from "./locale";
 
 type MenusPageProps = {
-  params: {
-    locale: string;
-  };
+  params: LocaleParamsInput;
 };
 
 export default async function MenusPage({ params }: MenusPageProps) {
-  const { locale } = params;
+  const locale = await resolveLocaleFromParams(params);
   const tDashboard = await getTranslations({
     locale,
     namespace: "dashboard",
@@ -51,6 +50,7 @@ export default async function MenusPage({ params }: MenusPageProps) {
     locale,
     namespace: "dashboard.visibility",
   });
+  const menusData = await listMenus();
 
   return (
     <div className="flex flex-col gap-6">
@@ -121,7 +121,7 @@ export default async function MenusPage({ params }: MenusPageProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockMenus.map((menu) => (
+              {menusData.map((menu) => (
                 <TableRow key={menu.id} className="group bg-white">
                   <TableCell className="px-8 py-6">
                     <div className="flex items-center gap-4">
@@ -160,15 +160,13 @@ export default async function MenusPage({ params }: MenusPageProps) {
                     {menu.items}
                   </TableCell>
                   <TableCell className="px-8 py-6 text-sm font-medium text-slate-500">
-                    {tAvailability(menu.availabilityKey)}
+                    {tAvailability("everyday")}
                   </TableCell>
                   <TableCell className="px-8 py-6">
                     <div className="flex items-center gap-3">
-                      <Switch defaultChecked={menu.isVisible} />
+                      <Switch defaultChecked={true} />
                       <span className="text-sm font-medium text-slate-500">
-                        {menu.isVisible
-                          ? tVisibility("visible")
-                          : tVisibility("hidden")}
+                        {tVisibility("visible")}
                       </span>
                     </div>
                   </TableCell>
