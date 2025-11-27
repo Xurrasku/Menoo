@@ -72,6 +72,7 @@ export const categories = pgTable("categories", {
     .notNull()
     .references(() => menus.id, { onDelete: "cascade" }),
   name: varchar("name", { length: 120 }).notNull(),
+  description: text("description"),
   position: integer("position").default(0).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()

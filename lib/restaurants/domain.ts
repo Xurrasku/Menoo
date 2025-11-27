@@ -27,15 +27,23 @@ export function buildMenuDomain(name: string) {
     throw new Error("Restaurant name must include alphanumeric characters");
   }
 
-  const base = getMenuDomainBase();
-
   return {
     slug,
-    url: `${base}/${slug}`,
+    url: buildMenuUrlFromSlug(slug),
   } as const;
 }
 
 export type MenuDomain = ReturnType<typeof buildMenuDomain>;
+
+export function buildMenuUrlFromSlug(slugInput: string) {
+  const normalizedSlug = slugInput.trim().replace(/^\/+|\/+$/g, "");
+
+  if (!normalizedSlug) {
+    throw new Error("Restaurant slug is required to build a menu URL");
+  }
+
+  return `${getMenuDomainBase()}/${normalizedSlug}`;
+}
 
 export function getMenuDomainBase() {
   const envOverride = process.env.NEXT_PUBLIC_MENU_DOMAIN_BASE;

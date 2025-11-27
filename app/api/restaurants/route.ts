@@ -5,7 +5,7 @@ import { z } from "zod";
 import { restaurants } from "@/db/schema";
 import { getServerUser } from "@/lib/auth/server";
 import { db } from "@/lib/db";
-import { buildMenuDomain, getMenuDomainBase } from "@/lib/restaurants/domain";
+import { buildMenuDomain, buildMenuUrlFromSlug } from "@/lib/restaurants/domain";
 
 const restaurantSchema = z.object({
   name: z.string().min(1, "Restaurant name is required"),
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
       {
         data: {
           ...createdRestaurant,
-          domain: `${getMenuDomainBase()}/${finalSlug}`,
+          domain: buildMenuUrlFromSlug(finalSlug),
         },
       },
       { status: 201 }
@@ -143,7 +143,7 @@ export async function GET() {
       {
         data: {
           ...restaurant,
-          domain: `${getMenuDomainBase()}/${restaurant.slug}`,
+          domain: buildMenuUrlFromSlug(restaurant.slug),
         },
       },
       { status: 200 }

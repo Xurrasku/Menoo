@@ -2,44 +2,8 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1"
-    />
-    <title>marcoslol | Carta digital</title>
-  </head>
-  <body>
-    <main>
-      <header>
-        <h1>marcoslol</h1>
-        <p>Valora tu experiencia</p>
-      </header>
-      <section>
-        <h2>Aperitivos</h2>
-        <ul>
-          <li>
-            <h3>Ensalada caprese</h3>
-            <p>Tomate, mozzarella fresca y albahaca.</p>
-          </li>
-          <li>
-            <h3>Gazpacho</h3>
-            <p>Sopa fría tradicional con verduras frescas.</p>
-          </li>
-          <li>
-            <h3>Aros de cebolla</h3>
-            <p>Crujientes y dorados, servidos con salsa casera.</p>
-          </li>
-        </ul>
-      </section>
-    </main>
-  </body>
-</html>
-<!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Menú móvil • Marcoslol</title>
+    <title>marcoslol | Carta digital</title>
     <style>
       :root {
         font-family: "Inter", "SF Pro Display", "Segoe UI", Roboto, sans-serif;
@@ -83,154 +47,158 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-      }
-
-      .hero__search {
-        position: absolute;
-        top: 18px;
-        right: 18px;
-        background: rgba(255, 255, 255, 0.92);
-        border: none;
-        border-radius: 999px;
-        width: 42px;
-        height: 42px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.15);
-        transition: transform 0.2s ease;
-      }
-
-      .hero__search:active {
-        transform: scale(0.95);
-      }
-
-      .hero__search svg {
-        width: 18px;
-        height: 18px;
-        stroke: #1f1f1f;
+        border-radius: 0;
       }
 
       main {
         padding: 24px 22px 18px;
+        flex: 1;
       }
 
       .venue-name {
-        margin: 0;
+        margin: 0 0 20px;
         font-size: 1.65rem;
         font-weight: 600;
         text-transform: lowercase;
         letter-spacing: 0.01em;
+        color: #1f1f1f;
       }
 
-      .section-heading {
-        margin: 20px 0 12px;
-        font-size: 0.95rem;
+      .category-section {
+        margin-bottom: 24px;
+      }
+
+      .category-heading {
+        margin: 0 0 16px;
+        font-size: 1.1rem;
         font-weight: 600;
-        color: #4a4a4a;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
+        color: #1f1f1f;
       }
 
       .menu-list {
         display: flex;
         flex-direction: column;
-        gap: 14px;
-      }
-
-      .menu-card {
-        display: grid;
-        grid-template-columns: 1fr minmax(84px, 108px);
-        align-items: center;
         gap: 16px;
-        padding: 14px 16px;
-        background-color: #f9fafb;
-        border-radius: 18px;
-        border: 1px solid rgba(15, 23, 42, 0.06);
-        box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
       }
 
-      .menu-card__header {
+      .menu-item {
+        display: flex;
+        gap: 14px;
+        padding: 14px 0;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      }
+
+      .menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .menu-item__icon {
+        width: 56px;
+        height: 56px;
+        flex-shrink: 0;
+        border-radius: 16px;
+        background-color: #f1f5f9;
         display: flex;
         align-items: center;
-        gap: 8px;
+        justify-content: center;
+        font-size: 1.5rem;
+        border: 1px solid rgba(15, 23, 42, 0.06);
+      }
+
+      .menu-item__icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 16px;
+      }
+
+      .menu-item__content {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .menu-item__header {
         margin-bottom: 6px;
       }
 
-      .menu-card__title {
-        margin: 0;
+      .menu-item__name {
+        margin: 0 0 4px;
         font-size: 1.04rem;
         font-weight: 600;
         color: #1f1f1f;
       }
 
-      .menu-card__tag {
+      .menu-item__description {
+        margin: 0 0 8px;
         font-size: 0.9rem;
-        line-height: 1;
-      }
-
-      .menu-card__description {
-        margin: 0 0 10px;
         color: #5d6368;
-        font-size: 0.9rem;
+        line-height: 1.4;
       }
 
-      .menu-card__price {
+      .menu-item__tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 6px;
+      }
+
+      .menu-item__tag {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 999px;
+        background-color: rgba(139, 92, 246, 0.1);
+        color: #8b5cf6;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .menu-item__allergens {
         margin: 0;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: #ef4444;
+      }
+
+      .menu-item__price {
+        font-size: 1rem;
         font-weight: 600;
         color: #1f1f1f;
-        font-size: 1rem;
-      }
-
-      .menu-card__image {
-        width: 100%;
-        aspect-ratio: 1;
-        border-radius: 16px;
-        object-fit: cover;
+        white-space: nowrap;
+        margin-top: 4px;
       }
 
       footer {
         padding: 20px 24px 24px;
-      }
-
-      .cta-button {
-        width: 100%;
-        border: none;
-        border-radius: 999px;
-        padding: 16px 20px;
-        background: #111827;
-        color: #ffffff;
-        font-size: 1rem;
-        font-weight: 600;
-        display: inline-flex;
+        border-top: 1px solid rgba(15, 23, 42, 0.06);
+        display: flex;
         align-items: center;
-        justify-content: center;
         gap: 10px;
-        cursor: pointer;
-        box-shadow: 0 20px 35px rgba(15, 23, 42, 0.35);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
       }
 
-      .cta-button:active {
-        transform: translateY(1px);
-        box-shadow: 0 12px 25px rgba(15, 23, 42, 0.25);
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #6b21a8;
+        font-size: 0.875rem;
+        font-weight: 500;
       }
 
-      .cta-button-icon {
+      .footer-icon {
+        width: 24px;
+        height: 24px;
+        background-color: #6b21a8;
+        border-radius: 4px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 20px;
-        height: 20px;
+        flex-shrink: 0;
       }
 
-      .cta-button-icon svg {
-        width: 18px;
-        height: 18px;
-        fill: none;
-        stroke: currentColor;
-        stroke-width: 1.8px;
+      .footer-icon svg {
+        width: 16px;
+        height: 16px;
+        fill: #ffffff;
       }
 
       @media (min-width: 540px) {
@@ -253,72 +221,77 @@
           alt="Ensalada fresca de aguacate servida en un bol"
           loading="lazy"
         />
-        <button class="hero__search" type="button" aria-label="Buscar en el menú">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="11" cy="11" r="7" fill="none" stroke-width="2"></circle>
-            <line x1="16.65" y1="16.65" x2="21" y2="21" stroke-width="2" stroke-linecap="round"></line>
-          </svg>
-        </button>
       </header>
 
       <main>
         <h1 class="venue-name">marcoslol</h1>
-        <p class="section-heading">Aperitivos</p>
-
-        <section class="menu-list" aria-label="Listado de aperitivos">
-          <article class="menu-card">
-            <div>
-              <div class="menu-card__header">
-                <h2 class="menu-card__title">Ensalada caprese</h2>
-                <span class="menu-card__tag" role="img" aria-label="Opción vegetariana">🌱</span>
+        
+        <div class="category-section">
+          <h2 class="category-heading">Aperitivos</h2>
+          
+          <div class="menu-list">
+            <article class="menu-item">
+              <div class="menu-item__icon">🥗</div>
+              <div class="menu-item__content">
+                <div class="menu-item__header">
+                  <h3 class="menu-item__name">Ensalada caprese</h3>
+                  <p class="menu-item__description">
+                    Una sencilla ensalada italiana hecha con tomate, mozzarella fresca y albahaca.
+                  </p>
+                </div>
+                <div class="menu-item__tags">
+                  <span class="menu-item__tag">Vegetariano</span>
+                </div>
+                <p class="menu-item__allergens">Alérgenos: Leche</p>
               </div>
-              <p class="menu-card__description">
-                Una sencilla ensalada italiana hecha con tomates frescos, queso mozzarella y albahaca.
-              </p>
-              <p class="menu-card__price">12.00 &euro;</p>
-            </div>
-            <img
-              class="menu-card__image"
-              src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=400&q=80"
-              alt="Ensalada caprese con tomates y mozzarella"
-              loading="lazy"
-            />
-          </article>
+              <div class="menu-item__price">12,00 €</div>
+            </article>
 
-          <article class="menu-card">
-            <div>
-              <div class="menu-card__header">
-                <h2 class="menu-card__title">Aros de cebolla</h2>
+            <article class="menu-item">
+              <div class="menu-item__icon">🍲</div>
+              <div class="menu-item__content">
+                <div class="menu-item__header">
+                  <h3 class="menu-item__name">Gazpacho</h3>
+                  <p class="menu-item__description">
+                    Sopa fría de tomate, pepino y pimiento.
+                  </p>
+                </div>
+                <div class="menu-item__tags">
+                  <span class="menu-item__tag">Vegetariano</span>
+                </div>
               </div>
-              <p class="menu-card__description">
-                Crujientes aros de cebolla empanados servidos con salsa barbacoa ahumada.
-              </p>
-              <p class="menu-card__price">8.00 &euro;</p>
-            </div>
-            <img
-              class="menu-card__image"
-              src="https://images.unsplash.com/photo-1548946526-f69e2424cf45?auto=format&fit=crop&w=400&q=80"
-              alt="Aros de cebolla crujientes acompañados de salsa"
-              loading="lazy"
-            />
-          </article>
-        </section>
+              <div class="menu-item__price">9,00 €</div>
+            </article>
+
+            <article class="menu-item">
+              <div class="menu-item__icon">🍽️</div>
+              <div class="menu-item__content">
+                <div class="menu-item__header">
+                  <h3 class="menu-item__name">Aros de cebolla</h3>
+                  <p class="menu-item__description">
+                    Crujientes y dorados, servidos con salsa casera.
+                  </p>
+                </div>
+              </div>
+              <div class="menu-item__price">8,00 €</div>
+            </article>
+          </div>
+        </div>
       </main>
 
       <footer>
-        <button class="cta-button" type="button">
-          <span class="cta-button-icon" aria-hidden="true">
+        <div class="footer-brand">
+          <span class="footer-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
-              <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8.1L4 21v-2.5H5a2 2 0 0 1-2-2Z"></path>
-              <circle cx="12" cy="11" r="1.8"></circle>
-              <circle cx="17" cy="11" r="1.8"></circle>
-              <circle cx="7" cy="11" r="1.8"></circle>
+              <circle cx="10" cy="10" r="3" />
+              <circle cx="14" cy="10" r="3" />
+              <circle cx="10" cy="14" r="3" />
+              <circle cx="14" cy="14" r="3" />
             </svg>
           </span>
-          Valora tu experiencia
-        </button>
+          Hecho con Menoo
+        </div>
       </footer>
     </div>
   </body>
 </html>
-

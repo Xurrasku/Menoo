@@ -46,10 +46,14 @@ test("mobile menu HTML exposes key content for diners", () => {
 
   assert.match(
     markup,
-    /Valora tu experiencia/i,
-    "The feedback call-to-action should be present"
+    /Made in NordQR/i,
+    "The NordQR branding should be present"
   );
 });
+
+
+
+
 
 
 

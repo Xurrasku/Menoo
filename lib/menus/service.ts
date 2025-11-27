@@ -5,6 +5,8 @@ import { mockMenuDetails } from "@/lib/mock/menu-details";
 import { mockMenus } from "@/lib/mock/menus";
 import { categories, items, menus } from "@/db/schema";
 
+type DatabaseClient = NonNullable<typeof db>;
+
 export type MenuListRow = {
   id: string;
   name: string;
@@ -36,7 +38,43 @@ export type MenuDetailData = {
   categories: MenuDetailCategory[];
 };
 
-export async function listMenus(restaurantId?: string): Promise<MenuListRow[]> {
+export type RestaurantMenuDetail = MenuDetailData & {
+  isDefault: boolean;
+  createdAt: Date;
+};
+
+function adaptMockMenuDetail(menuId: string): MenuDetailData | null {
+  const mock = mockMenuDetails[menuId];
+  if (!mock) {
+    return null;
+  }
+
+  return {
+    id: mock.id,
+    name: mock.name,
+    categories: mock.categories.map((category) => ({
+      ...category,
+      dishes: [],
+    })),
+  };
+}
+
+function buildMockMenuDetails(): MenuDetailData[] {
+  return Object.values(mockMenuDetails).map((menu) => ({
+    id: menu.id,
+    name: menu.name,
+    categories: menu.categories.map((category) => ({
+      ...category,
+      dishes: [],
+    })),
+  }));
+}
+
+export async function listMenus(restaurantId: string): Promise<MenuListRow[]> {
+  if (!restaurantId || restaurantId.trim().length === 0) {
+    throw new Error("restaurantId is required to list menus");
+  }
+
   if (!db) {
     return mockMenus.map((menu) => ({
       id: menu.id,
@@ -47,10 +85,11 @@ export async function listMenus(restaurantId?: string): Promise<MenuListRow[]> {
     }));
   }
 
+  const database = db as DatabaseClient;
   const itemsCount = sql<number>`COUNT(${items.id})`;
   const categoriesCount = sql<number>`COUNT(DISTINCT ${categories.id})`;
 
-  let builder = db
+  const rows = await database
     .select({
       id: menus.id,
       name: menus.name,
@@ -61,14 +100,9 @@ export async function listMenus(restaurantId?: string): Promise<MenuListRow[]> {
     .from(menus)
     .leftJoin(categories, eq(categories.menuId, menus.id))
     .leftJoin(items, eq(items.categoryId, categories.id))
+    .where(eq(menus.restaurantId, restaurantId))
     .groupBy(menus.id)
     .orderBy(desc(menus.createdAt));
-
-  if (restaurantId) {
-    builder = builder.where(eq(menus.restaurantId, restaurantId));
-  }
-
-  const rows = await builder;
 
   return rows.map((row) => ({
     id: row.id,
@@ -81,10 +115,11 @@ export async function listMenus(restaurantId?: string): Promise<MenuListRow[]> {
 
 export async function getMenuDetail(menuId: string): Promise<MenuDetailData | null> {
   if (!db) {
-    return mockMenuDetails[menuId] ?? null;
+    return adaptMockMenuDetail(menuId);
   }
 
-  const [menu] = await db
+  const database = db as DatabaseClient;
+  const [menu] = await database
     .select({
       id: menus.id,
       name: menus.name,
@@ -97,71 +132,149 @@ export async function getMenuDetail(menuId: string): Promise<MenuDetailData | nu
     return null;
   }
 
-  const menuCategories = await db
+  const categoriesByMenu = await buildMenuCategoryMap(database, [menu.id]);
+
+  return {
+    id: menu.id,
+    name: menu.name,
+    categories: categoriesByMenu.get(menu.id) ?? [],
+  };
+}
+
+async function buildMenuCategoryMap(
+  database: DatabaseClient,
+  menuIds: string[],
+): Promise<Map<string, MenuDetailCategory[]>> {
+  if (menuIds.length === 0) {
+    return new Map();
+  }
+
+  const menuCategories = await database
     .select({
       id: categories.id,
+      menuId: categories.menuId,
       name: categories.name,
       description: categories.description,
+      position: categories.position,
+      createdAt: categories.createdAt,
     })
     .from(categories)
-    .where(eq(categories.menuId, menuId))
+    .where(inArray(categories.menuId, menuIds))
     .orderBy(asc(categories.position), asc(categories.createdAt));
 
   if (menuCategories.length === 0) {
-    return {
-      id: menu.id,
-      name: menu.name,
-      categories: [],
-    };
+    return new Map();
   }
 
   const categoryIds = menuCategories.map((category) => category.id);
 
-  const menuItems = await db
-    .select({
-      id: items.id,
-      categoryId: items.categoryId,
-      name: items.name,
-      description: items.description,
-      priceCents: items.priceCents,
-      currency: items.currency,
-      imageUrl: items.imageUrl,
-      isVisible: items.isVisible,
-      labels: items.tags,
-      allergens: items.allergens,
-    })
-    .from(items)
-    .where(inArray(items.categoryId, categoryIds))
-    .orderBy(asc(items.createdAt));
+  const menuItems =
+    categoryIds.length === 0
+      ? []
+      : await database
+          .select({
+            id: items.id,
+            categoryId: items.categoryId,
+            name: items.name,
+            description: items.description,
+            priceCents: items.priceCents,
+            currency: items.currency,
+            imageUrl: items.imageUrl,
+            isVisible: items.isVisible,
+            tags: items.tags,
+            allergens: items.allergens,
+            createdAt: items.createdAt,
+          })
+          .from(items)
+          .where(inArray(items.categoryId, categoryIds))
+          .orderBy(asc(items.createdAt));
 
-  const categoriesWithDishes: MenuDetailCategory[] = menuCategories.map((category) => {
-    const dishes = menuItems
-      .filter((item) => item.categoryId === category.id)
-      .map((item) => ({
-        id: item.id,
-        name: item.name,
-        description: item.description ?? "",
-        price: item.priceCents / 100,
-        currency: item.currency,
-        thumbnail: item.imageUrl ?? "",
-        isVisible: item.isVisible,
-        labels: item.labels ?? [],
-        allergens: item.allergens ?? [],
-      }));
+  const itemsByCategory = new Map<string, typeof menuItems>();
+  for (const item of menuItems) {
+    const entries = itemsByCategory.get(item.categoryId);
+    if (entries) {
+      entries.push(item);
+    } else {
+      itemsByCategory.set(item.categoryId, [item]);
+    }
+  }
 
-    return {
+  const categoriesByMenu = new Map<string, MenuDetailCategory[]>();
+  for (const category of menuCategories) {
+    const dishes =
+      itemsByCategory
+        .get(category.id)
+        ?.map((item) => ({
+          id: item.id,
+          name: item.name,
+          description: item.description ?? "",
+          price: item.priceCents / 100,
+          currency: item.currency,
+          thumbnail: item.imageUrl ?? "",
+          isVisible: item.isVisible,
+          labels: Array.isArray(item.tags) ? item.tags : [],
+          allergens: Array.isArray(item.allergens) ? item.allergens : [],
+        })) ?? [];
+
+    const payload: MenuDetailCategory = {
       id: category.id,
       name: category.name,
       description: category.description ?? "",
       dishes,
     };
-  });
 
-  return {
+    const existing = categoriesByMenu.get(category.menuId);
+    if (existing) {
+      existing.push(payload);
+    } else {
+      categoriesByMenu.set(category.menuId, [payload]);
+    }
+  }
+
+  return categoriesByMenu;
+}
+
+export async function getRestaurantMenus(restaurantId: string): Promise<RestaurantMenuDetail[]> {
+  if (!restaurantId || restaurantId.trim().length === 0) {
+    throw new Error("restaurantId is required to load restaurant menus");
+  }
+
+  if (!db) {
+    return buildMockMenuDetails().map((menu, index) => ({
+      ...menu,
+      isDefault: index === 0,
+      createdAt: new Date(),
+    }));
+  }
+
+  const database = db as DatabaseClient;
+  const menuRows = await database
+    .select({
+      id: menus.id,
+      name: menus.name,
+      isDefault: menus.isDefault,
+      createdAt: menus.createdAt,
+    })
+    .from(menus)
+    .where(eq(menus.restaurantId, restaurantId))
+    .orderBy(desc(menus.isDefault), desc(menus.createdAt));
+
+  if (menuRows.length === 0) {
+    return [];
+  }
+
+  const categoriesByMenu = await buildMenuCategoryMap(
+    database,
+    menuRows.map((menu) => menu.id),
+  );
+
+  return menuRows.map((menu) => ({
     id: menu.id,
     name: menu.name,
-    categories: categoriesWithDishes,
-  };
+    categories: categoriesByMenu.get(menu.id) ?? [],
+    isDefault: menu.isDefault,
+    createdAt: menu.createdAt,
+  }));
 }
 
 

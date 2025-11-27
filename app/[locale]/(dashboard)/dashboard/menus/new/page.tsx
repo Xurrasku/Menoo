@@ -1,5 +1,9 @@
+import { redirect } from "next/navigation";
+
 import { NewMenuScreen } from "@/components/dashboard/new-menu-screen";
 import { getMenuDetailMessages } from "@/lib/dashboard/menu-detail-messages";
+import { requireUser } from "@/lib/auth/server";
+import { getRestaurantByOwnerId } from "@/lib/restaurants/service";
 
 type NewMenuPageProps = {
   params: Promise<{
@@ -10,6 +14,12 @@ type NewMenuPageProps = {
 export default async function NewMenuPage({ params }: NewMenuPageProps) {
   const { locale } = await params;
   const menuMessages = await getMenuDetailMessages(locale);
+  const user = await requireUser(locale);
+  const restaurant = await getRestaurantByOwnerId(user.id);
 
-  return <NewMenuScreen locale={locale} menu={menuMessages} />;
+  if (!restaurant) {
+    redirect(`/${locale}/dashboard/restaurant`);
+  }
+
+  return <NewMenuScreen locale={locale} menu={menuMessages} restaurantId={restaurant.id} />;
 }

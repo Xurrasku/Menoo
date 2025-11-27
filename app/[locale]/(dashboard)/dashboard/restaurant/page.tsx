@@ -29,6 +29,14 @@ export default async function RestaurantSetupPage({ params }: RestaurantSetupPag
         redirect(`/${locale}/dashboard/menus`);
       }
     } catch (error) {
+      // Re-throw redirect errors - they're expected behavior, not actual errors
+      if (
+        error instanceof Error &&
+        (error.message === "NEXT_REDIRECT" ||
+          (error as { digest?: string }).digest?.startsWith("NEXT_REDIRECT"))
+      ) {
+        throw error;
+      }
       console.error("Failed to query restaurants", error);
     }
   }

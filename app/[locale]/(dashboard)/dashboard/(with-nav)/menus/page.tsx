@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Eye, MoreHorizontal, UtensilsCrossed } from "lucide-react";
 
@@ -21,6 +22,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MenuNameEditor } from "@/components/dashboard/menu-name-editor";
+import { requireUser } from "@/lib/auth/server";
+import { getRestaurantByOwnerId } from "@/lib/restaurants/service";
 import { listMenus } from "@/lib/menus/service";
 import { resolveLocaleFromParams, type LocaleParamsInput } from "./locale";
 
@@ -50,7 +53,14 @@ export default async function MenusPage({ params }: MenusPageProps) {
     locale,
     namespace: "dashboard.visibility",
   });
-  const menusData = await listMenus();
+  const user = await requireUser(locale);
+  const restaurant = await getRestaurantByOwnerId(user.id);
+
+  if (!restaurant) {
+    redirect(`/${locale}/dashboard/restaurant`);
+  }
+
+  const menusData = await listMenus(restaurant.id);
 
   return (
     <div className="flex flex-col gap-6">
@@ -66,11 +76,14 @@ export default async function MenusPage({ params }: MenusPageProps) {
           </div>
           <div className="flex items-center gap-3">
             <Button
+              asChild
               variant="ghost"
               className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm hover:bg-slate-50"
             >
-              <Eye className="h-4 w-4" />
-              {tNavigation("viewMenu")}
+              <Link href={`/${restaurant.slug}`} target="_blank" rel="noreferrer">
+                <Eye className="h-4 w-4" />
+                {tNavigation("viewMenu")}
+              </Link>
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

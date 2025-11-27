@@ -70,6 +70,7 @@ type DishFormState = {
 type NewMenuScreenProps = {
   locale: string;
   menu: MenuDetailMessages;
+  restaurantId: string;
   initialMenu?: MenuDetailData | null;
 };
 
@@ -179,7 +180,7 @@ const DEFAULT_CATEGORIES: Category[] = [
   },
 ];
 
-export function NewMenuScreen({ locale, menu, initialMenu }: NewMenuScreenProps) {
+export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMenuScreenProps) {
   const router = useRouter();
   const [menuTitle, setMenuTitle] = useState(() => initialMenu?.name ?? menu.title);
   const [categories, setCategories] = useState<Category[]>(() => {
@@ -673,28 +674,54 @@ export function NewMenuScreen({ locale, menu, initialMenu }: NewMenuScreenProps)
     setIsSaving(true);
 
     try {
-      const payload = {
-        name: menuTitle.trim() || menu.title,
-        categories: categories.map((category) => ({
-          id: category.id,
-          name: category.name,
-          description: category.description,
-          dishes: category.dishes.map((dish) => ({
-            id: dish.id,
-            name: dish.name,
-            description: dish.description,
-            price: dish.price,
-            currency: dish.currency,
-            thumbnail: dish.thumbnail,
-            isVisible: dish.isVisible,
-            labels: dish.labels,
-            allergens: dish.allergens,
-          })),
-        })),
-      };
+      // Use PUT for editing, POST for creating
+      const isEditing = !!initialMenu;
+      const payload = isEditing
+        ? {
+            name: menuTitle.trim() || menu.title,
+            categories: categories.map((category) => ({
+              id: category.id,
+              name: category.name,
+              description: category.description,
+              dishes: category.dishes.map((dish) => ({
+                id: dish.id,
+                name: dish.name,
+                description: dish.description,
+                price: dish.price,
+                currency: dish.currency,
+                thumbnail: dish.thumbnail,
+                isVisible: dish.isVisible,
+                labels: dish.labels,
+                allergens: dish.allergens,
+              })),
+            })),
+          }
+        : {
+            restaurantId,
+            name: menuTitle.trim() || menu.title,
+            categories: categories.map((category) => ({
+              id: category.id,
+              name: category.name,
+              description: category.description,
+              dishes: category.dishes.map((dish) => ({
+                id: dish.id,
+                name: dish.name,
+                description: dish.description,
+                price: dish.price,
+                currency: dish.currency,
+                thumbnail: dish.thumbnail,
+                isVisible: dish.isVisible,
+                labels: dish.labels,
+                allergens: dish.allergens,
+              })),
+            })),
+          };
 
-      const response = await fetch("/api/menus", {
-        method: "POST",
+      const url = isEditing ? `/api/menus/${initialMenu.id}` : "/api/menus";
+      const method = isEditing ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
         },

@@ -7,6 +7,7 @@ import { db } from "@/lib/db";
 import { buildMenuPersistencePayload, type MenuDraft } from "@/lib/menus/persistence";
 import { categories, items, menus, restaurants } from "@/db/schema";
 import { mockMenus } from "@/lib/mock/menus";
+import { getServerUser } from "@/lib/auth/server";
 
 const menuQuerySchema = z.object({
   restaurantId: z.string().uuid().optional(),
@@ -102,12 +103,18 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const user = await getServerUser();
+  if (!user) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   if (!db) {
     return Response.json(
       { error: "Database client not initialised" },
       { status: 503 }
     );
   }
+
   const draft: MenuDraft = {
     name: result.data.name,
     restaurantId: result.data.restaurantId,
@@ -134,13 +141,54 @@ export async function POST(request: NextRequest) {
     const persistence = buildMenuPersistencePayload(draft);
 
     const data = await db.transaction(async (tx) => {
-      const targetRestaurantId = persistence.menu.restaurantId ?? (await ensureDemoRestaurant(tx));
+      // Get or verify restaurant
+      let targetRestaurantId = persistence.menu.restaurantId;
+
+      if (targetRestaurantId) {
+        // Verify restaurant belongs to user
+        const [restaurant] = await tx
+          .select({ id: restaurants.id })
+          .from(restaurants)
+          .where(eq(restaurants.id, targetRestaurantId))
+          .limit(1);
+
+        if (!restaurant) {
+          throw new Error("Restaurant not found");
+        }
+
+        // Verify ownership
+        const [ownedRestaurant] = await tx
+          .select({ id: restaurants.id })
+          .from(restaurants)
+          .where(and(
+            eq(restaurants.ownerUserId, user.id),
+            eq(restaurants.id, targetRestaurantId)
+          ))
+          .limit(1);
+
+        if (!ownedRestaurant) {
+          throw new Error("Restaurant does not belong to user");
+        }
+      } else {
+        // Get user's restaurant
+        const [userRestaurant] = await tx
+          .select({ id: restaurants.id })
+          .from(restaurants)
+          .where(eq(restaurants.ownerUserId, user.id))
+          .limit(1);
+
+        if (!userRestaurant) {
+          throw new Error("No restaurant found. Please create a restaurant first.");
+        }
+
+        targetRestaurantId = userRestaurant.id;
+      }
 
       const [createdMenu] = await tx
         .insert(menus)
         .values({
           name: persistence.menu.name,
-          restaurantId: targetRestaurantId,
+          restaurantId: targetRestaurantId!,
           isDefault: persistence.menu.isDefault,
         })
         .returning();

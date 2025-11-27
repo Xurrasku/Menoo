@@ -1,4 +1,9 @@
+import { redirect } from "next/navigation";
+
 import { QrBuilder } from "@/components/dashboard/qr-builder";
+import { requireUser } from "@/lib/auth/server";
+import { getRestaurantByOwnerId } from "@/lib/restaurants/service";
+import { buildMenuUrlFromSlug } from "@/lib/restaurants/domain";
 
 type QrPageProps = {
   params: Promise<{
@@ -8,9 +13,14 @@ type QrPageProps = {
 
 export default async function QrPage({ params }: QrPageProps) {
   const { locale } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://menoo.app";
-  const normalizedBaseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
-  const menuUrl = `${normalizedBaseUrl}/${locale}/menu/demo`;
+  const user = await requireUser(locale);
+  const restaurant = await getRestaurantByOwnerId(user.id);
+
+  if (!restaurant) {
+    redirect(`/${locale}/dashboard/restaurant`);
+  }
+
+  const menuUrl = buildMenuUrlFromSlug(restaurant.slug);
 
   return (
     <section className="px-4 pb-12 sm:px-12">
