@@ -28,6 +28,7 @@ export default async function ShellLayout({ children, params }: ShellLayoutProps
     namespace: "billing",
   });
   const billingPath = getBillingPagePath(locale);
+  const billingHref = { pathname: billingPath };
   const navItems = [
     {
       label: tNavigation("menus"),
@@ -84,7 +85,7 @@ export default async function ShellLayout({ children, params }: ShellLayoutProps
               size="sm"
               className="hidden items-center gap-2 rounded-full border border-primary/10 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/15 md:flex"
             >
-              <Link href={billingPath}>
+              <Link href={billingHref}>
                 <Sparkles className="h-4 w-4" />
                 {tBilling("pro.ctaShort")}
               </Link>
