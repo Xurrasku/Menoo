@@ -14,9 +14,9 @@ const categoryUpdateSchema = z.object({
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = paramsSchema.parse(params);
+  const { id } = paramsSchema.parse(await params);
   const json = await request.json().catch(() => null);
   const result = categoryUpdateSchema.safeParse(json);
 
@@ -49,9 +49,9 @@ export async function PATCH(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = paramsSchema.parse(params);
+  const { id } = paramsSchema.parse(await params);
 
   if (!db) {
     return Response.json(
