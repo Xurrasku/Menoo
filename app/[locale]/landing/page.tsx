@@ -21,7 +21,7 @@ export default async function LandingPage({ params }: Props) {
     <div className="min-h-screen bg-background">
       {/* Navigation */}
       <nav className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-0">
-        <div className="container mx-auto flex h-24 items-stretch justify-between px-4 py-0">
+        <div className="flex h-24 w-full items-stretch justify-between px-4 py-0 lg:px-8">
           <Link href={`/${locale}/landing`} className="flex items-stretch">
             <Image
               src="/assets/logo.png"

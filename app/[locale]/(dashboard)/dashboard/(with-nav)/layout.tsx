@@ -38,6 +38,12 @@ export default async function ShellLayout({ children, params }: ShellLayoutProps
       icon: "Utensils" as const,
     },
     {
+      label: tNavigation("customize"),
+      href: { pathname: `/${locale}/dashboard/settings` },
+      segment: "settings",
+      icon: "Wand2" as const,
+    },
+    {
       label: tNavigation("statistics"),
       href: { pathname: `/${locale}/dashboard/statistics` },
       segment: "statistics",
@@ -48,12 +54,6 @@ export default async function ShellLayout({ children, params }: ShellLayoutProps
       href: { pathname: `/${locale}/dashboard/qr` },
       segment: "qr",
       icon: "QrCode" as const,
-    },
-    {
-      label: tNavigation("settings"),
-      href: { pathname: `/${locale}/dashboard/settings` },
-      segment: "settings",
-      icon: "Settings" as const,
     },
   ];
 
