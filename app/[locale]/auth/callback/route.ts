@@ -3,14 +3,11 @@ import { NextResponse } from "next/server";
 import { buildPostAuthRedirect } from "@/lib/auth/config";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-type RouteContext = {
-  params: {
-    locale: string;
-  };
-};
-
-export async function GET(request: Request, { params }: RouteContext) {
-  const { locale } = params;
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ locale: string }> }
+) {
+  const { locale } = await params;
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
   const errorDescription = requestUrl.searchParams.get("error_description");
