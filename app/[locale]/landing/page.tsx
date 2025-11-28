@@ -1,7 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Check, QrCode, Smartphone, Globe, BarChart3, Image as ImageIcon, Zap } from "lucide-react";
+import type { ComponentProps } from "react";
+import { ArrowRight, QrCode, Smartphone, Globe, BarChart3, Image as ImageIcon, Zap } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -191,7 +192,7 @@ export default async function LandingPage({ params }: Props) {
                     const href = t(`footer.product.links.${index}.href`);
                     return (
                       <li key={index}>
-                        <Link href={href as any} className="hover:text-foreground">
+                        <Link href={href as ComponentProps<typeof Link>["href"]} className="hover:text-foreground">
                           {t(`footer.product.links.${index}.label`)}
                         </Link>
                       </li>
@@ -206,7 +207,7 @@ export default async function LandingPage({ params }: Props) {
                     const href = t(`footer.company.links.${index}.href`);
                     return (
                       <li key={index}>
-                        <Link href={href as any} className="hover:text-foreground">
+                        <Link href={href as ComponentProps<typeof Link>["href"]} className="hover:text-foreground">
                           {t(`footer.company.links.${index}.label`)}
                         </Link>
                       </li>
@@ -221,7 +222,7 @@ export default async function LandingPage({ params }: Props) {
                     const href = t(`footer.legal.links.${index}.href`);
                     return (
                       <li key={index}>
-                        <Link href={href as any} className="hover:text-foreground">
+                        <Link href={href as ComponentProps<typeof Link>["href"]} className="hover:text-foreground">
                           {t(`footer.legal.links.${index}.label`)}
                         </Link>
                       </li>

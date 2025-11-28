@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { ArrowLeft } from "lucide-react";
 import type { RestaurantMenuDetail } from "@/lib/menus/service";
 import { MenuSelector } from "./menu-selector";
@@ -100,29 +100,39 @@ function formatPrice(amount: number, currency: string) {
 }
 
 export function MenuViewer({ menus, restaurantName, defaultMenuId }: MenuViewerProps) {
-  const [selectedMenu, setSelectedMenu] = useState<RestaurantMenuDetail | null>(null);
-
-  useEffect(() => {
-    // If there's a default menu ID in URL or only one menu, select it
+  // Compute the default menu selection based on props
+  const defaultMenu = useMemo((): RestaurantMenuDetail | null => {
+    // If there's a default menu ID in URL, select it
     if (defaultMenuId) {
       const menu = menus.find((m) => m.id === defaultMenuId);
       if (menu) {
-        setSelectedMenu(menu);
-        return;
+        return menu;
       }
     }
 
     // If only one menu, show it directly
     if (menus.length === 1) {
-      setSelectedMenu(menus[0]);
-      return;
+      return menus[0];
     }
 
-    // If 2+ menus, show selector
-    if (menus.length >= 2) {
-      setSelectedMenu(null);
-    }
+    // If 2+ menus, show selector (null means show selector)
+    return null;
   }, [menus, defaultMenuId]);
+
+  const [selectedMenu, setSelectedMenu] = useState<RestaurantMenuDetail | null>(defaultMenu);
+  const prevDefaultMenuRef = useRef<RestaurantMenuDetail | null>(defaultMenu);
+
+  // Update selected menu when defaultMenu changes (but only if user hasn't manually selected)
+  useEffect(() => {
+    // Only update if defaultMenu actually changed
+    if (defaultMenu !== prevDefaultMenuRef.current) {
+      prevDefaultMenuRef.current = defaultMenu;
+      // Schedule state update to avoid synchronous setState in effect
+      queueMicrotask(() => {
+        setSelectedMenu(defaultMenu);
+      });
+    }
+  }, [defaultMenu]);
 
   // If no menus, show empty state
   if (menus.length === 0) {
