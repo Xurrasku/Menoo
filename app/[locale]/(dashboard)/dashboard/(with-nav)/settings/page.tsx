@@ -28,6 +28,10 @@ export default async function SettingsPage({
     }),
   ]);
 
+  const visibleSections = SETTINGS_SECTIONS.filter((section) =>
+    ["appearance", "languages", "wifi", "social"].includes(section.id)
+  );
+
   return (
     <section>
       <div className="rounded-3xl border border-dashed border-primary/20 bg-white p-10 shadow-xl shadow-slate-200/60">
@@ -41,7 +45,7 @@ export default async function SettingsPage({
         </header>
 
         <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {SETTINGS_SECTIONS.map((section) => (
+          {visibleSections.map((section) => (
             <SettingsSectionCard key={section.id} section={section} t={tSettings} />
           ))}
         </div>
