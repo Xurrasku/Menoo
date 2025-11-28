@@ -18,7 +18,7 @@ type DashboardSessionDependencies = {
   getRestaurantByOwnerId: (
     ownerUserId: string
   ) => Promise<RestaurantSummary | null>;
-  redirect: (href: string) => never;
+  redirect: typeof redirect;
 };
 
 export function createDashboardSessionLoader(
@@ -29,7 +29,11 @@ export function createDashboardSessionLoader(
     const restaurant = await deps.getRestaurantByOwnerId(user.id);
 
     if (!restaurant) {
-      deps.redirect(`/${locale}/dashboard/restaurant`);
+      const restaurantSetupRoute =
+        `/${locale}/dashboard/restaurant` as Parameters<
+          typeof redirect
+        >[0];
+      deps.redirect(restaurantSetupRoute);
     }
 
     return { user, restaurant: restaurant! };

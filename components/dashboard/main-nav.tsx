@@ -113,7 +113,9 @@ export function MainNav({ items }: MainNavProps) {
     const elements = [
       containerRef.current,
       ...Object.values(itemRefs.current),
-    ].filter((node): node is Element => Boolean(node));
+    ].filter(
+      (node): node is HTMLDivElement | HTMLAnchorElement => node !== null
+    );
 
     elements.forEach((node) => observer.observe(node));
 
