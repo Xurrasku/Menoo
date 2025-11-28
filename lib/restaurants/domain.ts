@@ -46,14 +46,20 @@ export function buildMenuUrlFromSlug(slugInput: string) {
 }
 
 export function getMenuDomainBase() {
-  const envOverride = process.env.NEXT_PUBLIC_MENU_DOMAIN_BASE;
-  if (envOverride && envOverride.trim().length > 0) {
-    return normalizeBaseUrl(envOverride);
-  }
+  const candidates = [
+    process.env.NEXT_PUBLIC_MENU_DOMAIN_BASE,
+    process.env.NEXT_PUBLIC_SITE_URL,
+    process.env.NEXT_PUBLIC_APP_URL,
+    process.env.NEXT_PUBLIC_VERCEL_URL
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+      : undefined,
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined,
+  ];
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL;
-  if (appUrl && appUrl.trim().length > 0) {
-    return normalizeBaseUrl(appUrl);
+  for (const candidate of candidates) {
+    if (candidate && candidate.trim().length > 0) {
+      return normalizeBaseUrl(candidate);
+    }
   }
 
   return normalizeBaseUrl("https://menoo.app");

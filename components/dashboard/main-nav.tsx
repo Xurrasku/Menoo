@@ -95,19 +95,36 @@ export function MainNav({ items }: MainNavProps) {
     };
   }, [scheduleIndicatorUpdate]);
 
+  useEffect(() => {
+    if (typeof window === "undefined" || !("ResizeObserver" in window)) {
+      return;
+    }
+
+    const observer = new ResizeObserver(() => scheduleIndicatorUpdate());
+    const elements = [
+      containerRef.current,
+      ...Object.values(itemRefs.current),
+    ].filter((node): node is Element => Boolean(node));
+
+    elements.forEach((node) => observer.observe(node));
+
+    return () => observer.disconnect();
+  }, [scheduleIndicatorUpdate, items]);
+
   return (
     <nav className="relative flex items-center gap-2 rounded-full bg-slate-100 p-1 text-sm font-medium">
       <div ref={containerRef} className="relative flex items-center gap-2">
         <span
           aria-hidden
           className={cn(
-            "pointer-events-none absolute left-0 top-1 h-[calc(100%-0.5rem)] rounded-full bg-white shadow-sm transition-[opacity,transform,width]",
+            "pointer-events-none absolute left-0 top-1 h-[calc(100%-0.5rem)] rounded-full bg-white shadow-sm transition-[opacity,transform,width] motion-reduce:transition-none",
             DASHBOARD_NAV_HIGHLIGHT_TRANSITION,
             indicator.visible ? "opacity-100" : "opacity-0"
           )}
           style={{
             width: indicator.visible ? indicator.width : 0,
-            transform: `translateX(${indicator.left}px)`,
+            transform: `translate3d(${indicator.left}px, 0, 0)`,
+            willChange: "transform,width",
           }}
         />
       {items.map((item) => {

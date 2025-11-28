@@ -11,6 +11,9 @@ test("dashboard edge padding matches fixed spacing", () => {
 });
 
 test("dashboard nav highlight transition remains smooth", () => {
-  assert.equal(DASHBOARD_NAV_HIGHLIGHT_TRANSITION, "duration-300 ease-out");
+  assert.equal(
+    DASHBOARD_NAV_HIGHLIGHT_TRANSITION,
+    "duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]"
+  );
 });
 

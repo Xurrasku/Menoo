@@ -25,6 +25,7 @@ import { MenuNameEditor } from "@/components/dashboard/menu-name-editor";
 import { requireUser } from "@/lib/auth/server";
 import { getRestaurantByOwnerId } from "@/lib/restaurants/service";
 import { listMenus } from "@/lib/menus/service";
+import { buildMenuUrlFromSlug } from "@/lib/restaurants/domain";
 import { resolveLocaleFromParams, type LocaleParams } from "./locale";
 
 type MenusPageProps = {
@@ -80,7 +81,7 @@ export default async function MenusPage({ params }: MenusPageProps) {
               variant="ghost"
               className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm hover:bg-slate-50"
             >
-              <Link href={`/${restaurant.slug}`} target="_blank" rel="noreferrer">
+              <Link href={buildMenuUrlFromSlug(restaurant.slug)} target="_blank" rel="noreferrer">
                 <Eye className="h-4 w-4" />
                 {tNavigation("viewMenu")}
               </Link>
