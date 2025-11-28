@@ -25,10 +25,10 @@ import { MenuNameEditor } from "@/components/dashboard/menu-name-editor";
 import { requireUser } from "@/lib/auth/server";
 import { getRestaurantByOwnerId } from "@/lib/restaurants/service";
 import { listMenus } from "@/lib/menus/service";
-import { resolveLocaleFromParams, type LocaleParamsInput } from "./locale";
+import { resolveLocaleFromParams, type LocaleParams } from "./locale";
 
 type MenusPageProps = {
-  params: LocaleParamsInput;
+  params: Promise<LocaleParams>;
 };
 
 export default async function MenusPage({ params }: MenusPageProps) {
