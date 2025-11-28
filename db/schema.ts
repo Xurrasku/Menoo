@@ -142,9 +142,30 @@ export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
   }),
 }));
 
+export const menuViews = pgTable("menu_views", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  restaurantId: uuid("restaurant_id")
+    .notNull()
+    .references(() => restaurants.id, { onDelete: "cascade" }),
+  viewedAt: timestamp("viewed_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  ipAddress: varchar("ip_address", { length: 45 }),
+  userAgent: text("user_agent"),
+  referer: text("referer"),
+});
+
+export const menuViewsRelations = relations(menuViews, ({ one }) => ({
+  restaurant: one(restaurants, {
+    fields: [menuViews.restaurantId],
+    references: [restaurants.id],
+  }),
+}));
+
 export type Restaurant = typeof restaurants.$inferSelect;
 export type Menu = typeof menus.$inferSelect;
 export type Category = typeof categories.$inferSelect;
 export type Item = typeof items.$inferSelect;
 export type Subscription = typeof subscriptions.$inferSelect;
+export type MenuView = typeof menuViews.$inferSelect;
 

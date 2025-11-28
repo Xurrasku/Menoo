@@ -1,33 +1,99 @@
 import { getTranslations } from "next-intl/server";
+import { Eye, TrendingUp, Calendar, BarChart3 } from "lucide-react";
+
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { getDashboardSession } from "@/lib/dashboard/session";
+import { getMenuViewStats } from "@/lib/analytics/service";
+import { resolveLocaleFromParams, type LocaleParams } from "../menus/locale";
 
 type StatisticsPageProps = {
-  params: Promise<{
-    locale: string;
-  }>;
+  params: Promise<LocaleParams>;
 };
 
 export default async function StatisticsPage({
   params,
 }: StatisticsPageProps) {
-  const { locale } = await params;
-  const tNavigation = await getTranslations({
-    locale,
-    namespace: "navigation",
-  });
+  const locale = await resolveLocaleFromParams(params);
+  const [tDashboard, tNavigation] = await Promise.all([
+    getTranslations({
+      locale,
+      namespace: "dashboard",
+    }),
+    getTranslations({
+      locale,
+      namespace: "navigation",
+    }),
+  ]);
+
+  const { restaurant } = await getDashboardSession(locale);
+  const stats = await getMenuViewStats(restaurant.id);
 
   return (
-    <section className="rounded-3xl border border-dashed border-primary/20 bg-white p-12 text-center shadow-xl shadow-slate-200/60">
-      <p className="text-sm font-semibold uppercase tracking-widest text-primary">
-        {tNavigation("statistics")}
-      </p>
-      <h2 className="mt-4 text-3xl font-bold text-slate-900">
-        Analítica en desenvolupament
-      </h2>
-      <p className="mt-4 text-base text-slate-500">
-        Estem treballant per oferir mètriques d{"'"}impacte, vendes i rendiment
-        en temps real.
-      </p>
-    </section>
+    <div className="flex flex-col gap-6">
+      <Card className="border-0 bg-white shadow-xl shadow-slate-200/60">
+        <CardHeader className="border-b border-slate-100 px-6 py-5 sm:px-8 sm:py-6">
+          <div className="flex flex-col gap-1">
+            <span className="text-sm font-semibold uppercase tracking-widest text-primary">
+              {tNavigation("statistics")}
+            </span>
+            <span className="text-xs text-slate-500 sm:text-sm">
+              {tDashboard("analyticsSubtitle")}
+            </span>
+          </div>
+        </CardHeader>
+        <CardContent className="p-6 sm:p-8">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <StatCard
+              icon={Eye}
+              label={tDashboard("analytics.totalViews")}
+              value={stats.totalViews}
+              className="bg-primary/10 text-primary"
+            />
+            <StatCard
+              icon={Calendar}
+              label={tDashboard("analytics.viewsToday")}
+              value={stats.viewsToday}
+              className="bg-blue-500/10 text-blue-600"
+            />
+            <StatCard
+              icon={TrendingUp}
+              label={tDashboard("analytics.viewsThisWeek")}
+              value={stats.viewsThisWeek}
+              className="bg-green-500/10 text-green-600"
+            />
+            <StatCard
+              icon={BarChart3}
+              label={tDashboard("analytics.viewsThisMonth")}
+              value={stats.viewsThisMonth}
+              className="bg-purple-500/10 text-purple-600"
+            />
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+type StatCardProps = {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  value: number;
+  className?: string;
+};
+
+function StatCard({ icon: Icon, label, value, className }: StatCardProps) {
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-1">
+          <p className="text-xs font-medium text-slate-500 sm:text-sm">{label}</p>
+          <p className="text-2xl font-bold text-slate-900 sm:text-3xl">{value.toLocaleString()}</p>
+        </div>
+        <div className={`flex h-12 w-12 items-center justify-center rounded-lg sm:h-14 sm:w-14 ${className ?? ""}`}>
+          <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
+        </div>
+      </div>
+    </div>
   );
 }
 

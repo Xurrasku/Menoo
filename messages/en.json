@@ -26,7 +26,14 @@
   "dashboard": {
     "menusTitle": "Menus",
     "menusSubtitle": "Manage your restaurant menus from a single dashboard.",
+    "analyticsSubtitle": "Track how many people access your menu.",
     "addMenu": "Add menu",
+    "analytics": {
+      "totalViews": "Total views",
+      "viewsToday": "Views today",
+      "viewsThisWeek": "Views this week",
+      "viewsThisMonth": "Views this month"
+    },
     "menuCategories": "{count, plural, one {# category} other {# categories}}",
     "table": {
       "name": "Name",
@@ -237,6 +244,219 @@
       "subtitle": "Launch your digital menu in under two minutes.",
       "cta": "Already have an account?",
       "ctaLink": "Sign in"
+    }
+  },
+  "landing": {
+    "nav": {
+      "signIn": "Sign in",
+      "cta": "Create my free menu"
+    },
+    "hero": {
+      "title": "Elegant digital menus for restaurants",
+      "subtitle": "Create your digital menu in 60 seconds",
+      "cta": "Create my free menu",
+      "visualPlaceholder": "Mobile mockup + QR + menu"
+    },
+    "problem": {
+      "title": "The problem with printed menus",
+      "description": "Printed menus are expensive, rigid, and hard to update. Every change means costs, errors, reprints, or confusion. Plus: allergens, translations, menu rotations, special offers… everything gets complicated."
+    },
+    "benefits": {
+      "title": "Everything you need to digitize your menu",
+      "items": {
+        "1": {
+          "title": "Update instantly",
+          "description": "Change prices, dishes, or descriptions in real-time without printing anything.",
+          "icon": "zap"
+        },
+        "2": {
+          "title": "Multilingual",
+          "description": "Perfect for tourists. Offer your menu in multiple languages with one click.",
+          "icon": "globe"
+        },
+        "3": {
+          "title": "Physical QR + digital menu",
+          "description": "Generate custom QR codes and send them to print or request free stickers.",
+          "icon": "qr"
+        },
+        "4": {
+          "title": "Simple dashboard",
+          "description": "Manage everything from your phone or desktop. Intuitive and easy to use.",
+          "icon": "smartphone"
+        },
+        "5": {
+          "title": "Images & descriptions",
+          "description": "Add professional photos and detailed descriptions to each dish.",
+          "icon": "image"
+        },
+        "6": {
+          "title": "Scan statistics",
+          "description": "Discover how many people view your menu and optimize your offering.",
+          "icon": "chart"
+        }
+      }
+    },
+    "demo": {
+      "title": "How Menoo works",
+      "panel": {
+        "title": "Control panel",
+        "description": "Manage your menus from any device",
+        "placeholder": "Dashboard screenshot"
+      },
+      "menu": {
+        "title": "Digital menu",
+        "description": "Preview of how your customers see the menu",
+        "placeholder": "Digital menu screenshot"
+      }
+    },
+    "pricing": {
+      "title": "Plans and pricing",
+      "plans": {
+        "free": {
+          "name": "Free forever",
+          "price": "Free",
+          "description": "Perfect to get started",
+          "features": {
+            "0": "1 menu",
+            "1": "Up to 20 dishes",
+            "2": "100 scans/month"
+          },
+          "cta": "Start free"
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "€8 / month",
+          "description": "For professional restaurants",
+          "features": {
+            "0": "Unlimited menus",
+            "1": "Unlimited dishes",
+            "2": "Unlimited scans",
+            "3": "Advanced statistics"
+          },
+          "cta": "Try Pro 14 days"
+        }
+      }
+    },
+    "socialProof": {
+      "title": "What our customers say",
+      "testimonials": {
+        "1": {
+          "quote": "Menoo has transformed how we manage our menu. We no longer have to reprint every time we change something.",
+          "author": "Maria Gonzalez",
+          "role": "Owner, La Bodega Restaurant"
+        },
+        "2": {
+          "quote": "Customers love being able to see the menu in their language. It has greatly improved the experience for our tourists.",
+          "author": "Carlos Ruiz",
+          "role": "Manager, Tapas & Co"
+        }
+      },
+      "logos": {
+        "title": "Trusted by",
+        "items": {
+          "1": "Restaurant A",
+          "2": "Restaurant B",
+          "3": "Restaurant C",
+          "4": "Restaurant D"
+        }
+      }
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "steps": {
+        "1": {
+          "title": "Upload your menu",
+          "description": "Import your menu from CSV or create it manually in minutes."
+        },
+        "2": {
+          "title": "Generate your QR",
+          "description": "Download your custom QR code or request free stickers for your tables."
+        },
+        "3": {
+          "title": "Share and update",
+          "description": "Customers scan the QR and see your digital menu. Update it whenever you want."
+        }
+      }
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "items": {
+        "1": {
+          "question": "Can I change the menu anytime?",
+          "answer": "Yes, you can update your menu at any time from the control panel. Changes are reflected instantly."
+        },
+        "2": {
+          "question": "Does it work without printing?",
+          "answer": "Yes, you only need to print the QR code once. The menu is displayed digitally when customers scan."
+        },
+        "3": {
+          "question": "Can I have multiple menus?",
+          "answer": "With the Pro plan you can create unlimited menus. The free plan includes 1 menu."
+        },
+        "4": {
+          "question": "How much does it cost?",
+          "answer": "We have a free forever plan. The Pro plan costs €8/month and includes advanced features."
+        },
+        "5": {
+          "question": "Do I need technical knowledge?",
+          "answer": "No, Menoo is designed to be easy to use. If you can use a phone, you can use Menoo."
+        }
+      }
+    },
+    "finalCta": {
+      "title": "Ready to digitize your menu?",
+      "cta": "Start free"
+    },
+    "footer": {
+      "description": "The easiest way to create and manage digital menus for restaurants.",
+      "product": {
+        "title": "Product",
+        "links": {
+          "1": {
+            "label": "Features",
+            "href": "#"
+          },
+          "2": {
+            "label": "Pricing",
+            "href": "#pricing"
+          },
+          "3": {
+            "label": "How it works",
+            "href": "#how-it-works"
+          }
+        }
+      },
+      "company": {
+        "title": "Company",
+        "links": {
+          "1": {
+            "label": "About us",
+            "href": "#"
+          },
+          "2": {
+            "label": "Contact",
+            "href": "#"
+          }
+        }
+      },
+      "legal": {
+        "title": "Legal",
+        "links": {
+          "1": {
+            "label": "Terms of Service",
+            "href": "#"
+          },
+          "2": {
+            "label": "Privacy Policy",
+            "href": "#"
+          },
+          "3": {
+            "label": "Cookies",
+            "href": "#"
+          }
+        }
+      },
+      "copyright": "© 2024 Menoo. All rights reserved."
     }
   }
 }

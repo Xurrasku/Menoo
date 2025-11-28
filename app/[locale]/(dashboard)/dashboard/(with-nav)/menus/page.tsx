@@ -68,38 +68,39 @@ export default async function MenusPage({ params }: MenusPageProps) {
   return (
     <div className="flex flex-col gap-6">
       <Card className="border-0 bg-white shadow-xl shadow-slate-200/60">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 border-b border-slate-100 px-8 py-6">
+        <CardHeader className="flex flex-col gap-4 border-b border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 sm:px-8 sm:py-6">
           <div className="flex flex-col gap-1">
             <span className="text-sm font-semibold uppercase tracking-widest text-primary">
               {tDashboard("menusTitle")}
             </span>
-            <span className="text-sm text-slate-500">
+            <span className="text-xs text-slate-500 sm:text-sm">
               {tDashboard("menusSubtitle")}
             </span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <Button
               asChild
               variant="ghost"
-              className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm hover:bg-slate-50"
+              className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 shadow-sm hover:bg-slate-50 sm:px-4 sm:text-sm"
             >
               <a
                 href={buildMenuUrlFromSlug(restaurant.slug)}
                 target="_blank"
                 rel="noreferrer"
               >
-                <Eye className="h-4 w-4" />
-                {tNavigation("viewMenu")}
+                <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">{tNavigation("viewMenu")}</span>
+                <span className="sm:hidden">View</span>
               </a>
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm hover:bg-slate-50"
+                  className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 shadow-sm hover:bg-slate-50 sm:px-4 sm:text-sm"
                 >
-                  <MoreHorizontal className="h-4 w-4" />
-                  {tNavigation("actions")}
+                  <MoreHorizontal className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">{tNavigation("actions")}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
@@ -111,44 +112,44 @@ export default async function MenusPage({ params }: MenusPageProps) {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button asChild className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90">
+            <Button asChild className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-primary/90 sm:px-5 sm:text-sm">
               <Link href={`/${locale}/dashboard/menus/new`}>
                 {tNavigation("newMenu")}
               </Link>
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="p-0">
+        <CardContent className="overflow-x-auto p-0">
           <Table>
             <TableHeader>
               <TableRow className="border-b border-slate-100 bg-slate-50/60">
-                <TableHead className="w-[40%] px-8 py-5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                <TableHead className="w-[40%] px-4 py-4 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:px-8 sm:py-5">
                   {tDashboard("table.name")}
                 </TableHead>
-                <TableHead className="w-[100px] px-6 py-5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                <TableHead className="hidden w-[100px] px-6 py-5 text-xs font-semibold uppercase tracking-wide text-slate-500 md:table-cell">
                   
                 </TableHead>
-                <TableHead className="px-8 py-5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                <TableHead className="px-4 py-4 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:px-8 sm:py-5">
                   {tDashboard("table.items")}
                 </TableHead>
-                <TableHead className="px-8 py-5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                <TableHead className="hidden px-8 py-5 text-xs font-semibold uppercase tracking-wide text-slate-500 lg:table-cell">
                   {tDashboard("table.availability")}
                 </TableHead>
-                <TableHead className="px-8 py-5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                <TableHead className="px-4 py-4 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:px-8 sm:py-5">
                   {tDashboard("table.visibility")}
                 </TableHead>
-                <TableHead className="px-6 py-5" />
+                <TableHead className="px-4 py-4 sm:px-6 sm:py-5" />
               </TableRow>
             </TableHeader>
             <TableBody>
               {menusData.map((menu) => (
                 <TableRow key={menu.id} className="group bg-white">
-                  <TableCell className="px-8 py-6">
-                    <div className="flex items-center gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                        <UtensilsCrossed className="h-5 w-5" />
+                  <TableCell className="px-4 py-4 sm:px-8 sm:py-6">
+                    <div className="flex items-center gap-3 sm:gap-4">
+                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary sm:h-12 sm:w-12 sm:rounded-xl">
+                        <UtensilsCrossed className="h-4 w-4 sm:h-5 sm:w-5" />
                       </div>
-                      <div className="flex flex-col">
+                      <div className="min-w-0 flex-1 flex-col">
                         <MenuNameEditor
                           menuId={menu.id}
                           initialValue={menu.name}
@@ -156,7 +157,7 @@ export default async function MenusPage({ params }: MenusPageProps) {
                           isEditable={false}
                         />
                         {typeof menu.categories === "number" && (
-                          <span className="text-xs font-medium text-slate-400">
+                          <span className="text-[10px] font-medium text-slate-400 sm:text-xs">
                             {tDashboard("menuCategories", {
                               count: menu.categories,
                             })}
@@ -165,7 +166,7 @@ export default async function MenusPage({ params }: MenusPageProps) {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="px-6 py-6">
+                  <TableCell className="hidden px-6 py-6 md:table-cell">
                     <Button
                       asChild
                       variant="outline"
@@ -176,29 +177,29 @@ export default async function MenusPage({ params }: MenusPageProps) {
                       </Link>
                     </Button>
                   </TableCell>
-                  <TableCell className="px-8 py-6 text-base font-semibold text-slate-700">
+                  <TableCell className="px-4 py-4 text-sm font-semibold text-slate-700 sm:px-8 sm:py-6 sm:text-base">
                     {menu.items}
                   </TableCell>
-                  <TableCell className="px-8 py-6 text-sm font-medium text-slate-500">
+                  <TableCell className="hidden px-8 py-6 text-sm font-medium text-slate-500 lg:table-cell">
                     {tAvailability("everyday")}
                   </TableCell>
-                  <TableCell className="px-8 py-6">
-                    <div className="flex items-center gap-3">
+                  <TableCell className="px-4 py-4 sm:px-8 sm:py-6">
+                    <div className="flex items-center gap-2 sm:gap-3">
                       <Switch defaultChecked={true} />
-                      <span className="text-sm font-medium text-slate-500">
+                      <span className="text-xs font-medium text-slate-500 sm:text-sm">
                         {tVisibility("visible")}
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell className="px-6 py-6 text-right">
+                  <TableCell className="px-4 py-4 text-right sm:px-6 sm:py-6">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 rounded-full border border-slate-200 text-slate-500 hover:text-slate-900"
+                          className="h-7 w-7 rounded-full border border-slate-200 text-slate-500 hover:text-slate-900 sm:h-8 sm:w-8"
                         >
-                          <MoreHorizontal className="h-4 w-4" />
+                          <MoreHorizontal className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-44">

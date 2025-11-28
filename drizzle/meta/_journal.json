@@ -15,6 +15,13 @@
       "when": 1763469554973,
       "tag": "0001_wild_valkyrie",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1764328440912,
+      "tag": "0002_chunky_inertia",
+      "breakpoints": true
     }
   ]
 }

@@ -10,7 +10,8 @@
     "test": "npm run lint && tsx --test",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate",
+    "db:apply-analytics": "node scripts/apply-migration.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "5.2.2",

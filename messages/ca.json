@@ -26,7 +26,14 @@
   "dashboard": {
     "menusTitle": "Menús",
     "menusSubtitle": "Gestiona els menús del teu restaurant des d'un únic panell.",
+    "analyticsSubtitle": "Rastreja quantes persones accedeixen al teu menú.",
     "addMenu": "Afegeix menú",
+    "analytics": {
+      "totalViews": "Visualitzacions totals",
+      "viewsToday": "Visualitzacions avui",
+      "viewsThisWeek": "Visualitzacions aquesta setmana",
+      "viewsThisMonth": "Visualitzacions aquest mes"
+    },
     "menuCategories": "{count, plural, one {# categoria} other {# categories}}",
     "table": {
       "name": "Nom",
@@ -237,6 +244,219 @@
       "subtitle": "Digitalitza la carta del teu restaurant en minuts.",
       "cta": "Ja tens compte?",
       "ctaLink": "Inicia sessió"
+    }
+  },
+  "landing": {
+    "nav": {
+      "signIn": "Iniciar sessió",
+      "cta": "Crea el meu menú gratis"
+    },
+    "hero": {
+      "title": "Menús digitals elegants per a restaurants",
+      "subtitle": "Crea el teu menú digital en 60 segons",
+      "cta": "Crea el meu menú gratis",
+      "visualPlaceholder": "Mockup mòbil + QR + carta"
+    },
+    "problem": {
+      "title": "El problema amb les cartes impreses",
+      "description": "Les cartes impreses són costoses, rígides i difícils d'actualitzar. Cada canvi implica despeses, errors, reimpressions o confusió. A més: al·lèrgens, traduccions, rotacions de menú, ofertes… tot es complica."
+    },
+    "benefits": {
+      "title": "Tot el que necessites per digitalitzar la teva carta",
+      "items": {
+        "1": {
+          "title": "Actualitza instantàniament",
+          "description": "Canvia preus, plats o descripcions en temps real sense imprimir res.",
+          "icon": "zap"
+        },
+        "2": {
+          "title": "Multilingüe",
+          "description": "Ideal per a turistes. Ofereix el teu menú en diversos idiomes amb un sol clic.",
+          "icon": "globe"
+        },
+        "3": {
+          "title": "QR físic + carta digital",
+          "description": "Genera codis QR personalitzats i envia'ls a imprimir o demana adhesius gratis.",
+          "icon": "qr"
+        },
+        "4": {
+          "title": "Panell simple",
+          "description": "Gestiona tot des del teu mòbil o escriptori. Interfície intuïtiva i fàcil d'usar.",
+          "icon": "smartphone"
+        },
+        "5": {
+          "title": "Imatges i descripcions",
+          "description": "Afegeix fotos professionals i descripcions detallades a cada plat.",
+          "icon": "image"
+        },
+        "6": {
+          "title": "Estadístiques d'escanejos",
+          "description": "Descobreix quantes persones veuen el teu menú i optimitza la teva oferta.",
+          "icon": "chart"
+        }
+      }
+    },
+    "demo": {
+      "title": "Així funciona Menoo",
+      "panel": {
+        "title": "Panell de control",
+        "description": "Gestiona els teus menús des de qualsevol dispositiu",
+        "placeholder": "Captura del panell de control"
+      },
+      "menu": {
+        "title": "Carta digital",
+        "description": "Vista prèvia de com veuen els teus clients el menú",
+        "placeholder": "Captura de la carta digital"
+      }
+    },
+    "pricing": {
+      "title": "Plans i preus",
+      "plans": {
+        "free": {
+          "name": "Gratis per sempre",
+          "price": "Gratis",
+          "description": "Perfecte per començar",
+          "features": {
+            "0": "1 carta",
+            "1": "Fins a 20 plats",
+            "2": "100 escanejos/mes"
+          },
+          "cta": "Comença gratis"
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "8 € / mes",
+          "description": "Per a restaurants professionals",
+          "features": {
+            "0": "Menús il·limitats",
+            "1": "Plats il·limitats",
+            "2": "Escanejos il·limitats",
+            "3": "Estadístiques avançades"
+          },
+          "cta": "Prova Pro 14 dies"
+        }
+      }
+    },
+    "socialProof": {
+      "title": "El que diuen els nostres clients",
+      "testimonials": {
+        "1": {
+          "quote": "Menoo ha transformat com gestionem el nostre menú. Ja no hem de reimprimir cada vegada que canviem alguna cosa.",
+          "author": "Maria González",
+          "role": "Propietària, Restaurant La Bodega"
+        },
+        "2": {
+          "quote": "Els clients adoren poder veure el menú en el seu idioma. Ha millorat molt l'experiència dels nostres turistes.",
+          "author": "Carlos Ruiz",
+          "role": "Gerent, Tapas & Co"
+        }
+      },
+      "logos": {
+        "title": "Confien en nosaltres",
+        "items": {
+          "1": "Restaurant A",
+          "2": "Restaurant B",
+          "3": "Restaurant C",
+          "4": "Restaurant D"
+        }
+      }
+    },
+    "howItWorks": {
+      "title": "Com funciona",
+      "steps": {
+        "1": {
+          "title": "Puja la teva carta",
+          "description": "Importa el teu menú des de CSV o crea'l manualment en minuts."
+        },
+        "2": {
+          "title": "Genera el teu QR",
+          "description": "Descarrega el teu codi QR personalitzat o demana adhesius gratis per a les teves taules."
+        },
+        "3": {
+          "title": "Comparteix i actualitza",
+          "description": "Els clients escanegen el QR i veuen la teva carta digital. Actualitza-la quan vulguis."
+        }
+      }
+    },
+    "faq": {
+      "title": "Preguntes freqüents",
+      "items": {
+        "1": {
+          "question": "Puc canviar el menú sempre?",
+          "answer": "Sí, pots actualitzar el teu menú en qualsevol moment des del panell de control. Els canvis es reflecteixen instantàniament."
+        },
+        "2": {
+          "question": "Funciona sense imprimir?",
+          "answer": "Sí, només necessites imprimir el codi QR una vegada. La carta es mostra digitalment quan els clients escanegen."
+        },
+        "3": {
+          "question": "Puc tenir diversos menús?",
+          "answer": "Amb el pla Pro pots crear menús il·limitats. El pla gratuït inclou 1 menú."
+        },
+        "4": {
+          "question": "Quant costa?",
+          "answer": "Tenim un pla gratuït per sempre. El pla Pro costa 8€/mes i inclou funcions avançades."
+        },
+        "5": {
+          "question": "Necessito coneixements tècnics?",
+          "answer": "No, Menoo està dissenyat per ser fàcil d'usar. Si pots usar un telèfon, pots usar Menoo."
+        }
+      }
+    },
+    "finalCta": {
+      "title": "Llest per digitalitzar la teva carta?",
+      "cta": "Comença gratis"
+    },
+    "footer": {
+      "description": "La forma més senzilla de crear i gestionar menús digitals per a restaurants.",
+      "product": {
+        "title": "Producte",
+        "links": {
+          "1": {
+            "label": "Característiques",
+            "href": "#"
+          },
+          "2": {
+            "label": "Preus",
+            "href": "#pricing"
+          },
+          "3": {
+            "label": "Com funciona",
+            "href": "#how-it-works"
+          }
+        }
+      },
+      "company": {
+        "title": "Empresa",
+        "links": {
+          "1": {
+            "label": "Sobre nosaltres",
+            "href": "#"
+          },
+          "2": {
+            "label": "Contacte",
+            "href": "#"
+          }
+        }
+      },
+      "legal": {
+        "title": "Legal",
+        "links": {
+          "1": {
+            "label": "Termes de servei",
+            "href": "#"
+          },
+          "2": {
+            "label": "Política de privacitat",
+            "href": "#"
+          },
+          "3": {
+            "label": "Cookies",
+            "href": "#"
+          }
+        }
+      },
+      "copyright": "© 2024 Menoo. Tots els drets reservats."
     }
   }
 }
