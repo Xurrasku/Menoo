@@ -119,6 +119,7 @@ function BillingTeaser({
   t: BillingTranslator;
 }) {
   const billingPath = getBillingPagePath(locale);
+  const billingHref = { pathname: billingPath };
 
   return (
     <div className="rounded-3xl border border-primary/20 bg-white p-8 shadow-xl shadow-primary/10">
@@ -139,7 +140,7 @@ function BillingTeaser({
         asChild
         className="mt-8 w-full justify-center rounded-2xl bg-primary px-6 py-4 text-base font-semibold text-white shadow-lg shadow-primary/30 transition hover:bg-primary/90"
       >
-        <Link href={billingPath}>{t("page.cta")}</Link>
+        <Link href={billingHref}>{t("page.cta")}</Link>
       </Button>
     </div>
   );

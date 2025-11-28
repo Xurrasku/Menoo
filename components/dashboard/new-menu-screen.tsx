@@ -364,7 +364,16 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
                 onReorderDishes={(nextOrder) =>
                   setCategories((prev) =>
                     prev.map((cat) =>
-                      cat.id === category.id ? { ...cat, dishes: nextOrder } : cat
+                      cat.id === category.id
+                        ? {
+                            ...cat,
+                            dishes: nextOrder.map((dish) => ({
+                              ...dish,
+                              labels: dish.labels ?? [],
+                              allergens: dish.allergens ?? [],
+                            })),
+                          }
+                        : cat
                     )
                   )
                 }

@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import type { Route } from "next";
 import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -75,7 +76,7 @@ export function SignInForm({
 
       const targetPath = buildPostAuthRedirect({ locale, destination: redirectTo });
       startTransition(() => {
-        router.replace(targetPath);
+        router.replace(targetPath as Route);
       });
     } catch (error) {
       setErrorMessage(

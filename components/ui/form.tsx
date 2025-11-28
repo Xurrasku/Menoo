@@ -6,6 +6,7 @@ import {
   useFormContext,
   type FieldValues,
   type ControllerProps,
+  type Path,
 } from "react-hook-form";
 
 import { cn } from "@/lib/utils";
@@ -51,7 +52,7 @@ const FormItemContext = React.createContext<FormItemContextValue | undefined>(
   undefined
 );
 
-const FormField = <TFieldValues extends FieldValues, TName extends string>({
+const FormField = <TFieldValues extends FieldValues, TName extends Path<TFieldValues>>({
   ...props
 }: ControllerProps<TFieldValues, TName>) => {
   return (

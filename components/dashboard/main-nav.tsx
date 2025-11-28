@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useSelectedLayoutSegments } from "next/navigation";
 import * as Icons from "lucide-react";
 import {
+  type ComponentProps,
+  type ComponentType,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -16,7 +18,7 @@ import { cn } from "@/lib/utils";
 
 export type NavItem = {
   label: string;
-  href: string;
+  href: ComponentProps<typeof Link>["href"];
   segment: string;
   icon: keyof typeof Icons;
 };
@@ -110,7 +112,7 @@ export function MainNav({ items }: MainNavProps) {
         />
       {items.map((item) => {
         const isActive = item.segment === activeSegment;
-        const Icon = Icons[item.icon];
+        const Icon = Icons[item.icon] as ComponentType<{ className?: string }>;
         return (
           <Link
             key={item.segment}

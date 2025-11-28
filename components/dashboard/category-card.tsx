@@ -21,6 +21,8 @@ export type Dish = {
   currency: string;
   thumbnail?: string;
   isVisible: boolean;
+  labels?: string[];
+  allergens?: string[];
 };
 
 type CategoryCardProps = {

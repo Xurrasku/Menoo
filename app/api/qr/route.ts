@@ -46,7 +46,9 @@ export async function POST(request: NextRequest) {
     width,
   });
 
-  return new Response(pngBuffer, {
+  const pngBytes = new Uint8Array(pngBuffer);
+
+  return new Response(pngBytes, {
     status: 200,
     headers: {
       "Content-Type": "image/png",

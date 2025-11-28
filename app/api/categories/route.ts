@@ -34,16 +34,16 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  let builder = db
-    .select()
-    .from(categories)
-    .orderBy(asc(categories.position));
-
-  if (query.data.menuId) {
-    builder = builder.where(eq(categories.menuId, query.data.menuId));
-  }
-
-  const data = await builder;
+  const data = query.data.menuId
+    ? await db
+        .select()
+        .from(categories)
+        .where(eq(categories.menuId, query.data.menuId))
+        .orderBy(asc(categories.position))
+    : await db
+        .select()
+        .from(categories)
+        .orderBy(asc(categories.position));
 
   return Response.json({ data }, { status: 200 });
 }

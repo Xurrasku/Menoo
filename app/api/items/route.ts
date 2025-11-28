@@ -37,16 +37,16 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  let builder = db
-    .select()
-    .from(items)
-    .orderBy(asc(items.createdAt));
-
-  if (query.data.categoryId) {
-    builder = builder.where(eq(items.categoryId, query.data.categoryId));
-  }
-
-  const data = await builder;
+  const data = query.data.categoryId
+    ? await db
+        .select()
+        .from(items)
+        .where(eq(items.categoryId, query.data.categoryId))
+        .orderBy(asc(items.createdAt))
+    : await db
+        .select()
+        .from(items)
+        .orderBy(asc(items.createdAt));
 
   return Response.json({ data }, { status: 200 });
 }

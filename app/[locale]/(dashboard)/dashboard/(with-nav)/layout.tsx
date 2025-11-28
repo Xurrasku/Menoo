@@ -32,25 +32,25 @@ export default async function ShellLayout({ children, params }: ShellLayoutProps
   const navItems = [
     {
       label: tNavigation("menus"),
-      href: `/${locale}/dashboard/menus`,
+      href: { pathname: `/${locale}/dashboard/menus` },
       segment: "menus",
       icon: "Utensils" as const,
     },
     {
       label: tNavigation("statistics"),
-      href: `/${locale}/dashboard/statistics`,
+      href: { pathname: `/${locale}/dashboard/statistics` },
       segment: "statistics",
       icon: "BarChart3" as const,
     },
     {
       label: tNavigation("qr"),
-      href: `/${locale}/dashboard/qr`,
+      href: { pathname: `/${locale}/dashboard/qr` },
       segment: "qr",
       icon: "QrCode" as const,
     },
     {
       label: tNavigation("settings"),
-      href: `/${locale}/dashboard/settings`,
+      href: { pathname: `/${locale}/dashboard/settings` },
       segment: "settings",
       icon: "Settings" as const,
     },

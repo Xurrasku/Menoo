@@ -10,7 +10,9 @@ export async function createSupabaseServerClient() {
     throw new Error("Supabase environment variables are not configured.");
   }
 
-  const safeSet = (name: string, value: string, options?: Parameters<typeof cookieStore.set>[0]) => {
+  type CookieOptions = Omit<Parameters<typeof cookieStore.set>[0], "name" | "value">;
+
+  const safeSet = (name: string, value: string, options?: CookieOptions) => {
     try {
       cookieStore.set({
         name,

@@ -16,9 +16,14 @@ const relevantEvents = new Set<Stripe.Event.Type>([
   "customer.subscription.deleted",
 ]);
 
+type SubscriptionPayload = Stripe.Subscription & {
+  current_period_end?: number;
+};
+
 export async function POST(request: NextRequest) {
   const rawBody = await request.text();
-  const signature = headers().get("stripe-signature");
+  const headersList = await headers();
+  const signature = headersList.get("stripe-signature");
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
   if (!signature || !webhookSecret) {
@@ -70,7 +75,11 @@ export async function POST(request: NextRequest) {
       }
       case "customer.subscription.updated":
       case "customer.subscription.created": {
-        const subscription = event.data.object as Stripe.Subscription;
+        const subscription = event.data.object as SubscriptionPayload;
+        const currentPeriodEnd =
+          typeof subscription.current_period_end === "number"
+            ? new Date(subscription.current_period_end * 1000)
+            : null;
 
         if (db) {
           await db
@@ -81,7 +90,7 @@ export async function POST(request: NextRequest) {
               )
                 ? (subscription.status as (typeof subscriptionStatusEnum.enumValues)[number])
                 : "active"),
-              currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+              currentPeriodEnd,
               plan: subscription.items.data[0]?.price.nickname ?? subscription.items.data[0]?.price.id ?? "unknown",
             })
             .where(eq(subscriptions.stripeCustomerId, subscription.customer as string));

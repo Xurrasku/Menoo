@@ -52,7 +52,9 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  if (!db) {
+  const client = db;
+
+  if (!client) {
     return Response.json(
       {
         data: mockMenus.map((menu) => ({
@@ -68,25 +70,25 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  let builder = db
-    .select({
-      id: menus.id,
-      name: menus.name,
-      isDefault: menus.isDefault,
-      createdAt: menus.createdAt,
-      itemsCount: count(items.id).as("itemsCount"),
-    })
-    .from(menus)
-    .leftJoin(categories, eq(categories.menuId, menus.id))
-    .leftJoin(items, eq(items.categoryId, categories.id))
-    .groupBy(menus.id)
-    .orderBy(desc(menus.createdAt));
+  const createBaseQuery = () =>
+    client
+      .select({
+        id: menus.id,
+        name: menus.name,
+        isDefault: menus.isDefault,
+        createdAt: menus.createdAt,
+        itemsCount: count(items.id).as("itemsCount"),
+      })
+      .from(menus)
+      .leftJoin(categories, eq(categories.menuId, menus.id))
+      .leftJoin(items, eq(items.categoryId, categories.id))
+      .groupBy(menus.id);
 
-  if (query.data.restaurantId) {
-    builder = builder.where(eq(menus.restaurantId, query.data.restaurantId));
-  }
+  const builder = query.data.restaurantId
+    ? createBaseQuery().where(eq(menus.restaurantId, query.data.restaurantId))
+    : createBaseQuery();
 
-  const data = await builder;
+  const data = await builder.orderBy(desc(menus.createdAt));
 
   return Response.json({ data }, { status: 200 });
 }

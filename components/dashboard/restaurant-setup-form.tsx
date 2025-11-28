@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import type { Route } from "next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
@@ -115,7 +116,7 @@ export function RestaurantSetupForm({ locale, copy }: RestaurantSetupFormProps) 
       setSubmissionState({ error: null, success: true });
 
       startTransition(() => {
-        router.replace(`/${locale}/dashboard/menus`);
+        router.replace(`/${locale}/dashboard/menus` as Route);
       });
     } catch (error) {
       console.error("Restaurant setup failed", error);

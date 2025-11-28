@@ -61,13 +61,17 @@ export type QrRequestConfig = {
 
 export const DEFAULT_DOWNLOAD_PRESET: DownloadPresetId = "pdfSmall";
 
-const fallbackPreset = QR_DOWNLOAD_PRESETS.find(
-  (preset) => preset.id === DEFAULT_DOWNLOAD_PRESET,
-);
+const fallbackPreset = (() => {
+  const preset = QR_DOWNLOAD_PRESETS.find(
+    (item) => item.id === DEFAULT_DOWNLOAD_PRESET,
+  );
 
-if (!fallbackPreset) {
-  throw new Error("DEFAULT_DOWNLOAD_PRESET must exist in QR_DOWNLOAD_PRESETS");
-}
+  if (!preset) {
+    throw new Error("DEFAULT_DOWNLOAD_PRESET must exist in QR_DOWNLOAD_PRESETS");
+  }
+
+  return preset;
+})();
 
 export function resolveDownloadConfig(
   presetId: string,
