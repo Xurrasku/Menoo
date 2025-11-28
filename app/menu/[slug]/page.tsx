@@ -1,5 +1,5 @@
-import Image from "next/image";
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { getRestaurantMenus, type RestaurantMenuDetail } from "@/lib/menus/service";
@@ -59,25 +59,12 @@ export default async function PublicMenuPage({ params }: PublicMenuPageProps) {
   return (
     <>
       <MenuViewTracker slug={slug} />
-      <div className="min-h-screen bg-[#e7e7e7] px-3 py-4 sm:px-4 sm:py-6 lg:px-8 safe-area-inset">
-        <div className="mx-auto flex w-full max-w-[420px] flex-col">
-        {/* Hero Image Section */}
-        <header className="relative h-[200px] overflow-hidden rounded-t-[24px] sm:h-[220px] sm:rounded-t-[28px]">
-          <Image
-            src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80"
-            alt={`${restaurant.name} - Carta digital`}
-            fill
-            className="object-cover"
-            priority
-            sizes="(max-width: 640px) 100vw, 420px"
-            quality={85}
-          />
-        </header>
-
+      <div className="min-h-screen w-full bg-white sm:bg-[#fafafa] sm:px-4 sm:py-6 lg:px-8 safe-area-inset">
+        <div className="mx-auto flex w-full flex-col sm:max-w-[420px]">
         {/* Main Content Card */}
-        <div className="flex flex-1 flex-col rounded-b-[24px] bg-white shadow-[0_18px_40px_rgba(15,23,42,0.12)] sm:rounded-b-[28px]">
-          <main className="flex-1 px-4 pb-4 pt-5 sm:px-[22px] sm:pb-[18px] sm:pt-6">
-            <h1 className="mb-4 text-[1.5rem] font-semibold lowercase leading-tight tracking-[0.01em] text-[#1f1f1f] sm:mb-5 sm:text-[1.65rem]">
+        <div className="flex flex-1 flex-col w-full bg-white sm:bg-white">
+          <main className="flex-1 w-full px-6 pb-6 pt-8 sm:px-8 sm:pb-8 sm:pt-10">
+            <h1 className="mb-8 font-display text-[1.875rem] font-bold uppercase leading-tight tracking-wider text-[#1a1a1a] sm:mb-10 sm:text-[2.25rem]">
               {restaurant.name}
             </h1>
 
@@ -100,25 +87,18 @@ export default async function PublicMenuPage({ params }: PublicMenuPageProps) {
           </main>
 
           {/* Footer */}
-          <footer className="flex items-center gap-2 border-t border-[rgba(15,23,42,0.06)] px-4 pb-4 pt-4 sm:gap-2.5 sm:px-6 sm:pb-6 sm:pt-5">
-            <div className="flex items-center gap-2 text-xs font-medium text-[#6b21a8] sm:gap-2.5 sm:text-sm">
-              <span
-                className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded bg-[#6b21a8] sm:h-6 sm:w-6"
-                aria-hidden="true"
-              >
-                <svg viewBox="0 0 24 24" className="h-3 w-3 fill-white sm:h-4 sm:w-4">
-                  <circle cx="10" cy="10" r="3" />
-                  <circle cx="14" cy="10" r="3" />
-                  <circle cx="10" cy="14" r="3" />
-                  <circle cx="14" cy="14" r="3" />
-                </svg>
-              </span>
-              Hecho con Menoo
-            </div>
+          <footer className="flex justify-end border-t border-[#e5e5e5] px-6 sm:px-8">
+            <Image
+              src="/assets/logo.png"
+              alt="Menoo"
+              width={200}
+              height={67}
+              className="h-16 w-auto sm:h-20"
+            />
           </footer>
         </div>
+        </div>
       </div>
-    </div>
     </>
   );
 }
@@ -132,8 +112,8 @@ function MenuSection({ menu }: { menu: RestaurantMenuDetail }) {
         </p>
       ) : (
         menu.categories.map((category) => (
-          <div key={category.id} className="space-y-3 sm:space-y-4">
-            <h2 className="text-base font-semibold text-[#1f1f1f] sm:text-[1.1rem]">{category.name}</h2>
+          <div key={category.id} className="space-y-6 sm:space-y-7">
+            <h2 className="border-b border-[#1a1a1a] pb-2 font-display text-base font-bold uppercase tracking-widest text-[#1a1a1a] sm:text-lg">{category.name}</h2>
             <CategoryDishes category={category} />
           </div>
         ))
@@ -152,12 +132,16 @@ function CategoryDishes({ category }: { category: RestaurantMenuDetail["categori
   return (
     <div className="flex flex-col gap-3 sm:gap-4">
       {visibleDishes.map((dish) => (
-        <article key={dish.id} className="flex gap-3 border-b border-[rgba(15,23,42,0.08)] pb-3 last:border-b-0 sm:gap-3.5 sm:pb-4">
-          <DishThumbnail thumbnail={dish.thumbnail} name={dish.name} />
+        <article key={dish.id} className="flex gap-4 pb-5 last:pb-0 sm:gap-5 sm:pb-6">
           <div className="min-w-0 flex-1">
-            <h3 className="mb-0.5 text-sm font-semibold leading-tight text-[#1f1f1f] sm:mb-1 sm:text-[1.04rem]">{dish.name}</h3>
+            <div className="mb-1 flex items-baseline justify-between gap-4 sm:mb-1.5">
+              <h3 className="font-display text-base font-bold leading-tight tracking-tight text-[#1a1a1a] sm:text-lg">{dish.name}</h3>
+              <p className="flex-shrink-0 whitespace-nowrap font-display text-base font-bold text-[#1a1a1a] sm:text-lg">
+                {formatPrice(dish.price, dish.currency)}
+              </p>
+            </div>
             {dish.description ? (
-              <p className="mb-1.5 text-xs leading-[1.4] text-[#5d6368] sm:mb-2 sm:text-sm">{dish.description}</p>
+              <p className="mb-2 text-xs leading-relaxed text-[#666666] italic sm:mb-2.5 sm:text-sm">{dish.description}</p>
             ) : null}
             {dish.labels.length > 0 ? (
               <div className="mb-1 flex flex-wrap gap-1 sm:mb-1.5 sm:gap-1.5">
@@ -172,15 +156,10 @@ function CategoryDishes({ category }: { category: RestaurantMenuDetail["categori
               </div>
             ) : null}
             {dish.allergens.length > 0 ? (
-              <p className="text-[10px] font-medium leading-tight text-[#ef4444] sm:text-xs">
+              <p className="mt-2 text-[10px] italic text-[#999999] sm:mt-2.5 sm:text-xs">
                 Alérgenos: {dish.allergens.join(", ")}
               </p>
             ) : null}
-          </div>
-          <div className="flex-shrink-0">
-            <p className="mt-0.5 whitespace-nowrap text-sm font-semibold text-[#1f1f1f] sm:mt-1 sm:text-base">
-              {formatPrice(dish.price, dish.currency)}
-            </p>
           </div>
         </article>
       ))}
@@ -188,30 +167,6 @@ function CategoryDishes({ category }: { category: RestaurantMenuDetail["categori
   );
 }
 
-function DishThumbnail({ thumbnail, name }: { thumbnail: string; name: string }) {
-  if (thumbnail && isImageUrl(thumbnail)) {
-    return (
-      <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-xl border border-[rgba(15,23,42,0.06)] bg-[#f1f5f9] sm:h-14 sm:w-14 sm:rounded-2xl">
-        <Image
-          src={thumbnail}
-          alt={name}
-          width={56}
-          height={56}
-          className="h-full w-full object-cover"
-          loading="lazy"
-          sizes="48px"
-          quality={75}
-        />
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl border border-[rgba(15,23,42,0.06)] bg-[#f1f5f9] text-xl sm:h-14 sm:w-14 sm:rounded-2xl sm:text-2xl">
-      {thumbnail || "🍽️"}
-    </div>
-  );
-}
 
 function isImageUrl(value: string) {
   return /^https?:\/\//i.test(value);

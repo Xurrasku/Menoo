@@ -77,10 +77,7 @@ export default async function LandingPage({ params }: Props) {
       <section className="border-y border-border bg-muted/30 py-20">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="mb-6 font-display text-3xl font-bold text-foreground md:text-4xl">
-              {t("problem.title")}
-            </h2>
-            <p className="text-lg text-muted-foreground md:text-xl">
+            <p className="text-lg leading-relaxed text-foreground md:text-xl md:leading-relaxed">
               {t("problem.description")}
             </p>
           </div>
@@ -89,12 +86,12 @@ export default async function LandingPage({ params }: Props) {
 
       {/* Benefits Section */}
       <section className="container mx-auto px-4 py-20">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-6xl px-8">
           <h2 className="mb-12 text-center font-display text-3xl font-bold text-foreground md:text-4xl">
             {t("benefits.title")}
           </h2>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3, 4, 5, 6].map((index) => {
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
+            {[1, 2, 3, 4].map((index) => {
               const iconKey = t(`benefits.items.${index}.icon`);
               const icons: Record<string, React.ReactNode> = {
                 zap: <Zap className="h-8 w-8 text-primary" />,
@@ -151,26 +148,6 @@ export default async function LandingPage({ params }: Props) {
                 </CardContent>
               </Card>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section id="how-it-works" className="container mx-auto px-4 py-20">
-        <div className="mx-auto max-w-4xl">
-          <h2 className="mb-12 text-center font-display text-3xl font-bold text-foreground md:text-4xl">
-            {t("howItWorks.title")}
-          </h2>
-          <div className="grid gap-8 md:grid-cols-3">
-            {[1, 2, 3].map((index) => (
-              <div key={index} className="text-center">
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-foreground">
-                  {index}
-                </div>
-                <h3 className="mb-2 font-display text-xl font-semibold text-foreground">{t(`howItWorks.steps.${index}.title`)}</h3>
-                <p className="text-muted-foreground">{t(`howItWorks.steps.${index}.description`)}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>

@@ -258,8 +258,7 @@
       "visualPlaceholder": "Mockup móvil + QR + carta"
     },
     "problem": {
-      "title": "El problema con las cartas impresas",
-      "description": "Las cartas impresas son costosas, rígidas y difíciles de actualizar. Cada cambio implica gastos, errores, reimpresiones o confusión. Además: alérgenos, traducciones, rotaciones de menú, ofertas… todo se complica."
+      "description": "Porque cada cambio en tu carta impresa cuesta dinero, tiempo y oportunidades perdidas. Descubre la libertad de lo digital."
     },
     "benefits": {
       "title": "Todo lo que necesitas para digitalizar tu carta",
@@ -270,29 +269,19 @@
           "icon": "zap"
         },
         "2": {
-          "title": "Multilingüe",
-          "description": "Ideal para turistas. Ofrece tu menú en varios idiomas con un solo clic.",
+          "title": "Usa IA para añadir todos los idiomas que quieras",
+          "description": "Traduce automáticamente tu menú a múltiples idiomas con inteligencia artificial.",
           "icon": "globe"
         },
         "3": {
-          "title": "QR físico + carta digital",
-          "description": "Genera códigos QR personalizados y envíalos a imprimir o pide stickers gratis.",
-          "icon": "qr"
+          "title": "Estadísticas de escaneos",
+          "description": "Descubre cuántas personas ven tu menú y optimiza tu oferta.",
+          "icon": "chart"
         },
         "4": {
           "title": "Panel simple",
           "description": "Gestiona todo desde tu móvil o escritorio. Interfaz intuitiva y fácil de usar.",
           "icon": "smartphone"
-        },
-        "5": {
-          "title": "Imágenes y descripciones",
-          "description": "Añade fotos profesionales y descripciones detalladas a cada plato.",
-          "icon": "image"
-        },
-        "6": {
-          "title": "Estadísticas de escaneos",
-          "description": "Descubre cuántas personas ven tu menú y optimiza tu oferta.",
-          "icon": "chart"
         }
       }
     },

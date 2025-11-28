@@ -258,8 +258,7 @@
       "visualPlaceholder": "Mobile mockup + QR + menu"
     },
     "problem": {
-      "title": "The problem with printed menus",
-      "description": "Printed menus are expensive, rigid, and hard to update. Every change means costs, errors, reprints, or confusion. Plus: allergens, translations, menu rotations, special offers… everything gets complicated."
+      "description": "Because every change to your printed menu costs money, time, and lost opportunities. Discover the freedom of digital."
     },
     "benefits": {
       "title": "Everything you need to digitize your menu",
@@ -270,29 +269,19 @@
           "icon": "zap"
         },
         "2": {
-          "title": "Multilingual",
-          "description": "Perfect for tourists. Offer your menu in multiple languages with one click.",
+          "title": "Use AI to add all languages you want",
+          "description": "Automatically translate your menu to multiple languages with artificial intelligence.",
           "icon": "globe"
         },
         "3": {
-          "title": "Physical QR + digital menu",
-          "description": "Generate custom QR codes and send them to print or request free stickers.",
-          "icon": "qr"
+          "title": "Scan statistics",
+          "description": "Discover how many people view your menu and optimize your offering.",
+          "icon": "chart"
         },
         "4": {
           "title": "Simple dashboard",
           "description": "Manage everything from your phone or desktop. Intuitive and easy to use.",
           "icon": "smartphone"
-        },
-        "5": {
-          "title": "Images & descriptions",
-          "description": "Add professional photos and detailed descriptions to each dish.",
-          "icon": "image"
-        },
-        "6": {
-          "title": "Scan statistics",
-          "description": "Discover how many people view your menu and optimize your offering.",
-          "icon": "chart"
         }
       }
     },

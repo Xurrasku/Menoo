@@ -258,8 +258,7 @@
       "visualPlaceholder": "Mockup mòbil + QR + carta"
     },
     "problem": {
-      "title": "El problema amb les cartes impreses",
-      "description": "Les cartes impreses són costoses, rígides i difícils d'actualitzar. Cada canvi implica despeses, errors, reimpressions o confusió. A més: al·lèrgens, traduccions, rotacions de menú, ofertes… tot es complica."
+      "description": "Perquè cada canvi a la teva carta impresa costa diners, temps i oportunitats perdudes. Descobreix la llibertat del digital."
     },
     "benefits": {
       "title": "Tot el que necessites per digitalitzar la teva carta",
@@ -270,29 +269,19 @@
           "icon": "zap"
         },
         "2": {
-          "title": "Multilingüe",
-          "description": "Ideal per a turistes. Ofereix el teu menú en diversos idiomes amb un sol clic.",
+          "title": "Utilitza IA per afegir tots els idiomes que vulguis",
+          "description": "Tradueix automàticament el teu menú a múltiples idiomes amb intel·ligència artificial.",
           "icon": "globe"
         },
         "3": {
-          "title": "QR físic + carta digital",
-          "description": "Genera codis QR personalitzats i envia'ls a imprimir o demana adhesius gratis.",
-          "icon": "qr"
+          "title": "Estadístiques d'escanejos",
+          "description": "Descobreix quantes persones veuen el teu menú i optimitza la teva oferta.",
+          "icon": "chart"
         },
         "4": {
           "title": "Panell simple",
           "description": "Gestiona tot des del teu mòbil o escriptori. Interfície intuïtiva i fàcil d'usar.",
           "icon": "smartphone"
-        },
-        "5": {
-          "title": "Imatges i descripcions",
-          "description": "Afegeix fotos professionals i descripcions detallades a cada plat.",
-          "icon": "image"
-        },
-        "6": {
-          "title": "Estadístiques d'escanejos",
-          "description": "Descobreix quantes persones veuen el teu menú i optimitza la teva oferta.",
-          "icon": "chart"
         }
       }
     },
