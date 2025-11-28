@@ -91,7 +91,7 @@ export async function PUT(
     );
   }
 
-  const user = await getServerUser();
+  const user = await getServerUser({ persistSession: true });
   if (!user) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }

@@ -33,6 +33,7 @@ export function MainNav({ items }: MainNavProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const itemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const frameRef = useRef<number | null>(null);
+  const pendingSegmentRef = useRef<string | null>(null);
   const [indicator, setIndicator] = useState({
     left: 0,
     width: 0,
@@ -41,7 +42,8 @@ export function MainNav({ items }: MainNavProps) {
 
   const measureIndicator = useCallback(() => {
     const container = containerRef.current;
-    const activeItem = activeSegment ? itemRefs.current[activeSegment] : null;
+    const targetSegment = pendingSegmentRef.current ?? activeSegment;
+    const activeItem = targetSegment ? itemRefs.current[targetSegment] : null;
 
     if (!container || !activeItem) {
       setIndicator((prev) =>
@@ -96,6 +98,13 @@ export function MainNav({ items }: MainNavProps) {
   }, [scheduleIndicatorUpdate]);
 
   useEffect(() => {
+    if (pendingSegmentRef.current === activeSegment) {
+      pendingSegmentRef.current = null;
+    }
+    scheduleIndicatorUpdate();
+  }, [activeSegment, scheduleIndicatorUpdate]);
+
+  useEffect(() => {
     if (typeof window === "undefined" || !("ResizeObserver" in window)) {
       return;
     }
@@ -110,6 +119,18 @@ export function MainNav({ items }: MainNavProps) {
 
     return () => observer.disconnect();
   }, [scheduleIndicatorUpdate, items]);
+
+  const previewSegment = useCallback(
+    (segment: string) => {
+      if (segment === activeSegment) {
+        pendingSegmentRef.current = null;
+        return;
+      }
+      pendingSegmentRef.current = segment;
+      scheduleIndicatorUpdate();
+    },
+    [activeSegment, scheduleIndicatorUpdate]
+  );
 
   return (
     <nav className="relative flex items-center gap-2 rounded-full bg-slate-100 p-1 text-sm font-medium">
@@ -134,6 +155,8 @@ export function MainNav({ items }: MainNavProps) {
           <Link
             key={item.segment}
             href={item.href}
+            onPointerDown={() => previewSegment(item.segment)}
+            onFocus={() => previewSegment(item.segment)}
               ref={(node) => {
                 itemRefs.current[item.segment] = node;
               }}

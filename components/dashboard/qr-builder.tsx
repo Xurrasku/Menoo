@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { QR_DOWNLOAD_PRESETS, DEFAULT_DOWNLOAD_PRESET, resolveDownloadConfig, type DownloadPresetId } from "@/lib/qr/presets";
 import { cn } from "@/lib/utils";
+import { copyTextToClipboard } from "@/lib/copy-to-clipboard";
 
 type FrameType = "bottom" | "top" | "none";
 
@@ -154,12 +155,13 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
   }, []);
 
   const handleCopyLink = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(menuUrl);
+    const didCopy = await copyTextToClipboard(menuUrl);
+
+    if (didCopy) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
-      console.error("Clipboard copy failed", error);
+    } else {
+      console.warn("Clipboard API unavailable, unable to copy the menu URL");
     }
   }, [menuUrl]);
 

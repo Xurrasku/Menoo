@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Eye, MoreHorizontal, UtensilsCrossed } from "lucide-react";
 
@@ -22,10 +21,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MenuNameEditor } from "@/components/dashboard/menu-name-editor";
-import { requireUser } from "@/lib/auth/server";
-import { getRestaurantByOwnerId } from "@/lib/restaurants/service";
 import { listMenus } from "@/lib/menus/service";
 import { buildMenuUrlFromSlug } from "@/lib/restaurants/domain";
+import { getDashboardSession } from "@/lib/dashboard/session";
 import { resolveLocaleFromParams, type LocaleParams } from "./locale";
 
 type MenusPageProps = {
@@ -34,34 +32,38 @@ type MenusPageProps = {
 
 export default async function MenusPage({ params }: MenusPageProps) {
   const locale = await resolveLocaleFromParams(params);
-  const tDashboard = await getTranslations({
-    locale,
-    namespace: "dashboard",
-  });
-  const tNavigation = await getTranslations({
-    locale,
-    namespace: "navigation",
-  });
-  const tRowActions = await getTranslations({
-    locale,
-    namespace: "dashboard.rowActions",
-  });
-  const tAvailability = await getTranslations({
-    locale,
-    namespace: "dashboard.availability",
-  });
-  const tVisibility = await getTranslations({
-    locale,
-    namespace: "dashboard.visibility",
-  });
-  const user = await requireUser(locale);
-  const restaurant = await getRestaurantByOwnerId(user.id);
+  const translationPromise = Promise.all([
+    getTranslations({
+      locale,
+      namespace: "dashboard",
+    }),
+    getTranslations({
+      locale,
+      namespace: "navigation",
+    }),
+    getTranslations({
+      locale,
+      namespace: "dashboard.rowActions",
+    }),
+    getTranslations({
+      locale,
+      namespace: "dashboard.availability",
+    }),
+    getTranslations({
+      locale,
+      namespace: "dashboard.visibility",
+    }),
+  ]);
+  const sessionPromise = getDashboardSession(locale);
+  const menusPromise = sessionPromise.then(({ restaurant }) =>
+    listMenus(restaurant.id)
+  );
 
-  if (!restaurant) {
-    redirect(`/${locale}/dashboard/restaurant`);
-  }
-
-  const menusData = await listMenus(restaurant.id);
+  const [
+    [tDashboard, tNavigation, tRowActions, tAvailability, tVisibility],
+    { restaurant },
+    menusData,
+  ] = await Promise.all([translationPromise, sessionPromise, menusPromise]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -81,10 +83,14 @@ export default async function MenusPage({ params }: MenusPageProps) {
               variant="ghost"
               className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm hover:bg-slate-50"
             >
-              <Link href={buildMenuUrlFromSlug(restaurant.slug)} target="_blank" rel="noreferrer">
+              <a
+                href={buildMenuUrlFromSlug(restaurant.slug)}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <Eye className="h-4 w-4" />
                 {tNavigation("viewMenu")}
-              </Link>
+              </a>
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

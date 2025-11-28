@@ -1,9 +1,6 @@
-import { redirect } from "next/navigation";
-
 import { QrBuilder } from "@/components/dashboard/qr-builder";
-import { requireUser } from "@/lib/auth/server";
-import { getRestaurantByOwnerId } from "@/lib/restaurants/service";
 import { buildMenuUrlFromSlug } from "@/lib/restaurants/domain";
+import { getDashboardSession } from "@/lib/dashboard/session";
 
 type QrPageProps = {
   params: Promise<{
@@ -13,13 +10,7 @@ type QrPageProps = {
 
 export default async function QrPage({ params }: QrPageProps) {
   const { locale } = await params;
-  const user = await requireUser(locale);
-  const restaurant = await getRestaurantByOwnerId(user.id);
-
-  if (!restaurant) {
-    redirect(`/${locale}/dashboard/restaurant`);
-  }
-
+  const { restaurant } = await getDashboardSession(locale);
   const menuUrl = buildMenuUrlFromSlug(restaurant.slug);
 
   return (

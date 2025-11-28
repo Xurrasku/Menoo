@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const user = await getServerUser();
+  const user = await getServerUser({ persistSession: true });
 
   if (!user) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  const user = await getServerUser();
+  const user = await getServerUser({ persistSession: true });
 
   if (!user) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });

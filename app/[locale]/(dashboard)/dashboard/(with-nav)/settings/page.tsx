@@ -32,18 +32,20 @@ export default async function SettingsPage({
   params,
 }: SettingsPageProps) {
   const { locale } = await params;
-  const tNavigation = await getTranslations({
-    locale,
-    namespace: "navigation",
-  });
-  const tSettings = await getTranslations({
-    locale,
-    namespace: "settings",
-  });
-  const tBilling = await getTranslations({
-    locale,
-    namespace: "billing",
-  });
+  const [tNavigation, tSettings, tBilling] = await Promise.all([
+    getTranslations({
+      locale,
+      namespace: "navigation",
+    }),
+    getTranslations({
+      locale,
+      namespace: "settings",
+    }),
+    getTranslations({
+      locale,
+      namespace: "billing",
+    }),
+  ]);
 
   return (
     <section className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px]">

@@ -1,13 +1,24 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
+import { cache } from "react";
 
 import { buildPostAuthRedirect } from "./config";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export async function getServerUser(): Promise<User | null> {
+type GetServerUserOptions = {
+  /**
+   * Route Handlers and Server Actions can persist Supabase sessions by writing
+   * cookies. RSC contexts should keep this disabled to avoid Next.js warnings.
+   */
+  persistSession?: boolean;
+};
+
+async function fetchServerUser(options: GetServerUserOptions = {}): Promise<User | null> {
   try {
-    const supabase = await createSupabaseServerClient();
+    const supabase = await createSupabaseServerClient({
+      persistSession: options.persistSession ?? false,
+    });
     const {
       data: { user },
       error,
@@ -51,8 +62,14 @@ export async function getServerUser(): Promise<User | null> {
   }
 }
 
+const getCachedServerUser = cache(async () => fetchServerUser());
+
+export async function getServerUser(options: GetServerUserOptions = {}): Promise<User | null> {
+  return fetchServerUser(options);
+}
+
 export async function requireUser(locale: string): Promise<User> {
-  const user = await getServerUser();
+  const user = await getCachedServerUser();
 
   if (user) {
     return user;
