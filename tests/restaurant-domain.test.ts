@@ -11,7 +11,7 @@ test("buildMenuDomain slugifies restaurant name", () => {
     const result = buildMenuDomain("Restaurante El Niño");
 
     assert.equal(result.slug, "restaurante-el-nino");
-    assert.equal(result.url, "https://menus.menoo.app/restaurante-el-nino");
+    assert.equal(result.url, "https://menus.menoo.app/menu/restaurante-el-nino");
   } finally {
     if (previousBase === undefined) {
       delete process.env.NEXT_PUBLIC_MENU_DOMAIN_BASE;
@@ -31,7 +31,7 @@ test("buildMenuUrlFromSlug normalizes slashes", () => {
 
   try {
     const result = buildMenuUrlFromSlug(" /featured-menu// ");
-    assert.equal(result, "https://menus.menoo.app/base/featured-menu");
+    assert.equal(result, "https://menus.menoo.app/base/menu/featured-menu");
   } finally {
     if (previousBase === undefined) {
       delete process.env.NEXT_PUBLIC_MENU_DOMAIN_BASE;

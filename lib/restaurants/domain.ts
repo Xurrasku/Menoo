@@ -42,7 +42,7 @@ export function buildMenuUrlFromSlug(slugInput: string) {
     throw new Error("Restaurant slug is required to build a menu URL");
   }
 
-  return `${getMenuDomainBase()}/${normalizedSlug}`;
+  return `${getMenuDomainBase()}/menu/${normalizedSlug}`;
 }
 
 export function getMenuDomainBase() {
