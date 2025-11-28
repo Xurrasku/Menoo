@@ -131,54 +131,7 @@ const ALLERGEN_OPTIONS: Record<string, string[]> = {
   ],
 };
 
-const DEFAULT_CATEGORIES: Category[] = [
-  {
-    id: "cat-aperitivos",
-    name: "Aperitivos",
-    description: "",
-    dishes: [
-      {
-        id: "dish-caprese",
-        name: "Ensalada caprese",
-        description: "Una sencilla ensalada italiana hecha con tomate, mozzarella fresca y albahaca.",
-        price: 12,
-        currency: "€",
-        thumbnail: "🥗",
-        isVisible: true,
-        labels: ["Vegetariano"],
-        allergens: ["Leche"],
-      },
-      {
-        id: "dish-gazpacho",
-        name: "Gazpacho",
-        description: "Sopa fría de tomate, pepino y pimiento.",
-        price: 9,
-        currency: "€",
-        thumbnail: "🥣",
-        isVisible: true,
-        labels: ["Vegetariano"],
-        allergens: [],
-      },
-      {
-        id: "dish-onionrings",
-        name: "Aros de cebolla",
-        description: "Crujientes aros de cebolla rebozados.",
-        price: 8,
-        currency: "€",
-        thumbnail: "🧅",
-        isVisible: true,
-        labels: [],
-        allergens: ["Gluten"],
-      },
-    ],
-  },
-  {
-    id: "cat-placeholder",
-    name: "sii",
-    description: "somos",
-    dishes: [],
-  },
-];
+const DEFAULT_CATEGORIES: Category[] = [];
 
 export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMenuScreenProps) {
   const router = useRouter();
@@ -211,6 +164,7 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
   const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
   const [isDishModalOpen, setDishModalOpen] = useState(false);
   const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
+  const [editingDishId, setEditingDishId] = useState<string | null>(null);
   const [activeDishCategoryId, setActiveDishCategoryId] = useState<string | null>(null);
 
   const [categoryName, setCategoryName] = useState("");
@@ -245,6 +199,7 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
       labels: [],
       allergens: [],
     });
+    setEditingDishId(null);
   };
 
   const handleSaveCategory = () => {
@@ -279,25 +234,54 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
   const handleSaveDish = () => {
     if (!activeDishCategoryId) return;
     const priceValue = parseFloat(dishForm.price.replace(",", ".")) || 0;
-    const newDish: Dish = {
-      id: typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `dish-${Date.now()}`,
-      name: dishForm.name.trim() || menu.dishModal.nameLabel,
-      description: dishForm.description.trim(),
-      price: priceValue,
-      currency: dishForm.currency,
-      thumbnail: dishForm.thumbnail,
-      isVisible: true,
-      labels: [...dishForm.labels],
-      allergens: [...dishForm.allergens],
-    };
+    
+    if (editingDishId) {
+      // Update existing dish
+      setCategories((prev) =>
+        prev.map((category) =>
+          category.id === activeDishCategoryId
+            ? {
+                ...category,
+                dishes: category.dishes.map((dish) =>
+                  dish.id === editingDishId
+                    ? {
+                        ...dish,
+                        name: dishForm.name.trim() || menu.dishModal.nameLabel,
+                        description: dishForm.description.trim(),
+                        price: priceValue,
+                        currency: dishForm.currency,
+                        thumbnail: dishForm.thumbnail,
+                        labels: [...dishForm.labels],
+                        allergens: [...dishForm.allergens],
+                      }
+                    : dish
+                ),
+              }
+            : category
+        )
+      );
+    } else {
+      // Create new dish
+      const newDish: Dish = {
+        id: typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `dish-${Date.now()}`,
+        name: dishForm.name.trim() || menu.dishModal.nameLabel,
+        description: dishForm.description.trim(),
+        price: priceValue,
+        currency: dishForm.currency,
+        thumbnail: dishForm.thumbnail,
+        isVisible: true,
+        labels: [...dishForm.labels],
+        allergens: [...dishForm.allergens],
+      };
 
-    setCategories((prev) =>
-      prev.map((category) =>
-        category.id === activeDishCategoryId
-          ? { ...category, dishes: [...category.dishes, newDish] }
-          : category
-      )
-    );
+      setCategories((prev) =>
+        prev.map((category) =>
+          category.id === activeDishCategoryId
+            ? { ...category, dishes: [...category.dishes, newDish] }
+            : category
+        )
+      );
+    }
 
     resetDishForm();
     setDishModalOpen(false);
@@ -323,30 +307,25 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
   };
 
   return (
-    <div className="flex flex-1 flex-col gap-8 pt-8">
+    <div className="flex flex-1 flex-col gap-8">
       <Link
         href={`/${locale}/dashboard/menus`}
-        className="flex w-full items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-slate-900"
+        className="flex w-full items-center gap-2 text-sm font-semibold text-muted-foreground transition hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4" />
         {menu.back}
       </Link>
 
       <div className="mx-auto w-full max-w-4xl space-y-8">
-        <div className="rounded-[32px] border border-slate-200/80 bg-white/95 p-12 shadow-[0_24px_60px_-32px_rgba(15,23,42,0.45)]">
-          <div className="flex items-center gap-4 pb-6">
-            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              <span className="text-xl" aria-hidden>
-                Ψ
-              </span>
-            </span>
+        <div className="rounded-lg border border-border bg-card p-6">
+          <div className="pb-6">
             <MenuNameEditor
               menuId={initialMenu?.id ?? "new-menu"}
               initialValue={menuTitle}
               className="flex-1"
-              textClassName="text-3xl font-semibold text-slate-900"
-              inputClassName="text-3xl font-semibold text-slate-900"
-              buttonClassName="p-1 text-slate-400 hover:text-slate-900"
+              textClassName="text-2xl font-semibold text-foreground"
+              inputClassName="text-2xl font-semibold text-foreground"
+              buttonClassName="p-1 text-muted-foreground hover:text-foreground"
               onChange={(_menuId, value) => setMenuTitle(value)}
             />
           </div>
@@ -380,6 +359,20 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
                 onAddDish={() => {
                   resetDishForm();
                   setActiveDishCategoryId(category.id);
+                  setDishModalOpen(true);
+                }}
+                onEditDish={(dish) => {
+                  setEditingDishId(dish.id);
+                  setActiveDishCategoryId(category.id);
+                  setDishForm({
+                    name: dish.name,
+                    description: dish.description,
+                    price: dish.price.toString(),
+                    currency: dish.currency,
+                    thumbnail: dish.thumbnail || "🍽️",
+                    labels: dish.labels || [],
+                    allergens: dish.allergens || [],
+                  });
                   setDishModalOpen(true);
                 }}
                 onToggleDishVisibility={(dishId, next) =>
@@ -424,7 +417,7 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
               <Button
                 type="button"
                 variant="ghost"
-                className="rounded-full border border-slate-200 px-5 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+                className="rounded-full border border-border px-5 py-2 text-sm font-semibold text-muted-foreground hover:bg-muted"
                 onClick={() => {
                   resetCategoryModal();
                   setCategoryModalOpen(true);
@@ -440,7 +433,7 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
       <div className="sticky bottom-8 z-40 flex justify-end">
         <Button
           type="button"
-          className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/30 transition hover:bg-primary/90"
+          className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition hover:bg-primary/90"
           disabled={isSaving}
           onClick={() => {
             if (isSaving) return;
@@ -452,23 +445,23 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
       </div>
 
       {errorMessage ? (
-        <div className="rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm font-medium text-destructive">
+        <div className="mx-auto w-full max-w-4xl rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm font-medium text-destructive">
           {errorMessage}
         </div>
       ) : null}
 
       {isCategoryModalOpen ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/30 backdrop-blur-sm">
-          <div className="w-full max-w-xl rounded-3xl bg-white p-8 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <div className="w-full max-w-xl rounded-3xl border border-border bg-card p-8 shadow-2xl">
             <div className="flex items-start justify-between">
-              <h2 className="text-lg font-semibold text-slate-900">{menu.categoryModal.title}</h2>
+              <h2 className="text-lg font-semibold text-foreground">{menu.categoryModal.title}</h2>
               <button
                 type="button"
                 onClick={() => {
                   setCategoryModalOpen(false);
                   resetCategoryModal();
                 }}
-                className="p-2 text-slate-400 transition hover:text-slate-900"
+                className="p-2 text-muted-foreground transition hover:text-foreground"
                 aria-label={menu.categoryModal.cancel}
               >
                 ×
@@ -476,7 +469,7 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
             </div>
 
             <div className="mt-6 space-y-4">
-              <label className="block text-sm font-medium text-slate-600">
+              <label className="block text-sm font-medium text-foreground">
                 {menu.categoryModal.nameLabel}
                 <Input
                   value={categoryName}
@@ -485,12 +478,12 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
                 />
               </label>
 
-              <label className="block text-sm font-medium text-slate-600">
+              <label className="block text-sm font-medium text-foreground">
                 {menu.categoryModal.descriptionLabel}
                 <textarea
                   value={categoryDescription}
                   onChange={(event) => setCategoryDescription(event.target.value)}
-                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 focus:border-primary focus:outline-none"
+                  className="mt-2 w-full rounded-2xl border border-input bg-muted px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none"
                   rows={4}
                 />
               </label>
@@ -500,7 +493,7 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
               <Button
                 type="button"
                 variant="ghost"
-                className="rounded-full border border-slate-200 px-5 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+                className="rounded-full border border-border px-5 py-2 text-sm font-semibold text-muted-foreground hover:bg-muted"
                 onClick={() => {
                   setCategoryModalOpen(false);
                   resetCategoryModal();
@@ -510,7 +503,7 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
               </Button>
               <Button
                 type="button"
-                className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90"
+                className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90"
                 onClick={handleSaveCategory}
               >
                 {menu.categoryModal.save}
@@ -521,10 +514,17 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
       ) : null}
 
       {isDishModalOpen ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/30 backdrop-blur-sm">
-          <div className="w-full max-w-3xl rounded-3xl bg-white p-8 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <div className="w-full max-w-3xl rounded-3xl border border-border bg-card p-8 shadow-2xl">
             <div className="flex items-start justify-between">
-              <h2 className="text-lg font-semibold text-slate-900">{menu.dishModal.title}</h2>
+              <h2 className="text-lg font-semibold text-foreground">
+                {editingDishId
+                  ? menu.dishModal.title
+                      .replace(/^New /i, "Edit ")
+                      .replace(/^Nuevo /i, "Editar ")
+                      .replace(/^Nou /i, "Edita ")
+                  : menu.dishModal.title}
+              </h2>
               <button
                 type="button"
                 onClick={() => {
@@ -532,7 +532,7 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
                   resetDishForm();
                   setActiveDishCategoryId(null);
                 }}
-                className="p-2 text-slate-400 transition hover:text-slate-900"
+                className="p-2 text-muted-foreground transition hover:text-foreground"
                 aria-label={menu.dishModal.cancel}
               >
                 ×
@@ -541,7 +541,7 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
 
             <div className="mt-6 grid grid-cols-[minmax(0,1fr)_220px] gap-8">
               <div className="space-y-4">
-                <label className="block text-sm font-medium text-slate-600">
+                <label className="block text-sm font-medium text-foreground">
                   {menu.dishModal.nameLabel}
                   <Input
                     value={dishForm.name}
@@ -550,29 +550,29 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
                   />
                 </label>
 
-                <label className="block text-sm font-medium text-slate-600">
+                <label className="block text-sm font-medium text-foreground">
                   {menu.dishModal.descriptionLabel}
                   <textarea
                     value={dishForm.description}
                     onChange={(event) =>
                       setDishForm((prev) => ({ ...prev, description: event.target.value }))
                     }
-                    className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 focus:border-primary focus:outline-none"
+                    className="mt-2 w-full rounded-2xl border border-input bg-muted px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none"
                     rows={4}
                   />
                 </label>
 
                 <div className="grid grid-cols-[minmax(0,1fr)_100px] items-end gap-4">
-                  <label className="block text-sm font-medium text-slate-600">
+                  <label className="block text-sm font-medium text-foreground">
                     {menu.dishModal.priceLabel}
-                    <div className="mt-2 flex overflow-hidden rounded-2xl border border-slate-200">
+                    <div className="mt-2 flex overflow-hidden rounded-2xl border border-input">
                       <input
                         type="text"
                         value={dishForm.price}
                         onChange={(event) => setDishForm((prev) => ({ ...prev, price: event.target.value }))}
-                        className="flex-1 bg-white px-4 py-2 text-sm text-slate-700 outline-none"
+                        className="flex-1 bg-background px-4 py-2 text-sm text-foreground outline-none"
                       />
-                      <div className="flex items-center gap-2 border-l border-slate-200 bg-slate-50 px-3 text-sm text-slate-500">
+                      <div className="flex items-center gap-2 border-l border-input bg-muted px-3 text-sm text-muted-foreground">
                         {dishForm.currency}
                       </div>
                     </div>
@@ -586,7 +586,7 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
                 </div>
 
                 <div className="space-y-3">
-                  <p className="text-sm font-semibold text-slate-600">{menu.dishModal.labelsTitle}</p>
+                  <p className="text-sm font-semibold text-foreground">{menu.dishModal.labelsTitle}</p>
                   <div className="flex flex-wrap gap-2">
                     {labelOptions.map((label) => {
                       const isSelected = dishForm.labels.includes(label);
@@ -599,7 +599,7 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
                             "rounded-full border px-4 py-1 text-xs font-medium transition",
                             isSelected
                               ? "border-primary bg-primary/10 text-primary"
-                              : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                              : "border-border bg-background text-muted-foreground hover:border-primary/50 hover:bg-muted"
                           )}
                         >
                           {label}
@@ -610,7 +610,7 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
                 </div>
 
                 <div className="space-y-3">
-                  <p className="text-sm font-semibold text-slate-600">{menu.dishModal.allergensTitle}</p>
+                  <p className="text-sm font-semibold text-foreground">{menu.dishModal.allergensTitle}</p>
                   <div className="flex flex-wrap gap-2">
                     {allergenOptions.map((allergen) => {
                       const isSelected = dishForm.allergens.includes(allergen);
@@ -622,8 +622,8 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
                           className={cn(
                             "rounded-full border px-4 py-1 text-xs font-medium transition",
                             isSelected
-                              ? "border-rose-400 bg-rose-50 text-rose-500"
-                              : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                              ? "border-destructive/50 bg-destructive/10 text-destructive"
+                              : "border-border bg-background text-muted-foreground hover:border-destructive/50 hover:bg-muted"
                           )}
                         >
                           {allergen}
@@ -635,16 +635,20 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
               </div>
 
               <div className="flex flex-col items-center justify-start gap-4">
-                <div className="flex h-44 w-40 flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 bg-slate-50 text-center text-sm text-slate-500">
+                <div className="flex h-44 w-40 flex-col items-center justify-center rounded-3xl border-2 border-dashed border-border bg-muted/50 text-center text-sm text-muted-foreground opacity-60">
                   <span className="mb-2 text-3xl" aria-hidden>
                     {dishForm.thumbnail}
                   </span>
-                  <p className="font-semibold text-slate-600">{menu.dishModal.imageUpload}</p>
-                  <p className="mt-1 px-6 text-xs text-slate-400">{menu.dishModal.imageHelper}</p>
+                  <p className="font-semibold text-foreground">{menu.dishModal.imageUpload}</p>
+                  <p className="mt-1 px-6 text-xs text-muted-foreground">{menu.dishModal.imageHelper}</p>
                   <button
                     type="button"
-                    className="mt-3 rounded-full border border-slate-200 px-3 py-1 text-xs text-slate-600 hover:border-slate-300 hover:bg-slate-100"
-                    onClick={() => setDishForm((prev) => ({ ...prev, thumbnail: "📸" }))}
+                    disabled
+                    className="mt-3 rounded-full border border-border px-3 py-1 text-xs text-muted-foreground cursor-not-allowed"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
                   >
                     {menu.dishModal.imageUpload}
                   </button>
@@ -656,7 +660,7 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
               <Button
                 type="button"
                 variant="ghost"
-                className="rounded-full border border-slate-200 px-5 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+                className="rounded-full border border-border px-5 py-2 text-sm font-semibold text-muted-foreground hover:bg-muted"
                 onClick={() => {
                   setDishModalOpen(false);
                   resetDishForm();
@@ -666,7 +670,7 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
               </Button>
               <Button
                 type="button"
-                className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90"
+                className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90"
                 onClick={handleSaveDish}
               >
                 {menu.dishModal.save}

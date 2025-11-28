@@ -1,5 +1,6 @@
 import { type ReactNode } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Sparkles } from "lucide-react";
 
@@ -58,7 +59,7 @@ export default async function ShellLayout({ children, params }: ShellLayoutProps
 
   return (
     <div>
-      <header className="fixed inset-x-0 top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
+      <header className="fixed inset-x-0 top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div
           className={cn(
             "flex h-20 w-full items-center gap-6",
@@ -67,11 +68,16 @@ export default async function ShellLayout({ children, params }: ShellLayoutProps
         >
           <Link
             href={`/${locale}/dashboard/menus`}
-            className="flex-shrink-0 text-lg font-semibold text-primary"
+            className="flex h-10 items-center"
           >
-            <span className="rounded-full bg-primary/10 px-4 py-1 text-sm font-semibold uppercase tracking-wider">
-              {tNavigation("brand")}
-            </span>
+            <Image
+              src="/assets/logo.png"
+              alt="Menoo"
+              width={120}
+              height={40}
+              className="h-auto w-auto object-contain"
+              priority
+            />
           </Link>
 
           <div className="flex flex-1 justify-center">
@@ -83,7 +89,7 @@ export default async function ShellLayout({ children, params }: ShellLayoutProps
               asChild
               variant="ghost"
               size="sm"
-              className="hidden items-center gap-2 rounded-full border border-primary/10 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/15 md:flex"
+              className="hidden items-center gap-2 rounded-full border border-primary/10 bg-primary/10 px-4 py-2 text-sm font-display font-semibold tracking-tight text-primary hover:bg-primary/15 md:flex"
             >
               <Link href={billingHref}>
                 <Sparkles className="h-4 w-4" />

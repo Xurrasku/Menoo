@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MenuNameEditor } from "@/components/dashboard/menu-name-editor";
+import { ClickableMenuRow } from "@/components/dashboard/clickable-menu-row";
 import { listMenus } from "@/lib/menus/service";
 import { buildMenuUrlFromSlug } from "@/lib/restaurants/domain";
 import { getDashboardSession } from "@/lib/dashboard/session";
@@ -70,10 +71,10 @@ export default async function MenusPage({ params }: MenusPageProps) {
       <Card className="border-0 bg-white shadow-xl shadow-slate-200/60">
         <CardHeader className="flex flex-col gap-4 border-b border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 sm:px-8 sm:py-6">
           <div className="flex flex-col gap-1">
-            <span className="text-sm font-semibold uppercase tracking-widest text-primary">
+            <span className="text-lg font-display font-bold uppercase tracking-widest text-primary md:text-xl">
               {tDashboard("menusTitle")}
             </span>
-            <span className="text-xs text-slate-500 sm:text-sm">
+            <span className="text-xs italic text-slate-500 sm:text-sm">
               {tDashboard("menusSubtitle")}
             </span>
           </div>
@@ -143,7 +144,12 @@ export default async function MenusPage({ params }: MenusPageProps) {
             </TableHeader>
             <TableBody>
               {menusData.map((menu) => (
-                <TableRow key={menu.id} className="group bg-white">
+                <ClickableMenuRow
+                  key={menu.id}
+                  menuId={menu.id}
+                  locale={locale}
+                  className="group cursor-pointer bg-white transition hover:bg-slate-50"
+                >
                   <TableCell className="px-4 py-4 sm:px-8 sm:py-6">
                     <div className="flex items-center gap-3 sm:gap-4">
                       <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary sm:h-12 sm:w-12 sm:rounded-xl">
@@ -216,7 +222,7 @@ export default async function MenusPage({ params }: MenusPageProps) {
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
-                </TableRow>
+                </ClickableMenuRow>
               ))}
             </TableBody>
           </Table>
