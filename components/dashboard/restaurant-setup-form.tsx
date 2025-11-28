@@ -3,7 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
 import {
@@ -68,7 +68,10 @@ export function RestaurantSetupForm({ locale, copy }: RestaurantSetupFormProps) 
     },
   });
 
-  const watchedName = form.watch("name");
+  const watchedName = useWatch({
+    control: form.control,
+    name: "name",
+  });
 
   const domainPreview = useMemo(() => {
     try {

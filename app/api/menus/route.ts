@@ -1,6 +1,5 @@
-import { randomUUID } from "node:crypto";
 import { NextRequest } from "next/server";
-import { count, desc, eq } from "drizzle-orm";
+import { and, count, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/lib/db";
@@ -249,31 +248,4 @@ export async function POST(request: NextRequest) {
   }
 }
 
-type TransactionClient = Parameters<Parameters<typeof db.transaction>[0]>[0];
-
-async function ensureDemoRestaurant(tx: TransactionClient) {
-  const DEMO_SLUG = "demo-restaurant";
-  const DEFAULT_OWNER_USER_ID = process.env.DEMO_OWNER_USER_ID ?? "00000000-0000-4000-8000-000000000000";
-
-  const existing = await tx
-    .select({ id: restaurants.id })
-    .from(restaurants)
-    .where(eq(restaurants.slug, DEMO_SLUG))
-    .limit(1);
-
-  if (existing[0]) {
-    return existing[0].id;
-  }
-
-  const [created] = await tx
-    .insert(restaurants)
-    .values({
-      ownerUserId: DEFAULT_OWNER_USER_ID,
-      name: "Demo restaurant",
-      slug: DEMO_SLUG,
-    })
-    .returning({ id: restaurants.id });
-
-  return created.id ?? randomUUID();
-}
 
