@@ -75,4 +75,21 @@
     padding-top: env(safe-area-inset-top, 0);
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Mobile percentage-based sizing constraints */
+  @media (max-width: 639px) {
+    /* Prevent viewport units from getting too large on very small screens */
+    html {
+      font-size: clamp(12px, 2.5vw, 16px);
+    }
+  }
 }

@@ -15,8 +15,8 @@ export function MenuSelector({ menus, restaurantName, onSelectMenu }: MenuSelect
   };
 
   return (
-    <div className="space-y-6 pb-8 sm:pb-10">
-      <h1 className="mb-8 font-display text-[1.875rem] font-bold uppercase leading-tight tracking-wider text-[#1a1a1a] sm:mb-10 sm:text-[2.25rem]">
+    <div className="space-y-[4%] pb-[6%] sm:pb-10">
+      <h1 className="mb-[6%] font-display text-[5vw] font-bold uppercase leading-tight tracking-wider text-[#1a1a1a] sm:mb-10 sm:text-[2.25rem]">
         {restaurantName}
       </h1>
       
@@ -26,24 +26,24 @@ export function MenuSelector({ menus, restaurantName, onSelectMenu }: MenuSelect
           return (
             <div key={menu.id}>
               {index > 0 && (
-                <div className="border-b border-[#e5e5e5] mb-5 sm:mb-6" />
+                <div className="border-b border-[#e5e5e5] mb-[3.5%] sm:mb-6" />
               )}
               <button
                 onClick={() => onSelectMenu(menu)}
                 className="group w-full text-left transition"
               >
-                <article className="flex gap-4 pb-5 sm:gap-5 sm:pb-6">
+                <article className="flex gap-[3%] pb-[3.5%] sm:gap-5 sm:pb-6">
                 <div className="min-w-0 flex-1">
-                  <div className="mb-1 flex items-baseline justify-between gap-4 sm:mb-1.5">
-                    <h2 className="font-display text-base font-bold leading-tight tracking-tight text-[#1a1a1a] sm:text-lg group-hover:text-primary transition-colors">
+                  <div className="mb-[1%] flex items-baseline justify-between gap-[3%] sm:mb-1.5">
+                    <h2 className="font-display text-[3.2vw] font-bold leading-tight tracking-tight text-[#1a1a1a] sm:text-lg group-hover:text-primary transition-colors">
                       {menu.name}
                     </h2>
-                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center text-[#999999] transition group-hover:text-primary sm:h-6 sm:w-6">
-                      <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <div className="flex h-[3.5vw] w-[3.5vw] flex-shrink-0 items-center justify-center text-[#999999] transition group-hover:text-primary sm:h-6 sm:w-6">
+                      <ChevronRight className="h-[3vw] w-[3vw] sm:h-5 sm:w-5" />
                     </div>
                   </div>
                   {menu.categories.length > 0 && (
-                    <p className="mb-2 text-xs leading-relaxed text-[#666666] italic sm:mb-2.5 sm:text-sm">
+                    <p className="mb-[1.5%] text-[2.5vw] leading-relaxed text-[#666666] italic sm:mb-2.5 sm:text-sm">
                       {menu.categories.length} {menu.categories.length === 1 ? "categoría" : "categorías"}
                       {dishCount > 0 && (
                         <> · {dishCount} {dishCount === 1 ? "plato" : "platos"}</>
@@ -51,7 +51,7 @@ export function MenuSelector({ menus, restaurantName, onSelectMenu }: MenuSelect
                     </p>
                   )}
                   {menu.categories.length === 0 && (
-                    <p className="mb-2 text-xs leading-relaxed text-[#666666] italic sm:mb-2.5 sm:text-sm">
+                    <p className="mb-[1.5%] text-[2.5vw] leading-relaxed text-[#666666] italic sm:mb-2.5 sm:text-sm">
                       Menú vacío
                     </p>
                   )}

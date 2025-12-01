@@ -49,11 +49,11 @@ export function MenuNameEditor({
   };
 
   return (
-    <div className={cn("flex w-full items-center gap-2", className)}>
+    <div className={cn("flex w-full items-center gap-[1.5%] sm:gap-2", className)}>
       {isEditable && isEditing ? (
         <input
           className={cn(
-            "flex-1 border-none bg-transparent px-0 py-0 text-base font-semibold text-slate-900 outline-none focus:outline-none",
+            "flex-1 border-none bg-transparent px-0 py-0 text-[3.2vw] font-semibold text-slate-900 outline-none focus:outline-none sm:text-base",
             inputClassName
           )}
           value={value}
@@ -62,7 +62,7 @@ export function MenuNameEditor({
           aria-label="Edit menu name"
         />
       ) : (
-        <span className={cn("flex-1 truncate text-base font-semibold text-slate-900", textClassName)}>
+        <span className={cn("flex-1 truncate text-[3.2vw] font-semibold text-slate-900 sm:text-base", textClassName)}>
           {value}
         </span>
       )}
@@ -71,12 +71,12 @@ export function MenuNameEditor({
           type="button"
           onClick={toggleEditing}
           className={cn(
-            "p-1 text-slate-400 transition hover:text-slate-900",
+            "p-[0.8%] text-slate-400 transition hover:text-slate-900 sm:p-1",
             buttonClassName
           )}
           aria-label={isEditing ? "Confirm menu name" : "Edit menu name"}
         >
-          {isEditing ? <Check className="h-4 w-4" /> : <Pencil className="h-4 w-4" />}
+          {isEditing ? <Check className="h-[3.5vw] w-[3.5vw] sm:h-4 sm:w-4" /> : <Pencil className="h-[3.5vw] w-[3.5vw] sm:h-4 sm:w-4" />}
         </button>
       ) : null}
     </div>

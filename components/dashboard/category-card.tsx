@@ -103,30 +103,30 @@ export function CategoryCard({
   };
 
   return (
-    <div className={cn("space-y-4", className)}>
-      <div className="flex items-start justify-between gap-3">
+    <div className={cn("space-y-[3%] sm:space-y-4", className)}>
+      <div className="flex items-start justify-between gap-[2.5%] sm:gap-3">
         <button
           type="button"
           onClick={onTitleClick}
           className="flex-1 min-w-0 text-left"
         >
-          <p className="truncate text-base font-semibold text-foreground">{title}</p>
+          <p className="truncate text-[3.5vw] font-semibold text-foreground sm:text-base">{title}</p>
           {description && description.trim().length > 0 ? (
-            <p className="mt-1 text-sm italic text-muted-foreground">{description}</p>
+            <p className="mt-[1%] text-[2.8vw] italic text-muted-foreground sm:mt-1 sm:text-sm">{description}</p>
           ) : null}
         </button>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-[1%] sm:gap-1">
           <Button
             type="button"
             variant="ghost"
-            className="flex h-8 w-8 items-center justify-center text-muted-foreground transition hover:text-foreground"
+            className="flex h-[6.5vw] w-[6.5vw] items-center justify-center text-muted-foreground transition hover:text-foreground sm:h-8 sm:w-8"
             onClick={() => setCollapsed((prev) => !prev)}
             aria-label={collapseLabel ?? "Toggle category"}
           >
             <ChevronDown
               className={cn(
-                "h-4 w-4 transition-transform",
+                "h-[3.5vw] w-[3.5vw] transition-transform sm:h-4 sm:w-4",
                 collapsed ? "rotate-180" : "rotate-0"
               )}
             />
@@ -134,25 +134,25 @@ export function CategoryCard({
           <Button
             type="button"
             variant="ghost"
-            className="flex h-8 w-8 items-center justify-center text-muted-foreground transition hover:text-foreground"
+            className="flex h-[6.5vw] w-[6.5vw] items-center justify-center text-muted-foreground transition hover:text-foreground sm:h-8 sm:w-8"
             onClick={onActionsClick}
             aria-label="Category actions"
           >
-            <MoreHorizontal className="h-4 w-4" />
+            <MoreHorizontal className="h-[3.5vw] w-[3.5vw] sm:h-4 sm:w-4" />
           </Button>
         </div>
       </div>
 
       {!collapsed ? (
-        <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
+        <div className="rounded-3xl border border-border bg-card p-[4%] shadow-sm sm:p-6">
           {hasDishes ? (
-            <div className="space-y-4">
+            <div className="space-y-[3%] sm:space-y-4">
               <div className="divide-y divide-border rounded-2xl border border-border">
                 {dishes.map((dish) => (
                   <div
                     key={dish.id}
                     className={cn(
-                      "grid grid-cols-[auto_1fr_auto_auto_auto] items-center gap-4 px-4 py-3 text-sm transition",
+                      "grid grid-cols-[auto_1fr_auto_auto_auto] items-center gap-[3%] px-[3%] py-[2.5%] text-[2.8vw] transition sm:gap-4 sm:px-4 sm:py-3 sm:text-sm",
                       draggedId === dish.id ? "bg-muted/50" : "bg-background",
                       onEditDish && "cursor-pointer hover:bg-muted/50"
                     )}
@@ -174,39 +174,39 @@ export function CategoryCard({
                   >
                     <button
                       type="button"
-                      className="flex h-6 w-6 items-center justify-center text-muted-foreground/50 hover:text-muted-foreground"
+                      className="flex h-[5vw] w-[5vw] items-center justify-center text-muted-foreground/50 hover:text-muted-foreground sm:h-6 sm:w-6"
                       draggable
                       onDragStart={(event) => handleDragStart(event, dish.id)}
                       onDragEnd={handleDragEnd}
                       onClick={(e) => e.stopPropagation()}
                       aria-label={`Reordenar ${dish.name}`}
                     >
-                      <GripVertical className="h-4 w-4" aria-hidden />
+                      <GripVertical className="h-[3.5vw] w-[3.5vw] sm:h-4 sm:w-4" aria-hidden />
                     </button>
 
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-foreground">
+                      <p className="truncate text-[2.8vw] font-semibold text-foreground sm:text-sm">
                         {dish.name}
                       </p>
                       {dish.description ? (
-                        <p className="mt-0.5 truncate text-xs italic text-muted-foreground">
+                        <p className="mt-[0.5%] truncate text-[2.2vw] italic text-muted-foreground sm:mt-0.5 sm:text-xs">
                           {dish.description}
                         </p>
                       ) : null}
                     </div>
 
-                    <div className="text-sm font-semibold text-foreground">
+                    <div className="text-[2.8vw] font-semibold text-foreground sm:text-sm">
                       {dish.price.toFixed(2)} {dish.currency}
                     </div>
 
-                    <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex items-center gap-[1.5%] sm:gap-2" onClick={(e) => e.stopPropagation()}>
                       <Switch
                         checked={dish.isVisible}
                         onCheckedChange={(value) => onToggleDishVisibility(dish.id, value)}
                         aria-label={`Toggle visibility for ${dish.name}`}
                       />
-                      <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-border bg-muted text-base">
-                        {dish.thumbnail ? dish.thumbnail : <UtensilsCrossed className="h-4 w-4 text-muted-foreground" />}
+                      <div className="flex h-[8vw] w-[8vw] items-center justify-center overflow-hidden rounded-xl border border-border bg-muted text-base sm:h-10 sm:w-10">
+                        {dish.thumbnail ? dish.thumbnail : <UtensilsCrossed className="h-[3.5vw] w-[3.5vw] text-muted-foreground sm:h-4 sm:w-4" />}
                       </div>
                     </div>
 
@@ -216,10 +216,10 @@ export function CategoryCard({
                         e.stopPropagation();
                         onDeleteDish(dish.id);
                       }}
-                      className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground/50 transition hover:text-destructive"
+                      className="flex h-[6.5vw] w-[6.5vw] items-center justify-center rounded-full text-muted-foreground/50 transition hover:text-destructive sm:h-8 sm:w-8"
                       aria-label={`Delete ${dish.name}`}
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-[3.5vw] w-[3.5vw] sm:h-4 sm:w-4" />
                     </button>
                   </div>
                 ))}
@@ -229,22 +229,22 @@ export function CategoryCard({
                 <Button
                   type="button"
                   onClick={onAddDish}
-                  className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition hover:bg-primary/90"
+                  className="rounded-full bg-primary px-[4%] py-[1.5%] text-[2.8vw] font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition hover:bg-primary/90 sm:px-5 sm:py-2 sm:text-sm"
                 >
                   + {newDishLabel}
                 </Button>
               </div>
             </div>
           ) : (
-            <div className="flex w-full flex-col items-center gap-4 rounded-2xl border border-dashed border-border bg-muted/30 px-10 py-14 text-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <UtensilsCrossed className="h-8 w-8" />
+            <div className="flex w-full flex-col items-center gap-[3%] rounded-2xl border border-dashed border-border bg-muted/30 px-[6%] py-[9%] text-center sm:gap-4 sm:px-10 sm:py-14">
+              <div className="flex h-[12vw] w-[12vw] items-center justify-center rounded-full bg-primary/10 text-primary sm:h-16 sm:w-16">
+                <UtensilsCrossed className="h-[6vw] w-[6vw] sm:h-8 sm:w-8" />
               </div>
-              <p className="text-sm font-medium text-muted-foreground">{emptyDescription}</p>
+              <p className="text-[2.8vw] font-medium text-muted-foreground sm:text-sm">{emptyDescription}</p>
               <Button
                 type="button"
                 onClick={onAddDish}
-                className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition hover:bg-primary/90"
+                className="rounded-full bg-primary px-[4%] py-[1.5%] text-[2.8vw] font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition hover:bg-primary/90 sm:px-5 sm:py-2 sm:text-sm"
               >
                 + {newDishLabel}
               </Button>
@@ -252,7 +252,7 @@ export function CategoryCard({
           )}
           {hasDishes ? (
             <div
-              className="mt-3 h-4 rounded-2xl border border-dashed border-transparent"
+              className="mt-[2.5%] h-[3vw] rounded-2xl border border-dashed border-transparent sm:mt-3 sm:h-4"
               onDragEnter={handleDropZoneEnter}
               onDragOver={handleDragOver}
               onDragEnd={handleDragEnd}

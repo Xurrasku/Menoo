@@ -208,13 +208,13 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
   const frameBackground = state.frameType === "none" ? "#FFFFFF" : state.frameColor;
 
   return (
-    <div className="space-y-10">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-semibold text-slate-900 sm:text-4xl">
+    <div className="space-y-[6%] sm:space-y-10">
+      <div className="flex flex-col gap-[3%] sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+        <div className="space-y-[1.5%] sm:space-y-2">
+          <h1 className="text-[5vw] font-semibold text-slate-900 sm:text-4xl">
             {t("title")}
           </h1>
-          <p className="max-w-2xl text-base text-slate-500">
+          <p className="max-w-2xl text-[3vw] text-slate-500 sm:text-base">
             {t("subtitle")}
           </p>
         </div>
@@ -222,16 +222,16 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
         <Button
           type="button"
           variant="outline"
-          className="inline-flex items-center gap-2 rounded-full border-slate-200 bg-white px-5 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50"
+          className="inline-flex items-center gap-[1.5%] rounded-full border-slate-200 bg-white px-[3%] py-[1.5%] text-[2.8vw] font-semibold text-slate-700 shadow-sm hover:bg-slate-50 sm:gap-2 sm:px-5 sm:py-2 sm:text-sm"
           onClick={handleCopyLink}
         >
-          {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+          {copied ? <Check className="h-[3.5vw] w-[3.5vw] sm:h-4 sm:w-4" /> : <Copy className="h-[3.5vw] w-[3.5vw] sm:h-4 sm:w-4" />}
           {copied ? t("copied") : t("copyLink")}
         </Button>
       </div>
 
-      <div className="grid gap-8 xl:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)]">
-        <div className="space-y-4">
+      <div className="grid gap-[5%] xl:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)] sm:gap-8">
+        <div className="space-y-[3%] sm:space-y-4">
           <ConfiguratorSection
             id="frame"
             title={t("frame.title")}
@@ -240,11 +240,11 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
             onToggle={() => toggleSection("frame")}
           >
             <div className="space-y-6">
-              <div className="space-y-3">
-                <Label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <div className="space-y-[2%] sm:space-y-3">
+                <Label className="text-[2.5vw] font-semibold uppercase tracking-wide text-slate-500 sm:text-xs">
                   {t("frame.typeLabel")}
                 </Label>
-                <div className="grid gap-3 sm:grid-cols-3">
+                <div className="grid gap-[2.5%] sm:grid-cols-3 sm:gap-3">
                   {FRAME_OPTIONS.map((option) => (
                     <FrameOptionButton
                       key={option.value}
@@ -259,9 +259,9 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
                 </div>
               </div>
 
-              <div className="space-y-5">
-                <div className="space-y-2">
-                  <Label htmlFor="frameColor" className="text-sm font-semibold text-slate-600">
+              <div className="space-y-[3.5%] sm:space-y-5">
+                <div className="space-y-[1.5%] sm:space-y-2">
+                  <Label htmlFor="frameColor" className="text-[2.8vw] font-semibold text-slate-600 sm:text-sm">
                     {t("frame.backgroundColor")}
                   </Label>
                   <ColorField
@@ -277,8 +277,8 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="frameText" className="text-sm font-semibold text-slate-600">
+                <div className="space-y-[1.5%] sm:space-y-2">
+                  <Label htmlFor="frameText" className="text-[2.8vw] font-semibold text-slate-600 sm:text-sm">
                     {t("frame.textLabel")}
                   </Label>
                   <Input
@@ -292,8 +292,8 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="frameTextColor" className="text-sm font-semibold text-slate-600">
+                <div className="space-y-[1.5%] sm:space-y-2">
+                  <Label htmlFor="frameTextColor" className="text-[2.8vw] font-semibold text-slate-600 sm:text-sm">
                     {t("frame.textColor")}
                   </Label>
                   <ColorField
@@ -310,14 +310,14 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="fontFamily" className="text-sm font-semibold text-slate-600">
+                <div className="space-y-[1.5%] sm:space-y-2">
+                  <Label htmlFor="fontFamily" className="text-[2.8vw] font-semibold text-slate-600 sm:text-sm">
                     {t("frame.fontFamily")}
                   </Label>
                   <div className="relative w-full">
                     <select
                       id="fontFamily"
-                      className="h-12 w-full appearance-none rounded-full border border-slate-200 bg-white px-4 pr-10 text-sm font-semibold text-slate-700 shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                      className="h-[9vw] w-full appearance-none rounded-full border border-slate-200 bg-white px-[3%] pr-[8%] text-[2.8vw] font-semibold text-slate-700 shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:h-12 sm:px-4 sm:pr-10 sm:text-sm"
                       value={state.fontFamily}
                       onChange={(event) =>
                         setState((previous) => ({ ...previous, fontFamily: event.target.value }))
@@ -329,13 +329,13 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
                         </option>
                       ))}
                     </select>
-                    <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                    <ChevronDown className="pointer-events-none absolute right-[3%] top-1/2 h-[3.5vw] w-[3.5vw] -translate-y-1/2 text-slate-400 sm:right-4 sm:h-4 sm:w-4" />
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="textSize" className="text-sm font-semibold text-slate-600">
+              <div className="space-y-[1.5%] sm:space-y-2">
+                <Label htmlFor="textSize" className="text-[2.8vw] font-semibold text-slate-600 sm:text-sm">
                   {t("frame.textSize")}
                 </Label>
                 <Input
@@ -346,7 +346,7 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
                   step={1}
                   value={state.textSize}
                   disabled={state.frameType === "none"}
-                  className="h-12 w-28 rounded-2xl border-slate-200 bg-white text-center text-sm font-semibold text-slate-700 disabled:cursor-not-allowed"
+                  className="h-[9vw] w-[22vw] rounded-2xl border-slate-200 bg-white text-center text-[2.8vw] font-semibold text-slate-700 disabled:cursor-not-allowed sm:h-12 sm:w-28 sm:text-sm"
                   onChange={(event) => {
                     const value = Number(event.target.value);
                     if (Number.isNaN(value)) {
@@ -367,10 +367,10 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
             isOpen={openSections.has("style")}
             onToggle={() => toggleSection("style")}
           >
-            <div className="space-y-6">
-              <div className="space-y-5">
-                <div className="space-y-2">
-                  <Label htmlFor="qrColor" className="text-sm font-semibold text-slate-600">
+            <div className="space-y-[4%] sm:space-y-6">
+              <div className="space-y-[3.5%] sm:space-y-5">
+                <div className="space-y-[1.5%] sm:space-y-2">
+                  <Label htmlFor="qrColor" className="text-[2.8vw] font-semibold text-slate-600 sm:text-sm">
                     {t("style.qrColor")}
                   </Label>
                   <ColorField
@@ -386,8 +386,8 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="qrBackground" className="text-sm font-semibold text-slate-600">
+                <div className="space-y-[1.5%] sm:space-y-2">
+                  <Label htmlFor="qrBackground" className="text-[2.8vw] font-semibold text-slate-600 sm:text-sm">
                     {t("style.qrBackground")}
                   </Label>
                   <ColorField
@@ -408,9 +408,9 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
           </ConfiguratorSection>
         </div>
 
-        <aside className="space-y-4">
-          <Card className="rounded-3xl border-slate-100 bg-white p-6 shadow-xl">
-            <div className="flex flex-col items-center gap-6">
+        <aside className="space-y-[3%] sm:space-y-4">
+          <Card className="rounded-3xl border-slate-100 bg-white p-[4%] shadow-xl sm:p-6">
+            <div className="flex flex-col items-center gap-[4%] sm:gap-6">
               <div className="w-full max-w-xs">
                 <div
                   className="overflow-hidden rounded-[32px] border border-slate-200 shadow-lg"
@@ -421,7 +421,7 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
                 >
                   {state.frameType === "top" && showFrameText ? (
                     <div
-                      className="px-6 py-4 text-center font-semibold uppercase tracking-[0.32em]"
+                      className="px-[4%] py-[3%] text-center font-semibold uppercase tracking-[0.32em] sm:px-6 sm:py-4"
                       style={{
                         color: state.frameTextColor,
                         fontSize: `${state.textSize}px`,
@@ -431,9 +431,9 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
                     </div>
                   ) : null}
 
-                  <div className="flex justify-center bg-white px-6 py-6">
+                  <div className="flex justify-center bg-white px-[4%] py-[4%] sm:px-6 sm:py-6">
                     <div
-                      className="flex items-center justify-center rounded-2xl border border-slate-200/60 bg-white p-3 shadow-inner"
+                      className="flex items-center justify-center rounded-2xl border border-slate-200/60 bg-white p-[2.5%] shadow-inner sm:p-3"
                       style={{ backgroundColor: state.qrBackground }}
                     >
                       {qrDataUrl ? (
@@ -442,15 +442,15 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
                           alt={t("previewAlt")}
                           width={192}
                           height={192}
-                          className="h-48 w-48 object-contain"
+                          className="h-[35vw] w-[35vw] object-contain sm:h-48 sm:w-48"
                           unoptimized
                         />
                       ) : (
-                        <div className="flex h-48 w-48 items-center justify-center rounded-xl bg-slate-100">
+                        <div className="flex h-[35vw] w-[35vw] items-center justify-center rounded-xl bg-slate-100 sm:h-48 sm:w-48">
                           {isGenerating ? (
-                            <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
+                            <Loader2 className="h-[5vw] w-[5vw] animate-spin text-slate-400 sm:h-6 sm:w-6" />
                           ) : (
-                            <RefreshCcw className="h-6 w-6 text-slate-400" />
+                            <RefreshCcw className="h-[5vw] w-[5vw] text-slate-400 sm:h-6 sm:w-6" />
                           )}
                         </div>
                       )}
@@ -459,7 +459,7 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
 
                   {state.frameType === "bottom" && showFrameText ? (
                     <div
-                      className="px-6 py-4 text-center font-semibold uppercase tracking-[0.32em]"
+                      className="px-[4%] py-[3%] text-center font-semibold uppercase tracking-[0.32em] sm:px-6 sm:py-4"
                       style={{
                         color: state.frameTextColor,
                         fontSize: `${state.textSize}px`,
@@ -471,13 +471,13 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
                 </div>
               </div>
 
-              <div className="w-full space-y-3">
-                <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <div className="w-full space-y-[2.5%] sm:space-y-3">
+                <label className="text-[2.5vw] font-semibold uppercase tracking-wide text-slate-500 sm:text-xs">
                   {t("download.presetLabel")}
                 </label>
                 <div className="relative">
                   <select
-                    className="h-11 w-full appearance-none rounded-full border border-slate-200 bg-white px-4 pr-10 text-sm font-semibold text-slate-700 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    className="h-[8.5vw] w-full appearance-none rounded-full border border-slate-200 bg-white px-[3%] pr-[8%] text-[2.8vw] font-semibold text-slate-700 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:h-11 sm:px-4 sm:pr-10 sm:text-sm"
                     value={state.downloadPreset}
                     onChange={(event) =>
                       setState((previous) => ({
@@ -492,32 +492,32 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
                       </option>
                     ))}
                   </select>
-                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <ChevronDown className="pointer-events-none absolute right-[3%] top-1/2 h-[3.5vw] w-[3.5vw] -translate-y-1/2 text-slate-400 sm:right-4 sm:h-4 sm:w-4" />
                 </div>
 
                 {selectedPreset?.descriptionKey ? (
-                  <p className="text-xs text-slate-500">
+                  <p className="text-[2.5vw] text-slate-500 sm:text-xs">
                     {t(selectedPreset.descriptionKey)}
                   </p>
                 ) : null}
 
                 <Button
                   type="button"
-                  className="w-full justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-primary/90"
+                  className="w-full justify-center gap-[1.5%] rounded-full bg-primary px-[4%] py-[2.5%] text-[2.8vw] font-semibold text-white shadow-lg hover:bg-primary/90 sm:gap-2 sm:px-6 sm:py-3 sm:text-sm"
                   onClick={handleDownload}
                   disabled={isDownloading}
                 >
                   {isDownloading ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className="h-[3.5vw] w-[3.5vw] animate-spin sm:h-4 sm:w-4" />
                   ) : (
-                    <Download className="h-4 w-4" />
+                    <Download className="h-[3.5vw] w-[3.5vw] sm:h-4 sm:w-4" />
                   )}
                   {t("download.cta")}
                 </Button>
 
                 <button
                   type="button"
-                  className="w-full text-center text-sm font-semibold text-primary hover:underline"
+                  className="w-full text-center text-[2.8vw] font-semibold text-primary hover:underline sm:text-sm"
                   onClick={handleReset}
                 >
                   {t("reset")}
@@ -526,14 +526,14 @@ export function QrBuilder({ menuUrl }: QrBuilderProps) {
             </div>
           </Card>
 
-          <Card className="rounded-3xl border-slate-100 bg-emerald-50 p-6 text-emerald-900">
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
+          <Card className="rounded-3xl border-slate-100 bg-emerald-50 p-[4%] text-emerald-900 sm:p-6">
+            <h3 className="text-[2.8vw] font-semibold uppercase tracking-wide text-emerald-700 sm:text-sm">
               {t("promo.title")}
             </h3>
-            <p className="mt-3 text-sm leading-relaxed">
+            <p className="mt-[2.5%] text-[2.8vw] leading-relaxed sm:mt-3 sm:text-sm">
               {t("promo.description")}
             </p>
-            <p className="mt-4 text-xs text-emerald-700">{t("promo.note")}</p>
+            <p className="mt-[3%] text-[2.5vw] text-emerald-700 sm:mt-4 sm:text-xs">{t("promo.note")}</p>
           </Card>
         </aside>
       </div>
@@ -545,28 +545,28 @@ function ConfiguratorSection({ id, title, subtitle, isOpen, onToggle, children }
   return (
     <div
       id={id}
-      className="rounded-3xl border border-slate-100 bg-white p-2 shadow-sm"
+      className="rounded-3xl border border-slate-100 bg-white p-[1.5%] shadow-sm sm:p-2"
     >
       <button
         type="button"
-        className="flex w-full items-center justify-between rounded-2xl px-4 py-4 text-left"
+        className="flex w-full items-center justify-between rounded-2xl px-[3%] py-[3%] text-left sm:px-4 sm:py-4"
         onClick={onToggle}
       >
-        <div className="space-y-1">
-          <h2 className="text-sm font-semibold text-slate-800">{title}</h2>
+        <div className="space-y-[0.8%] sm:space-y-1">
+          <h2 className="text-[2.8vw] font-semibold text-slate-800 sm:text-sm">{title}</h2>
           {subtitle ? (
-            <p className="text-xs text-slate-500">{subtitle}</p>
+            <p className="text-[2.5vw] text-slate-500 sm:text-xs">{subtitle}</p>
           ) : null}
         </div>
         <ChevronDown
           className={cn(
-            "h-5 w-5 text-slate-500 transition-transform",
+            "h-[4.5vw] w-[4.5vw] text-slate-500 transition-transform sm:h-5 sm:w-5",
             isOpen ? "rotate-180" : "rotate-0",
           )}
         />
       </button>
 
-      {isOpen ? <div className="border-t border-slate-100 px-4 py-6">{children}</div> : null}
+      {isOpen ? <div className="border-t border-slate-100 px-[3%] py-[4%] sm:px-4 sm:py-6">{children}</div> : null}
     </div>
   );
 }
@@ -612,7 +612,7 @@ function ColorField({ id, label, value, onChange, disabled }: ColorFieldProps) {
   return (
     <div
       className={cn(
-        "flex items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-2 shadow-sm",
+        "flex items-center gap-[2.5%] rounded-full border border-slate-200 bg-white px-[2.5%] py-[1.5%] shadow-sm sm:gap-3 sm:px-3 sm:py-2",
         disabled && "opacity-50",
       )}
     >
@@ -620,11 +620,11 @@ function ColorField({ id, label, value, onChange, disabled }: ColorFieldProps) {
         type="button"
         onClick={() => colorInputRef.current?.click()}
         disabled={disabled}
-        className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-inner transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:cursor-not-allowed"
+        className="flex h-[7vw] w-[7vw] items-center justify-center rounded-xl border border-slate-200 bg-white shadow-inner transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:cursor-not-allowed sm:h-9 sm:w-9"
       aria-label={label}
       >
         <span
-          className="h-6 w-6 rounded-lg"
+          className="h-[5vw] w-[5vw] rounded-lg sm:h-6 sm:w-6"
           style={{ backgroundColor: value }}
         />
       </button>
@@ -643,7 +643,7 @@ function ColorField({ id, label, value, onChange, disabled }: ColorFieldProps) {
         onChange={handleHexChange}
         onBlur={handleHexBlur}
         disabled={disabled}
-        className="flex-1 bg-transparent text-sm font-semibold uppercase text-slate-700 outline-none focus-visible:ring-0 disabled:cursor-not-allowed"
+        className="flex-1 bg-transparent text-[2.8vw] font-semibold uppercase text-slate-700 outline-none focus-visible:ring-0 disabled:cursor-not-allowed sm:text-sm"
         spellCheck={false}
         aria-label={label}
       />
@@ -657,7 +657,7 @@ function FrameOptionButton({ frameType, selected, label, onSelect }: FrameOption
       type="button"
       onClick={() => onSelect(frameType)}
       className={cn(
-        "group relative flex flex-col items-center gap-3 rounded-2xl border px-4 py-4 text-sm font-semibold text-slate-600 transition-all",
+        "group relative flex flex-col items-center gap-[2.5%] rounded-2xl border px-[3%] py-[3%] text-[2.8vw] font-semibold text-slate-600 transition-all sm:gap-3 sm:px-4 sm:py-4 sm:text-sm",
         selected
           ? "border-primary/60 bg-white text-primary shadow-[0_18px_32px_-24px_rgba(79,70,229,0.65)] ring-2 ring-primary/15"
           : "border-slate-200 bg-white/90 hover:border-slate-300 hover:bg-white hover:shadow-[0_14px_24px_-20px_rgba(15,23,42,0.45)]",
@@ -678,13 +678,13 @@ function FrameOptionButton({ frameType, selected, label, onSelect }: FrameOption
 
 function FrameIllustration({ frameType }: { frameType: FrameType }) {
   return (
-    <div className="flex h-14 w-14 items-center justify-center">
-      <div className="relative h-12 w-10 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
-        <div className="absolute inset-1 grid grid-cols-3 gap-[2px]">
+    <div className="flex h-[11vw] w-[11vw] items-center justify-center sm:h-14 sm:w-14">
+      <div className="relative h-[10vw] w-[8vw] overflow-hidden rounded-xl border border-slate-200 bg-slate-50 sm:h-12 sm:w-10">
+        <div className="absolute inset-[0.8vw] grid grid-cols-3 gap-[0.2vw] sm:inset-1 sm:gap-[2px]">
           {Array.from({ length: 9 }).map((_, index) => (
             <span
               key={`${frameType}-${index}`}
-              className="block rounded-[2px] bg-slate-300"
+              className="block rounded-[0.2vw] bg-slate-300 sm:rounded-[2px]"
               style={{ opacity: index % 2 === 0 ? 0.78 : 0.36 }}
             />
           ))}
@@ -692,7 +692,7 @@ function FrameIllustration({ frameType }: { frameType: FrameType }) {
         {frameType !== "none" ? (
           <div
             className={cn(
-              "absolute left-0 right-0 h-3 bg-slate-900",
+              "absolute left-0 right-0 h-[2.5vw] bg-slate-900 sm:h-3",
               frameType === "bottom" ? "bottom-0" : "top-0",
             )}
           />

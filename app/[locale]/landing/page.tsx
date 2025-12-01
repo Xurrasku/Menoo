@@ -59,17 +59,14 @@ export default async function LandingPage({ params }: Props) {
             </Button>
           </Link>
           <div className="mt-16 flex items-center justify-center">
-            {/* Placeholder for mockup visual */}
-            <div className="relative">
-              <div className="h-96 w-64 rounded-2xl border-8 border-foreground/10 bg-muted shadow-2xl md:h-[500px] md:w-80">
-                <div className="flex h-full flex-col items-center justify-center gap-4 p-8">
-                  <QrCode className="h-32 w-32 text-primary" />
-                  <div className="text-center text-sm text-muted-foreground">
-                    {t("hero.visualPlaceholder")}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Image
+              src="/assets/hero-phone-mockup.png"
+              alt="Mobile mockup showing QR code and digital menu"
+              width={320}
+              height={640}
+              className="h-auto w-64 md:w-80"
+              priority
+            />
           </div>
         </div>
       </section>

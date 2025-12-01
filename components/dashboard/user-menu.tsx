@@ -67,9 +67,9 @@ export function UserMenu({ locale }: UserMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
-        <Avatar className="h-11 w-11 border border-slate-200">
+        <Avatar className="h-[7vw] w-[7vw] border border-slate-200 sm:h-11 sm:w-11">
           <AvatarImage src="/avatar-placeholder.png" alt={displayName} />
-          <AvatarFallback>{initials}</AvatarFallback>
+          <AvatarFallback className="text-[2.5vw] sm:text-sm">{initials}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56 rounded-2xl">

@@ -29,20 +29,20 @@ export default async function StatisticsPage({
   const stats = await getMenuViewStats(restaurant.id);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-[4%] sm:gap-6">
       <Card className="border-0 bg-white shadow-xl shadow-slate-200/60">
-        <CardHeader className="border-b border-slate-100 px-6 py-5 sm:px-8 sm:py-6">
-          <div className="flex flex-col gap-1">
-            <span className="text-sm font-semibold uppercase tracking-widest text-primary">
+        <CardHeader className="border-b border-slate-100 px-[4%] py-[3.5%] sm:px-8 sm:py-6">
+          <div className="flex flex-col gap-[1%]">
+            <span className="text-[3vw] font-semibold uppercase tracking-widest text-primary sm:text-sm">
               {tNavigation("statistics")}
             </span>
-            <span className="text-xs text-slate-500 sm:text-sm">
+            <span className="text-[2.5vw] text-slate-500 sm:text-sm">
               {tDashboard("analyticsSubtitle")}
             </span>
           </div>
         </CardHeader>
-        <CardContent className="p-6 sm:p-8">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <CardContent className="p-[4%] sm:p-8">
+          <div className="grid grid-cols-1 gap-[3%] sm:grid-cols-2 lg:grid-cols-4">
             <StatCard
               icon={Eye}
               label={tDashboard("analytics.totalViews")}
@@ -83,14 +83,14 @@ type StatCardProps = {
 
 function StatCard({ icon: Icon, label, value, className }: StatCardProps) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+    <div className="rounded-xl border border-slate-200 bg-white p-[3%] shadow-sm sm:p-6">
       <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-1">
-          <p className="text-xs font-medium text-slate-500 sm:text-sm">{label}</p>
-          <p className="text-2xl font-bold text-slate-900 sm:text-3xl">{value.toLocaleString()}</p>
+        <div className="flex flex-col gap-[1%]">
+          <p className="text-[2.5vw] font-medium text-slate-500 sm:text-sm">{label}</p>
+          <p className="text-[5vw] font-bold text-slate-900 sm:text-3xl">{value.toLocaleString()}</p>
         </div>
-        <div className={`flex h-12 w-12 items-center justify-center rounded-lg sm:h-14 sm:w-14 ${className ?? ""}`}>
-          <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
+        <div className={`flex h-[10vw] w-[10vw] items-center justify-center rounded-lg sm:h-14 sm:w-14 ${className ?? ""}`}>
+          <Icon className="h-[5vw] w-[5vw] sm:h-7 sm:w-7" />
         </div>
       </div>
     </div>

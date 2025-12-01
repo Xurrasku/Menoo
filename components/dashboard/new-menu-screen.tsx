@@ -585,9 +585,9 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
                   </label>
                 </div>
 
-                <div className="space-y-3">
-                  <p className="text-sm font-semibold text-foreground">{menu.dishModal.labelsTitle}</p>
-                  <div className="flex flex-wrap gap-2">
+                <div className="space-y-[2%] sm:space-y-3">
+                  <p className="text-[2.8vw] font-semibold text-foreground sm:text-sm">{menu.dishModal.labelsTitle}</p>
+                  <div className="flex flex-wrap gap-x-[4%] gap-y-[9%] sm:gap-x-3 sm:gap-y-4">
                     {labelOptions.map((label) => {
                       const isSelected = dishForm.labels.includes(label);
                       return (
@@ -596,7 +596,7 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
                           key={label}
                           onClick={() => toggleLabel(label)}
                           className={cn(
-                            "rounded-full border px-4 py-1 text-xs font-medium transition",
+                            "rounded-full border px-[2.5%] py-[0.8%] text-[2.2vw] font-medium transition whitespace-nowrap sm:px-4 sm:py-1 sm:text-xs",
                             isSelected
                               ? "border-primary bg-primary/10 text-primary"
                               : "border-border bg-background text-muted-foreground hover:border-primary/50 hover:bg-muted"
@@ -609,9 +609,9 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <p className="text-sm font-semibold text-foreground">{menu.dishModal.allergensTitle}</p>
-                  <div className="flex flex-wrap gap-2">
+                <div className="space-y-[2%] sm:space-y-3 mt-[6%] sm:mt-[4%]">
+                  <p className="text-[2.8vw] font-semibold text-foreground sm:text-sm">{menu.dishModal.allergensTitle}</p>
+                  <div className="flex flex-wrap gap-x-[4%] gap-y-[9%] sm:gap-x-3 sm:gap-y-4">
                     {allergenOptions.map((allergen) => {
                       const isSelected = dishForm.allergens.includes(allergen);
                       return (
@@ -620,7 +620,7 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
                           key={allergen}
                           onClick={() => toggleAllergen(allergen)}
                           className={cn(
-                            "rounded-full border px-4 py-1 text-xs font-medium transition",
+                            "rounded-full border px-[2.5%] py-[0.8%] text-[2.2vw] font-medium transition whitespace-nowrap sm:px-4 sm:py-1 sm:text-xs",
                             isSelected
                               ? "border-destructive/50 bg-destructive/10 text-destructive"
                               : "border-border bg-background text-muted-foreground hover:border-destructive/50 hover:bg-muted"

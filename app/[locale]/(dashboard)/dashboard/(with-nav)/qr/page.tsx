@@ -14,7 +14,7 @@ export default async function QrPage({ params }: QrPageProps) {
   const menuUrl = buildMenuUrlFromSlug(restaurant.slug);
 
   return (
-    <section className="px-4 pb-12 sm:px-12">
+    <section className="px-[3%] pb-[8%] sm:px-12 sm:pb-12">
       <div className="mx-auto max-w-6xl">
         <QrBuilder menuUrl={menuUrl} />
       </div>
