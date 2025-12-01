@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-import { buildPostAuthRedirect } from "./config";
+import { buildPostAuthRedirect, getAppBaseUrl } from "./config";
 
 type OAuthProviderId = "google";
 
@@ -22,8 +22,9 @@ export async function signInWithOAuthProvider({
     destination: redirectDestination,
   });
 
+  const appBaseUrl = getAppBaseUrl();
   const callbackUrl = new URL(
-    `${window.location.origin}/${locale}/auth/callback`,
+    `${appBaseUrl}/${locale}/auth/callback`,
   );
   callbackUrl.searchParams.set("redirect_to", postAuthRedirect);
 
@@ -35,6 +36,10 @@ export async function signInWithOAuthProvider({
     },
   });
 }
+
+
+
+
 
 
 

@@ -28,6 +28,15 @@ async function fetchServerUser(options: GetServerUserOptions = {}): Promise<User
       if (error.message === "Auth session missing!" || error.name === "AuthSessionMissingError") {
         return null;
       }
+      // Handle refresh token errors - treat as unauthenticated
+      if (
+        (error as { code?: string }).code === "refresh_token_not_found" ||
+        error.message.includes("Refresh Token Not Found") ||
+        error.message.includes("Invalid Refresh Token")
+      ) {
+        console.warn("Refresh token not found, treating as unauthenticated:", error.message);
+        return null;
+      }
       // Handle network/connection errors gracefully
       if (
         error.name === "AuthRetryableFetchError" ||
@@ -45,6 +54,16 @@ async function fetchServerUser(options: GetServerUserOptions = {}): Promise<User
   } catch (error) {
     // Handle any other errors (including network errors from client creation)
     if (error instanceof Error) {
+      // Handle refresh token errors - treat as unauthenticated
+      if (
+        (error as { code?: string }).code === "refresh_token_not_found" ||
+        error.message.includes("Refresh Token Not Found") ||
+        error.message.includes("Invalid Refresh Token")
+      ) {
+        console.warn("Refresh token not found, treating as unauthenticated:", error.message);
+        return null;
+      }
+
       const isNetworkError =
         error.message.includes("fetch failed") ||
         error.message.includes("ENOTFOUND") ||

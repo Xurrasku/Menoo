@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AUTH_PROVIDERS, buildPostAuthRedirect } from "@/lib/auth/config";
+import { parseAuthError } from "@/lib/auth/errors";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 import { useOAuthHandler } from "./use-oauth-handler";
@@ -53,7 +54,10 @@ export function SignUpForm({
   const router = useRouter();
   const t = useTranslations();
   const tCommon = useTranslations("auth.common");
-  const [serverMessage, setServerMessage] = useState<string | null>(initialError);
+  const [serverMessage, setServerMessage] = useState<string | null>(
+    initialError ? parseAuthError({ message: initialError }).message : null
+  );
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<SignUpValues>({
@@ -67,13 +71,15 @@ export function SignUpForm({
 
   const onSubmit = async (values: SignUpValues) => {
     setServerMessage(null);
+    setSuccessMessage(null);
 
     try {
       const supabase = createSupabaseBrowserClient();
       const targetPath = buildPostAuthRedirect({ locale, destination: redirectTo });
       const callbackUrl = new URL(`${window.location.origin}/${locale}/auth/callback`);
       callbackUrl.searchParams.set("redirect_to", targetPath);
-      const { error } = await supabase.auth.signUp({
+      
+      const { data, error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
         options: {
@@ -82,19 +88,33 @@ export function SignUpForm({
       });
 
       if (error) {
-        setServerMessage(error.message);
+        const parsedError = parseAuthError(error);
+        setServerMessage(parsedError.message);
         return;
       }
 
-      startTransition(() => {
-        router.replace(targetPath as Route);
-      });
+      // Check if email confirmation is required
+      // If user is null, email confirmation is required
+      // If user is not null, they're automatically logged in
+      if (data.user && data.session) {
+        // User is automatically logged in (email confirmation disabled)
+        await supabase.auth.getSession();
+        window.location.href = targetPath;
+      } else {
+        // Email confirmation required
+        setSuccessMessage(
+          "Compte creat! Revisa el teu email i clica l'enllaç de verificació per activar el compte."
+        );
+        // Clear the form
+        form.reset();
+      }
     } catch (error) {
-      setServerMessage(
+      const parsedError = parseAuthError(
         error instanceof Error
-          ? error.message
-          : "No s'ha pogut crear el compte. Torna-ho a provar més tard."
+          ? error
+          : { message: "No s'ha pogut crear el compte. Torna-ho a provar més tard." }
       );
+      setServerMessage(parsedError.message);
     }
   };
 
@@ -181,6 +201,11 @@ export function SignUpForm({
           )}
         />
 
+        {successMessage ? (
+          <p className="text-sm font-medium text-green-600 dark:text-green-400">
+            {successMessage}
+          </p>
+        ) : null}
         {serverMessage ? (
           <p className="text-sm font-medium text-destructive">{serverMessage}</p>
         ) : null}

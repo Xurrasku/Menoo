@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AUTH_PROVIDERS, buildPostAuthRedirect } from "@/lib/auth/config";
+import { parseAuthError } from "@/lib/auth/errors";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 import { useOAuthHandler } from "./use-oauth-handler";
@@ -47,7 +48,9 @@ export function SignInForm({
   const router = useRouter();
   const t = useTranslations();
   const tCommon = useTranslations("auth.common");
-  const [errorMessage, setErrorMessage] = useState<string | null>(initialError);
+  const [errorMessage, setErrorMessage] = useState<string | null>(
+    initialError ? parseAuthError({ message: initialError }).message : null
+  );
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<SignInValues>({
@@ -70,20 +73,22 @@ export function SignInForm({
       });
 
       if (error) {
-        setErrorMessage(error.message);
+        const parsedError = parseAuthError(error);
+        setErrorMessage(parsedError.message);
         return;
       }
 
+      // Refresh the session to ensure cookies are set
+      await supabase.auth.getSession();
+
       const targetPath = buildPostAuthRedirect({ locale, destination: redirectTo });
-      startTransition(() => {
-        router.replace(targetPath as Route);
-      });
+      // Use window.location for full page reload to ensure server picks up new session
+      window.location.href = targetPath;
     } catch (error) {
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "No s'ha pogut iniciar sessió. Torna-ho a intentar."
+      const parsedError = parseAuthError(
+        error instanceof Error ? error : { message: "No s'ha pogut iniciar sessió. Torna-ho a intentar." }
       );
+      setErrorMessage(parsedError.message);
     }
   };
 
