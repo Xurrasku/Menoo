@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
-import type { Route } from "next";
 import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -51,14 +49,13 @@ export function SignUpForm({
   redirectTo = "/dashboard/restaurant",
   initialError = null,
 }: SignUpFormProps) {
-  const router = useRouter();
   const t = useTranslations();
   const tCommon = useTranslations("auth.common");
   const [serverMessage, setServerMessage] = useState<string | null>(
     initialError ? parseAuthError({ message: initialError }).message : null
   );
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
+  const [isPending] = useTransition();
 
   const form = useForm<SignUpValues>({
     resolver: zodResolver(signUpSchema),
@@ -99,7 +96,7 @@ export function SignUpForm({
       if (data.user && data.session) {
         // User is automatically logged in (email confirmation disabled)
         await supabase.auth.getSession();
-        window.location.href = targetPath;
+        window.location.assign(targetPath);
       } else {
         // Email confirmation required
         setSuccessMessage(

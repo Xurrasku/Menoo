@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
-import type { Route } from "next";
 import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -45,13 +43,12 @@ export function SignInForm({
   locale,
   initialError = null,
 }: SignInFormProps) {
-  const router = useRouter();
   const t = useTranslations();
   const tCommon = useTranslations("auth.common");
   const [errorMessage, setErrorMessage] = useState<string | null>(
     initialError ? parseAuthError({ message: initialError }).message : null
   );
-  const [isPending, startTransition] = useTransition();
+  const [isPending] = useTransition();
 
   const form = useForm<SignInValues>({
     resolver: zodResolver(signInSchema),
@@ -83,7 +80,7 @@ export function SignInForm({
 
       const targetPath = buildPostAuthRedirect({ locale, destination: redirectTo });
       // Use window.location for full page reload to ensure server picks up new session
-      window.location.href = targetPath;
+      window.location.assign(targetPath);
     } catch (error) {
       const parsedError = parseAuthError(
         error instanceof Error ? error : { message: "No s'ha pogut iniciar sessió. Torna-ho a intentar." }
