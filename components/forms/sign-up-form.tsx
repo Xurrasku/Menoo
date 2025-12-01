@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { AUTH_PROVIDERS, buildPostAuthRedirect } from "@/lib/auth/config";
+import { AUTH_PROVIDERS, buildPostAuthRedirect, getAppBaseUrl } from "@/lib/auth/config";
 import { parseAuthError } from "@/lib/auth/errors";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
@@ -73,7 +73,8 @@ export function SignUpForm({
     try {
       const supabase = createSupabaseBrowserClient();
       const targetPath = buildPostAuthRedirect({ locale, destination: redirectTo });
-      const callbackUrl = new URL(`${window.location.origin}/${locale}/auth/callback`);
+      const appBaseUrl = getAppBaseUrl();
+      const callbackUrl = new URL(`${appBaseUrl}/${locale}/auth/callback`);
       callbackUrl.searchParams.set("redirect_to", targetPath);
       
       const { data, error } = await supabase.auth.signUp({

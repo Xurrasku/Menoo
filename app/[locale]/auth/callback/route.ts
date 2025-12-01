@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { buildPostAuthRedirect } from "@/lib/auth/config";
+import { buildPostAuthRedirect, getAppBaseUrl } from "@/lib/auth/config";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function GET(
@@ -16,6 +16,9 @@ export async function GET(
     ? redirectToParam
     : buildPostAuthRedirect({ locale });
 
+  // Use public app base URL instead of request.url to ensure redirects go to public domain
+  const appBaseUrl = getAppBaseUrl();
+
   if (errorDescription) {
     const params = new URLSearchParams({
       error: errorDescription,
@@ -23,7 +26,7 @@ export async function GET(
     });
 
     return NextResponse.redirect(
-      new URL(`/${locale}/auth/sign-in?${params.toString()}`, request.url),
+      new URL(`/${locale}/auth/sign-in?${params.toString()}`, appBaseUrl),
     );
   }
 
@@ -34,7 +37,7 @@ export async function GET(
     });
 
     return NextResponse.redirect(
-      new URL(`/${locale}/auth/sign-in?${params.toString()}`, request.url),
+      new URL(`/${locale}/auth/sign-in?${params.toString()}`, appBaseUrl),
     );
   }
 
@@ -60,11 +63,11 @@ export async function GET(
       });
 
       return NextResponse.redirect(
-        new URL(`/${locale}/auth/sign-in?${params.toString()}`, request.url),
+        new URL(`/${locale}/auth/sign-in?${params.toString()}`, appBaseUrl),
       );
     }
 
-    return NextResponse.redirect(new URL(redirectTarget, request.url));
+    return NextResponse.redirect(new URL(redirectTarget, appBaseUrl));
   } catch (error) {
     // Handle any other errors (including network errors from client creation)
     const isNetworkError =
@@ -87,7 +90,7 @@ export async function GET(
     });
 
     return NextResponse.redirect(
-      new URL(`/${locale}/auth/sign-in?${params.toString()}`, request.url),
+      new URL(`/${locale}/auth/sign-in?${params.toString()}`, appBaseUrl),
     );
   }
 }
