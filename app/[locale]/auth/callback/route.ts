@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { buildPostAuthRedirect, getAppBaseUrl } from "@/lib/auth/config";
+import { buildPostAuthRedirect, getAppBaseUrlFromRequest } from "@/lib/auth/config";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function GET(
@@ -16,8 +16,9 @@ export async function GET(
     ? redirectToParam
     : buildPostAuthRedirect({ locale });
 
-  // Use public app base URL instead of request.url to ensure redirects go to public domain
-  const appBaseUrl = getAppBaseUrl();
+  // Use public app base URL, detecting from request headers if env vars aren't set
+  // This ensures redirects go to the correct domain even after 2FA confirmation
+  const appBaseUrl = getAppBaseUrlFromRequest(request);
 
   if (errorDescription) {
     const params = new URLSearchParams({

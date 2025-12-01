@@ -48,6 +48,43 @@ export function getAppBaseUrl() {
   return normalizeBaseUrl("https://menoo.app");
 }
 
+/**
+ * Gets the app base URL from a request, detecting the origin from headers.
+ * This is useful for server-side routes where we need to detect the actual request origin.
+ * Prioritizes environment variables, but falls back to request detection if env vars aren't set.
+ */
+export function getAppBaseUrlFromRequest(request: Request): string {
+  // First try environment variables
+  const envBaseUrl = getAppBaseUrl();
+  
+  // If we got a non-default value from env vars, use it (even if request is localhost)
+  // This ensures we redirect to public domain even if callback came to localhost
+  if (envBaseUrl !== "https://menoo.app") {
+    return envBaseUrl;
+  }
+
+  // Otherwise, try to detect from request headers
+  // This handles cases where env vars aren't set but we can detect the actual domain
+  try {
+    const url = new URL(request.url);
+    const host = request.headers.get("x-forwarded-host") || 
+                 request.headers.get("host") || 
+                 url.host;
+    
+    if (host && !host.includes("localhost") && !host.includes("127.0.0.1")) {
+      // Only use detected host if it's not localhost
+      // Use https for non-localhost domains
+      const detectedUrl = `https://${host}`;
+      return normalizeBaseUrl(detectedUrl);
+    }
+  } catch (error) {
+    // If detection fails, fall back to env-based URL
+    console.warn("Failed to detect base URL from request headers:", error);
+  }
+
+  return envBaseUrl;
+}
+
 type BuildPostAuthRedirectOptions = {
   locale: string;
   destination?: string;
