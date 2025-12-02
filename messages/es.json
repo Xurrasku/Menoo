@@ -61,7 +61,8 @@
     "rowActions": {
       "edit": "Editar",
       "duplicate": "Duplicar",
-      "archive": "Archivar"
+      "archive": "Archivar",
+      "delete": "Eliminar"
     },
     "menuDetail": {
       "back": "Mis menús",
@@ -74,6 +75,16 @@
       "save": "Guardar menú",
       "saving": "Guardando...",
       "saveError": "No pudimos guardar el menú. Inténtalo de nuevo.",
+      "aiUploader": {
+        "title": "Crea un menú nuevo desde una foto",
+        "subtitle": "Sube una foto de tu menú y la IA hará el resto",
+        "dropHere": "Suelta la imagen aquí",
+        "clickOrDrag": "Haz clic o arrastra para subir",
+        "fileTypes": "PNG, JPG o WEBP hasta 10MB",
+        "analyzing": "Analizando tu menú...",
+        "createManually": "O créalo manualmente",
+        "process": "Procesar imágenes"
+      },
       "categoryModal": {
         "title": "Nueva categoría",
         "nameLabel": "Nombre de la categoría",

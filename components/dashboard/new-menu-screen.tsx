@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState, type ChangeEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight, FileEdit, Loader2, Plus, Sparkles, UploadCloud, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import { MenuNameEditor } from "@/components/dashboard/menu-name-editor";
 import { CategoryCard, type Dish as CategoryDish } from "@/components/dashboard/category-card";
 import { cn } from "@/lib/utils";
 import type { MenuDetailData } from "@/lib/menus/service";
+import type { AiMenuDraft } from "@/lib/menus/ai-import";
 
 export type MenuDetailMessages = {
   back: string;
@@ -23,6 +24,16 @@ export type MenuDetailMessages = {
   save: string;
   saving: string;
   saveError: string;
+  aiUploader: {
+    title: string;
+    subtitle: string;
+    dropHere: string;
+    clickOrDrag: string;
+    fileTypes: string;
+    analyzing: string;
+    createManually: string;
+    process: string;
+  };
   categoryModal: {
     title: string;
     nameLabel: string;
@@ -67,11 +78,18 @@ type DishFormState = {
   allergens: string[];
 };
 
+type PendingImage = {
+  id: string;
+  file: File;
+  previewUrl: string;
+};
+
 type NewMenuScreenProps = {
   locale: string;
   menu: MenuDetailMessages;
   restaurantId: string;
   initialMenu?: MenuDetailData | null;
+  hasExistingMenus?: boolean;
 };
 
 const LABEL_OPTIONS: Record<string, string[]> = {
@@ -133,9 +151,18 @@ const ALLERGEN_OPTIONS: Record<string, string[]> = {
 
 const DEFAULT_CATEGORIES: Category[] = [];
 
-export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMenuScreenProps) {
+export function NewMenuScreen({
+  locale,
+  menu,
+  restaurantId,
+  initialMenu,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  hasExistingMenus: _hasExistingMenus,
+}: NewMenuScreenProps) {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [menuTitle, setMenuTitle] = useState(() => initialMenu?.name ?? menu.title);
+  const [hasEditedTitle, setHasEditedTitle] = useState(false);
   const [categories, setCategories] = useState<Category[]>(() => {
     if (initialMenu) {
       return initialMenu.categories.map((category) => ({
@@ -159,7 +186,14 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
     return DEFAULT_CATEGORIES.map((category) => ({ ...category, dishes: [...category.dishes] }));
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [creationMode, setCreationMode] = useState<"ai" | "manual" | null>(
+    initialMenu ? "manual" : "ai"
+  );
+  const [isAiGenerating, setAiGenerating] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [pendingImages, setPendingImages] = useState<PendingImage[]>([]);
 
   const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
   const [isDishModalOpen, setDishModalOpen] = useState(false);
@@ -182,6 +216,9 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
 
   const labelOptions = useMemo(() => LABEL_OPTIONS[locale] ?? LABEL_OPTIONS.es, [locale]);
   const allergenOptions = useMemo(() => ALLERGEN_OPTIONS[locale] ?? ALLERGEN_OPTIONS.es, [locale]);
+  const showChoiceScreen = creationMode === null && !initialMenu;
+  const showAiUploader = creationMode === "ai" && !initialMenu && categories.length === 0;
+  const showManualEditor = creationMode === "manual" || !!initialMenu || (creationMode === "ai" && categories.length > 0);
 
   const resetCategoryModal = () => {
     setCategoryName("");
@@ -306,6 +343,186 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
     }));
   };
 
+  function addPendingImages(files: FileList | File[]) {
+    const newImages: PendingImage[] = [];
+    for (const file of Array.from(files)) {
+      if (file.type.startsWith("image/")) {
+        newImages.push({
+          id: createClientId("img"),
+          file,
+          previewUrl: URL.createObjectURL(file),
+        });
+      }
+    }
+    if (newImages.length > 0) {
+      setPendingImages((prev) => [...prev, ...newImages]);
+      setAiError(null);
+    }
+  }
+
+  function removePendingImage(imageId: string) {
+    setPendingImages((prev) => {
+      const image = prev.find((img) => img.id === imageId);
+      if (image) {
+        URL.revokeObjectURL(image.previewUrl);
+      }
+      return prev.filter((img) => img.id !== imageId);
+    });
+  }
+
+  function handleAiFileChange(event: ChangeEvent<HTMLInputElement>) {
+    const files = event.target.files;
+    event.target.value = "";
+    if (!files || files.length === 0) return;
+    addPendingImages(files);
+  }
+
+  function handleDragOver(event: React.DragEvent<HTMLElement>) {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(true);
+  }
+
+  function handleDragLeave(event: React.DragEvent<HTMLElement>) {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+  }
+
+  function handleDrop(event: React.DragEvent<HTMLElement>) {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+
+    const files = event.dataTransfer.files;
+    if (!files || files.length === 0) {
+      setAiError("Please drop image files");
+      return;
+    }
+
+    addPendingImages(files);
+  }
+
+  async function processAllImages() {
+    if (pendingImages.length === 0) return;
+    
+    setAiError(null);
+    setAiGenerating(true);
+    
+    try {
+      const allCategories: Category[] = [];
+      let menuName = "";
+      
+      for (const pendingImage of pendingImages) {
+        const dataUrl = await fileToDataUrl(pendingImage.file);
+        const response = await fetch("/api/ai/menu-from-image", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            image: dataUrl,
+            mimeType: pendingImage.file.type || undefined,
+          }),
+        });
+
+        const body = (await response.json().catch(() => null)) as
+          | { data?: AiMenuDraft; error?: string }
+          | null;
+
+        if (!response.ok || !body?.data) {
+          console.warn("Failed to process image:", pendingImage.file.name);
+          continue;
+        }
+
+        if (body.data.name && !menuName) {
+          menuName = body.data.name.trim();
+        }
+
+        for (const category of body.data.categories) {
+          allCategories.push({
+            id: createClientId("category"),
+            name: category.name?.trim() || menu.untitledCategory,
+            description: category.description?.trim() ?? "",
+            dishes: category.dishes.map((dish) => ({
+              id: createClientId("dish"),
+              name: dish.name?.trim() || menu.dishModal.nameLabel,
+              description: dish.description?.trim() ?? "",
+              price: typeof dish.price === "number" && Number.isFinite(dish.price) ? dish.price : 0,
+              currency: dish.currency?.trim() || "€",
+              thumbnail: "🍽️",
+              isVisible: true,
+              labels: [],
+              allergens: [],
+            })),
+          });
+        }
+      }
+
+      if (allCategories.length === 0) {
+        setAiError("We couldn't find any dishes in those photos.");
+        return;
+      }
+
+      if (menuName && !hasEditedTitle) {
+        setMenuTitle(menuName);
+      }
+
+      setCategories(allCategories);
+      
+      // Clean up preview URLs
+      for (const img of pendingImages) {
+        URL.revokeObjectURL(img.previewUrl);
+      }
+      setPendingImages([]);
+      
+      setCreationMode("manual");
+    } catch (error) {
+      console.error("AI menu import failed", error);
+      setAiError(
+        error instanceof Error && error.message
+          ? error.message
+          : "We couldn't process those photos. Try again.",
+      );
+    } finally {
+      setAiGenerating(false);
+    }
+  }
+
+  function createClientId(prefix: string) {
+    if (typeof crypto !== "undefined" && crypto.randomUUID) {
+      return crypto.randomUUID();
+    }
+
+    return `${prefix}-${Date.now()}-${Math.round(Math.random() * 1_000_000)}`;
+  }
+
+  function fileToDataUrl(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result;
+        if (typeof result === "string") {
+          resolve(result);
+          return;
+        }
+
+        if (result instanceof ArrayBuffer) {
+          const bytes = new Uint8Array(result);
+          let binary = "";
+          for (let index = 0; index < bytes.byteLength; index += 1) {
+            binary += String.fromCharCode(bytes[index]);
+          }
+          const base64 = btoa(binary);
+          resolve(`data:${file.type || "application/octet-stream"};base64,${base64}`);
+          return;
+        }
+
+        reject(new Error("Unsupported file content"));
+      };
+      reader.onerror = () => reject(reader.error ?? new Error("Unable to read file"));
+      reader.readAsDataURL(file);
+    });
+  }
+
   return (
     <div className="flex flex-1 flex-col gap-8">
       <Link
@@ -316,7 +533,176 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
         {menu.back}
       </Link>
 
-      <div className="mx-auto w-full max-w-4xl space-y-8">
+      {showChoiceScreen ? (
+        <div className="mx-auto w-full max-w-4xl">
+          <div className="mb-6 text-center">
+            <h1 className="text-3xl font-bold text-foreground">Create a new menu</h1>
+            <p className="mt-2 text-muted-foreground">Choose how you&apos;d like to create your menu</p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => setCreationMode("ai")}
+              className="group flex flex-col items-center gap-4 rounded-3xl border-2 border-primary/30 bg-primary/5 p-8 text-left transition hover:border-primary/60 hover:bg-primary/10"
+            >
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary transition group-hover:bg-primary/20">
+                <Sparkles className="h-8 w-8" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-semibold text-foreground">Generate from image</h3>
+                <p className="text-sm text-muted-foreground">
+                  Upload a photo of your menu and we&apos;ll automatically extract all categories and dishes using AI.
+                </p>
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setCreationMode("manual")}
+              className="group flex flex-col items-center gap-4 rounded-3xl border-2 border-border bg-card p-8 text-left transition hover:border-primary/30 hover:bg-muted/50"
+            >
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-muted text-foreground transition group-hover:bg-muted/80">
+                <FileEdit className="h-8 w-8" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-semibold text-foreground">Create manually</h3>
+                <p className="text-sm text-muted-foreground">
+                  Start from scratch and add your categories and dishes one by one.
+                </p>
+              </div>
+            </button>
+          </div>
+        </div>
+      ) : null}
+
+      {showAiUploader ? (
+        <div className="mx-auto flex w-full max-w-lg flex-col items-center space-y-6">
+          <div className="space-y-3 text-center">
+            <h1 className="font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+              {menu.aiUploader.title}
+            </h1>
+            <p className="text-base text-muted-foreground">
+              {menu.aiUploader.subtitle}
+            </p>
+          </div>
+
+          {/* Image previews grid */}
+          {pendingImages.length > 0 ? (
+            <div className="w-full space-y-4">
+              <div className="grid grid-cols-3 gap-3">
+                {pendingImages.map((img) => (
+                  <div key={img.id} className="group relative aspect-square overflow-hidden rounded-xl border border-border bg-muted">
+                    <img
+                      src={img.previewUrl}
+                      alt=""
+                      className="h-full w-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removePendingImage(img.id)}
+                      disabled={isAiGenerating}
+                      className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-background/80 text-muted-foreground opacity-0 transition hover:bg-background hover:text-foreground group-hover:opacity-100 disabled:opacity-50"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ))}
+                {/* Add more button - supports drag & drop */}
+                <button
+                  type="button"
+                  onClick={() => !isAiGenerating && fileInputRef.current?.click()}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  disabled={isAiGenerating}
+                  className={cn(
+                    "flex aspect-square items-center justify-center rounded-xl border-2 border-dashed transition-colors",
+                    isDragging
+                      ? "border-primary bg-primary/10"
+                      : "border-border bg-muted/50 hover:border-primary/50 hover:bg-primary/5",
+                    isAiGenerating && "cursor-not-allowed opacity-50"
+                  )}
+                >
+                  <Plus className={cn("h-6 w-6 transition-colors", isDragging ? "text-primary" : "text-muted-foreground")} />
+                </button>
+              </div>
+
+              {/* Process button */}
+              <Button
+                type="button"
+                onClick={() => void processAllImages()}
+                disabled={isAiGenerating || pendingImages.length === 0}
+                className="w-full rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition hover:bg-primary/90"
+              >
+                {isAiGenerating ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    {menu.aiUploader.analyzing}
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    {menu.aiUploader.process}
+                  </>
+                )}
+              </Button>
+            </div>
+          ) : (
+            <div
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onClick={() => !isAiGenerating && fileInputRef.current?.click()}
+              className={cn(
+                "relative flex h-56 w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed transition-colors",
+                isDragging
+                  ? "border-primary bg-primary/10"
+                  : "border-primary/30 bg-primary/5 hover:border-primary/50 hover:bg-primary/10",
+                isAiGenerating && "cursor-not-allowed opacity-50"
+              )}
+            >
+              <div className="flex flex-col items-center gap-3 p-6">
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <UploadCloud className="h-7 w-7" />
+                </div>
+                <div className="space-y-1 text-center">
+                  <p className="text-sm font-semibold text-foreground">
+                    {isDragging ? menu.aiUploader.dropHere : menu.aiUploader.clickOrDrag}
+                  </p>
+                  <p className="text-xs text-muted-foreground">{menu.aiUploader.fileTypes}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {aiError ? (
+            <div className="w-full rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm font-medium text-destructive">
+              {aiError}
+            </div>
+          ) : null}
+
+          <button
+            type="button"
+            onClick={() => setCreationMode("manual")}
+            disabled={isAiGenerating}
+            className="group flex items-center gap-2 text-sm font-medium text-muted-foreground transition hover:text-foreground disabled:opacity-50"
+          >
+            <span>{menu.aiUploader.createManually}</span>
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </button>
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            className="hidden"
+            accept="image/*"
+            multiple
+            onChange={handleAiFileChange}
+          />
+        </div>
+      ) : null}
+
+      {showManualEditor ? (
+        <div className="mx-auto w-full max-w-4xl space-y-8">
         <div className="rounded-lg border border-border bg-card p-6">
           <div className="pb-6">
             <MenuNameEditor
@@ -326,7 +712,10 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
               textClassName="text-2xl font-semibold text-foreground"
               inputClassName="text-2xl font-semibold text-foreground"
               buttonClassName="p-1 text-muted-foreground hover:text-foreground"
-              onChange={(_menuId, value) => setMenuTitle(value)}
+              onChange={(_menuId, value) => {
+                setMenuTitle(value);
+                setHasEditedTitle(true);
+              }}
             />
           </div>
 
@@ -429,8 +818,10 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
           </div>
         </div>
       </div>
+      ) : null}
 
-      <div className="sticky bottom-8 z-40 flex justify-end">
+      {showManualEditor ? (
+        <div className="sticky bottom-8 z-40 flex justify-end">
         <Button
           type="button"
           className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition hover:bg-primary/90"
@@ -443,8 +834,9 @@ export function NewMenuScreen({ locale, menu, restaurantId, initialMenu }: NewMe
           {isSaving ? menu.saving : menu.save}
         </Button>
       </div>
+      ) : null}
 
-      {errorMessage ? (
+      {showManualEditor && errorMessage ? (
         <div className="mx-auto w-full max-w-4xl rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm font-medium text-destructive">
           {errorMessage}
         </div>

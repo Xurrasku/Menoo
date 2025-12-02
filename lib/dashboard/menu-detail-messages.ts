@@ -19,6 +19,16 @@ export async function getMenuDetailMessages(locale: string): Promise<MenuDetailM
     save: tMenuDetail("save"),
     saving: tMenuDetail("saving"),
     saveError: tMenuDetail("saveError"),
+    aiUploader: {
+      title: tMenuDetail("aiUploader.title"),
+      subtitle: tMenuDetail("aiUploader.subtitle"),
+      dropHere: tMenuDetail("aiUploader.dropHere"),
+      clickOrDrag: tMenuDetail("aiUploader.clickOrDrag"),
+      fileTypes: tMenuDetail("aiUploader.fileTypes"),
+      analyzing: tMenuDetail("aiUploader.analyzing"),
+      createManually: tMenuDetail("aiUploader.createManually"),
+      process: tMenuDetail("aiUploader.process"),
+    },
     categoryModal: {
       title: tMenuDetail("categoryModal.title"),
       nameLabel: tMenuDetail("categoryModal.nameLabel"),

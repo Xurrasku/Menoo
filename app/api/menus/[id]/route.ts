@@ -237,15 +237,27 @@ export async function DELETE(
     );
   }
 
-  const [deleted] = await db
-    .delete(menus)
-    .where(eq(menus.id, id))
-    .returning();
+  try {
+    const [deleted] = await db
+      .delete(menus)
+      .where(eq(menus.id, id))
+      .returning({
+        id: menus.id,
+        name: menus.name,
+        restaurantId: menus.restaurantId,
+        isDefault: menus.isDefault,
+        createdAt: menus.createdAt,
+        updatedAt: menus.updatedAt,
+      });
 
-  if (!deleted) {
-    return Response.json({ error: "Menu not found" }, { status: 404 });
+    if (!deleted) {
+      return Response.json({ error: "Menu not found" }, { status: 404 });
+    }
+
+    return Response.json({ data: deleted }, { status: 200 });
+  } catch (error) {
+    console.error("Failed to delete menu", error);
+    return Response.json({ error: "Unable to delete menu" }, { status: 500 });
   }
-
-  return Response.json({ data: deleted }, { status: 200 });
 }
 

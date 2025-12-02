@@ -61,7 +61,8 @@
     "rowActions": {
       "edit": "Edita",
       "duplicate": "Duplica",
-      "archive": "Arxiva"
+      "archive": "Arxiva",
+      "delete": "Elimina"
     },
     "menuDetail": {
       "back": "Els meus menús",
@@ -74,6 +75,16 @@
       "save": "Desa el menú",
       "saving": "Desant...",
       "saveError": "No hem pogut desar el menú. Torna-ho a provar.",
+      "aiUploader": {
+        "title": "Crea un menú nou a partir d'una foto",
+        "subtitle": "Puja una foto del teu menú i la IA farà la resta",
+        "dropHere": "Deixa la imatge aquí",
+        "clickOrDrag": "Fes clic o arrossega per pujar",
+        "fileTypes": "PNG, JPG o WEBP fins a 10MB",
+        "analyzing": "Analitzant el teu menú...",
+        "createManually": "O crea'l manualment",
+        "process": "Processar imatges"
+      },
       "categoryModal": {
         "title": "Nova categoria",
         "nameLabel": "Nom de la categoria",

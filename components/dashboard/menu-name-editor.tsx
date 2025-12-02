@@ -57,7 +57,11 @@ export function MenuNameEditor({
             inputClassName
           )}
           value={value}
-          onChange={(event) => setValue(event.target.value)}
+          onChange={(event) => {
+            const nextValue = event.target.value;
+            setValue(nextValue);
+            onChange?.(menuId, nextValue);
+          }}
           autoFocus
           aria-label="Edit menu name"
         />

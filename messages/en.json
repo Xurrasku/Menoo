@@ -61,7 +61,8 @@
     "rowActions": {
       "edit": "Edit",
       "duplicate": "Duplicate",
-      "archive": "Archive"
+      "archive": "Archive",
+      "delete": "Delete"
     },
     "menuDetail": {
       "back": "My menus",
@@ -74,6 +75,16 @@
       "save": "Save menu",
       "saving": "Saving...",
       "saveError": "We couldn't save the menu. Please try again.",
+      "aiUploader": {
+        "title": "Create new menu from photo",
+        "subtitle": "Upload a photo of your menu and AI will do the rest",
+        "dropHere": "Drop your image here",
+        "clickOrDrag": "Click or drag to upload",
+        "fileTypes": "PNG, JPG, or WEBP up to 10MB",
+        "analyzing": "Analyzing your menu...",
+        "createManually": "Or create it manually",
+        "process": "Process images"
+      },
       "categoryModal": {
         "title": "New category",
         "nameLabel": "Category name",

@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MenuNameEditor } from "@/components/dashboard/menu-name-editor";
+import { MenuRowActions } from "@/components/dashboard/menu-row-actions";
 import { ClickableMenuRow } from "@/components/dashboard/clickable-menu-row";
 import { listMenus } from "@/lib/menus/service";
 import { buildMenuUrlFromSlug } from "@/lib/restaurants/domain";
@@ -109,7 +110,7 @@ export default async function MenusPage({ params }: MenusPageProps) {
                 <DropdownMenuItem>{tRowActions("duplicate")}</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="text-destructive">
-                  {tRowActions("archive")}
+                  {tRowActions("delete")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -198,29 +199,15 @@ export default async function MenusPage({ params }: MenusPageProps) {
                     </div>
                   </TableCell>
                   <TableCell className="px-[3%] py-[3%] text-right sm:px-6 sm:py-6">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-[5.5vw] w-[5.5vw] rounded-full border border-slate-200 text-slate-500 hover:text-slate-900 sm:h-8 sm:w-8"
-                        >
-                          <MoreHorizontal className="h-[3vw] w-[3vw] sm:h-4 sm:w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-44">
-                        <DropdownMenuItem asChild>
-                          <Link href={`/${locale}/dashboard/menus/${menu.id}/edit`}>
-                            {tRowActions("edit")}
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>{tRowActions("duplicate")}</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive">
-                          {tRowActions("archive")}
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <MenuRowActions
+                      menuId={menu.id}
+                      locale={locale}
+                      labels={{
+                        edit: tRowActions("edit"),
+                        duplicate: tRowActions("duplicate"),
+                        delete: tRowActions("delete"),
+                      }}
+                    />
                   </TableCell>
                 </ClickableMenuRow>
               ))}

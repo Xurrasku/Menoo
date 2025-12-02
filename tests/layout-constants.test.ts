@@ -7,7 +7,7 @@ import {
 } from "../lib/constants/layout";
 
 test("dashboard edge padding matches fixed spacing", () => {
-  assert.equal(DASHBOARD_EDGE_PADDING, "px-6");
+  assert.equal(DASHBOARD_EDGE_PADDING, "px-[3%] sm:px-6");
 });
 
 test("dashboard nav highlight transition remains smooth", () => {
