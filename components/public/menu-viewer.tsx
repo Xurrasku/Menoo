@@ -4,6 +4,11 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { ArrowLeft } from "lucide-react";
 import type { RestaurantMenuDetail } from "@/lib/menus/service";
 import { MenuSelector } from "./menu-selector";
+import {
+  replaceHtmlPlaceholders,
+  isFullHtmlDocument,
+  extractHeadContent,
+} from "@/lib/menus/html-template";
 
 type MenuViewerProps = {
   menus: RestaurantMenuDetail[];
@@ -99,6 +104,72 @@ function formatPrice(amount: number, currency: string) {
   }
 }
 
+function HtmlMenuContent({
+  htmlContent,
+  menuId,
+}: {
+  htmlContent: string;
+  menuId: string;
+}) {
+  const { headContent, bodyContent } = extractHeadContent(htmlContent);
+
+  // Inject head content (styles, meta tags, etc.) into document head
+  useEffect(() => {
+    if (headContent) {
+      // Create a temporary container to parse head content
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = headContent;
+
+      // Extract and inject styles, meta tags, etc.
+      const styles = tempDiv.querySelectorAll("style");
+      const links = tempDiv.querySelectorAll("link");
+
+      const injectedElements: HTMLElement[] = [];
+
+      // Inject styles
+      styles.forEach((style) => {
+        const styleElement = document.createElement("style");
+        styleElement.setAttribute("data-menu-custom", menuId);
+        styleElement.textContent = style.textContent || "";
+        document.head.appendChild(styleElement);
+        injectedElements.push(styleElement);
+      });
+
+      // Inject link tags (for external stylesheets, fonts, etc.)
+      links.forEach((link) => {
+        const linkElement = document.createElement("link");
+        linkElement.setAttribute("data-menu-custom", menuId);
+        Array.from(link.attributes).forEach((attr) => {
+          linkElement.setAttribute(attr.name, attr.value);
+        });
+        document.head.appendChild(linkElement);
+        injectedElements.push(linkElement);
+      });
+
+      // Cleanup function
+      return () => {
+        // Remove injected styles and links when component unmounts or menu changes
+        injectedElements.forEach((el) => el.remove());
+      };
+    }
+  }, [headContent, menuId]);
+
+  // Render body content or full HTML fragment
+  const htmlToRender = bodyContent || htmlContent;
+
+  return (
+    <div
+      dangerouslySetInnerHTML={{ __html: htmlToRender }}
+      className="menu-html-content"
+      style={{
+        width: "100%",
+        minHeight: "100%",
+        overflow: "visible",
+      }}
+    />
+  );
+}
+
 export function MenuViewer({ menus, restaurantName, defaultMenuId }: MenuViewerProps) {
   // Compute the default menu selection based on props
   const defaultMenu = useMemo((): RestaurantMenuDetail | null => {
@@ -121,6 +192,7 @@ export function MenuViewer({ menus, restaurantName, defaultMenuId }: MenuViewerP
 
   const [selectedMenu, setSelectedMenu] = useState<RestaurantMenuDetail | null>(defaultMenu);
   const prevDefaultMenuRef = useRef<RestaurantMenuDetail | null>(defaultMenu);
+  const prevMenusRef = useRef<RestaurantMenuDetail[]>(menus);
 
   // Update selected menu when defaultMenu changes (but only if user hasn't manually selected)
   useEffect(() => {
@@ -133,6 +205,24 @@ export function MenuViewer({ menus, restaurantName, defaultMenuId }: MenuViewerP
       });
     }
   }, [defaultMenu]);
+
+  // Update selectedMenu when menus prop changes to ensure we always use latest database data
+  useEffect(() => {
+    // Check if menus array has changed (new reference means data was updated)
+    const menusChanged = prevMenusRef.current !== menus;
+    
+    if (menusChanged && selectedMenu) {
+      // Find the updated menu data for the currently selected menu
+      const updatedMenu = menus.find((m) => m.id === selectedMenu.id);
+      if (updatedMenu) {
+        // Update selectedMenu with fresh data from database
+        setSelectedMenu(updatedMenu);
+      }
+    }
+    
+    // Update ref to track current menus
+    prevMenusRef.current = menus;
+  }, [menus, selectedMenu]);
 
   // If no menus, show empty state
   if (menus.length === 0) {
@@ -166,6 +256,32 @@ export function MenuViewer({ menus, restaurantName, defaultMenuId }: MenuViewerP
 
   // Show selected menu
   if (selectedMenu) {
+    // If menu has custom HTML content, render it instead of default component
+    if (selectedMenu.htmlContent && selectedMenu.htmlContent.trim().length > 0) {
+      const processedHtml = replaceHtmlPlaceholders(
+        selectedMenu.htmlContent,
+        restaurantName,
+        selectedMenu,
+      );
+
+      // For HTML menus, render full-screen without any wrapper constraints
+      return (
+        <div className="html-menu-fullscreen">
+          {menus.length >= 2 && (
+            <button
+              onClick={() => setSelectedMenu(null)}
+              className="fixed top-4 left-4 z-50 flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-slate-600 shadow-lg backdrop-blur transition hover:bg-white hover:text-slate-900"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Volver
+            </button>
+          )}
+          <HtmlMenuContent htmlContent={processedHtml} menuId={selectedMenu.id} />
+        </div>
+      );
+    }
+
+    // Default React component rendering
     return (
       <div className="space-y-[4%] pb-[6%] sm:pb-10">
         {menus.length >= 2 && (

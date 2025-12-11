@@ -92,4 +92,58 @@
       font-size: clamp(12px, 2.5vw, 16px);
     }
   }
+
+  /* HTML Menu fullscreen container - takes over entire page */
+  .html-menu-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    min-height: 100vh;
+    overflow: auto;
+    z-index: 40;
+    background: white;
+  }
+
+  /* Menu HTML content container - ensure full content display */
+  .menu-html-content {
+    width: 100%;
+    min-height: 100%;
+    overflow: visible;
+    position: relative;
+  }
+
+  /* Don't restrict max-width for menu content children */
+  .html-menu-fullscreen .menu-html-content,
+  .html-menu-fullscreen .menu-html-content * {
+    max-width: none;
+  }
+
+  /* Override viewport-width styles that might cause overflow */
+  .menu-html-content [style*="100vw"],
+  .menu-html-content [style*="width: 100vw"] {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Ensure menu-wrap and other menu containers display properly */
+  .menu-html-content .menu-wrap,
+  .menu-html-content [class*="menu-wrap"] {
+    width: 100% !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  /* Ensure body and html elements inside menu-html-content don't restrict display */
+  .menu-html-content body,
+  .menu-html-content html {
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
 }

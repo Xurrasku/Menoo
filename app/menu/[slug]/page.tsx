@@ -7,6 +7,10 @@ import { getRestaurantBySlug } from "@/lib/restaurants/service";
 import { MenuViewTracker } from "@/components/analytics/menu-view-tracker";
 import { MenuViewer } from "@/components/public/menu-viewer";
 
+// Force dynamic rendering to ensure menu always reflects latest database state
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 type PublicMenuPageProps = {
   params: Promise<{
     slug: string;
@@ -62,14 +66,29 @@ export default async function PublicMenuPage({ params, searchParams }: PublicMen
   const menus = await getRestaurantMenus(restaurant.id);
   const selectedMenuId = resolvedSearchParams?.menu;
 
+  // Check if any menu has HTML content to determine layout
+  const hasHtmlMenu = menus.some((m) => m.htmlContent && m.htmlContent.trim().length > 0);
+
   return (
     <>
       <MenuViewTracker slug={slug} />
-      <div className="flex min-h-screen w-full flex-col bg-white sm:bg-[#fafafa] sm:px-4 sm:py-6 lg:px-8 safe-area-inset">
-        <div className="mx-auto flex w-full flex-1 flex-col sm:max-w-[420px]">
+      <div className={hasHtmlMenu 
+        ? "min-h-screen w-full bg-white" 
+        : "flex min-h-screen w-full flex-col bg-white sm:bg-[#fafafa] sm:px-4 sm:py-6 lg:px-8 safe-area-inset"
+      }>
+        <div className={hasHtmlMenu 
+          ? "w-full" 
+          : "mx-auto flex w-full flex-1 flex-col sm:max-w-[420px]"
+        }>
         {/* Main Content Card */}
-        <div className="flex min-h-screen flex-1 flex-col w-full bg-white sm:bg-white sm:min-h-0">
-          <main className="flex-1 w-full px-[4%] pb-[4%] pt-[5%] sm:px-8 sm:pb-8 sm:pt-10">
+        <div className={hasHtmlMenu 
+          ? "w-full" 
+          : "flex min-h-screen flex-1 flex-col w-full bg-white sm:bg-white sm:min-h-0"
+        }>
+          <main className={hasHtmlMenu 
+            ? "w-full" 
+            : "flex-1 w-full px-[4%] pb-[4%] pt-[5%] sm:px-8 sm:pb-8 sm:pt-10"
+          }>
             <MenuViewer
               menus={menus}
               restaurantName={restaurant.name}
@@ -77,16 +96,18 @@ export default async function PublicMenuPage({ params, searchParams }: PublicMen
             />
           </main>
 
-          {/* Footer */}
-          <footer className="mt-auto flex justify-end border-t border-[#e5e5e5] px-[4%] py-0 sm:px-8 sm:py-0">
-            <Image
-              src="/assets/logo.png"
-              alt="Menoo"
-              width={200}
-              height={67}
-              className="h-[10vw] w-auto sm:h-20"
-            />
-          </footer>
+          {/* Footer - only show for non-HTML menus */}
+          {!hasHtmlMenu && (
+            <footer className="mt-auto flex justify-end border-t border-[#e5e5e5] px-[4%] py-0 sm:px-8 sm:py-0">
+              <Image
+                src="/assets/logo.png"
+                alt="Menoo"
+                width={200}
+                height={67}
+                className="h-[10vw] w-auto sm:h-20"
+              />
+            </footer>
+          )}
         </div>
         </div>
       </div>

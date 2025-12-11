@@ -41,6 +41,7 @@ export type MenuDetailData = {
 export type RestaurantMenuDetail = MenuDetailData & {
   isDefault: boolean;
   createdAt: Date;
+  htmlContent: string | null;
 };
 
 function adaptMockMenuDetail(menuId: string): MenuDetailData | null {
@@ -243,6 +244,7 @@ export async function getRestaurantMenus(restaurantId: string): Promise<Restaura
     return buildMockMenuDetails().map((menu, index) => ({
       ...menu,
       isDefault: index === 0,
+      htmlContent: null,
       createdAt: new Date(),
     }));
   }
@@ -253,6 +255,7 @@ export async function getRestaurantMenus(restaurantId: string): Promise<Restaura
       id: menus.id,
       name: menus.name,
       isDefault: menus.isDefault,
+      htmlContent: menus.htmlContent,
       createdAt: menus.createdAt,
     })
     .from(menus)
@@ -273,6 +276,7 @@ export async function getRestaurantMenus(restaurantId: string): Promise<Restaura
     name: menu.name,
     categories: categoriesByMenu.get(menu.id) ?? [],
     isDefault: menu.isDefault,
+    htmlContent: menu.htmlContent,
     createdAt: menu.createdAt,
   }));
 }

@@ -190,6 +190,19 @@
         "description": "Mostra als teus clients els enllaços als teus perfils."
       }
     },
+    "appearance": {
+      "selectMenu": "Selecciona el menú",
+      "restaurantWebsite": "Lloc web del restaurant (opcional)",
+      "websitePlaceholder": "https://exemple.com",
+      "websiteNote": "El teu lloc web s'inclourà a la sol·licitud de disseny per ajudar a coincidir amb l'estil de la teva marca.",
+      "welcomeMessage": "Podem adaptar l'estil del menú a la teva marca.",
+      "inputPlaceholder": "Descriu les teves preferències de disseny...",
+      "thinking": "Pensant...",
+      "noMenus": "Has de crear almenys un menú abans de personalitzar la seva aparença.",
+      "designUpdateSuccess": "Sol·licitud d'actualització de disseny enviada amb èxit!",
+      "designUpdateError": "Error en actualitzar el disseny",
+      "websiteRequired": "Si us plau, introdueix una URL del lloc web"
+    },
     "preview": {
       "time": "05:28 PM",
       "restaurant": "marcoslol",

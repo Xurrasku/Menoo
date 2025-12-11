@@ -50,6 +50,7 @@ export const menus = pgTable("menus", {
     .references(() => restaurants.id, { onDelete: "cascade" }),
   name: varchar("name", { length: 120 }).notNull(),
   isDefault: boolean("is_default").default(false).notNull(),
+  htmlContent: text("html_content"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),

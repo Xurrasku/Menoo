@@ -190,6 +190,19 @@
         "description": "Share links to your social profiles."
       }
     },
+    "appearance": {
+      "selectMenu": "Select menu",
+      "restaurantWebsite": "Restaurant website (optional)",
+      "websitePlaceholder": "https://example.com",
+      "websiteNote": "Your website will be included in the design request to help match your brand style.",
+      "welcomeMessage": "We can adapt the menu styling to your branding.",
+      "inputPlaceholder": "Describe your design preferences...",
+      "thinking": "Thinking...",
+      "noMenus": "You need to create at least one menu before customizing its appearance.",
+      "designUpdateSuccess": "Design update request sent successfully!",
+      "designUpdateError": "Error updating design",
+      "websiteRequired": "Please enter a website URL"
+    },
     "preview": {
       "time": "05:28 PM",
       "restaurant": "marcoslol",
