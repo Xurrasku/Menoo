@@ -29,6 +29,20 @@
       "when": 1764670366238,
       "tag": "0003_tiresome_the_captain",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1765871057000,
+      "tag": "0004_add_restaurant_size",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1765957200000,
+      "tag": "0005_add_design_preferences",
+      "breakpoints": true
     }
   ]
 }

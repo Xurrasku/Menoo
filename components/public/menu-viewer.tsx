@@ -6,7 +6,6 @@ import type { RestaurantMenuDetail } from "@/lib/menus/service";
 import { MenuSelector } from "./menu-selector";
 import {
   replaceHtmlPlaceholders,
-  isFullHtmlDocument,
   extractHeadContent,
 } from "@/lib/menus/html-template";
 
@@ -207,20 +206,18 @@ export function MenuViewer({ menus, restaurantName, defaultMenuId }: MenuViewerP
   }, [defaultMenu]);
 
   // Update selectedMenu when menus prop changes to ensure we always use latest database data
+  // This syncs derived state (selectedMenu) with the prop (menus) - a valid pattern for prop-driven state
   useEffect(() => {
-    // Check if menus array has changed (new reference means data was updated)
     const menusChanged = prevMenusRef.current !== menus;
     
     if (menusChanged && selectedMenu) {
-      // Find the updated menu data for the currently selected menu
       const updatedMenu = menus.find((m) => m.id === selectedMenu.id);
       if (updatedMenu) {
-        // Update selectedMenu with fresh data from database
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSelectedMenu(updatedMenu);
       }
     }
     
-    // Update ref to track current menus
     prevMenusRef.current = menus;
   }, [menus, selectedMenu]);
 

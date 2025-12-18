@@ -4,6 +4,8 @@ import { eq } from "drizzle-orm";
 
 import { restaurants } from "@/db/schema";
 import { RestaurantSetupForm } from "@/components/dashboard/restaurant-setup-form";
+import { OnboardingForm } from "@/components/dashboard/onboarding-form";
+import { OnboardingLayout } from "@/components/layouts/onboarding-layout";
 import { requireUser } from "@/lib/auth/server";
 import { db } from "@/lib/db";
 
@@ -11,13 +13,26 @@ type RestaurantSetupPageProps = {
   params: Promise<{
     locale: string;
   }>;
+  searchParams: Promise<{
+    test?: string;
+    onboarding?: string;
+  }>;
 };
 
-export default async function RestaurantSetupPage({ params }: RestaurantSetupPageProps) {
+export default async function RestaurantSetupPage({
+  params,
+  searchParams,
+}: RestaurantSetupPageProps) {
   const { locale } = await params;
+  const { test, onboarding } = await searchParams;
   const user = await requireUser(locale);
 
-  if (db) {
+  // Check if test mode or onboarding mode is enabled
+  const useOnboarding = test === "true" || onboarding === "true";
+
+  // Only check for existing restaurant if NOT in test/onboarding mode
+  // In test mode, we want to show onboarding even if restaurant exists
+  if (db && !useOnboarding) {
     try {
       const [existingRestaurant] = await db
         .select({ id: restaurants.id })
@@ -41,6 +56,63 @@ export default async function RestaurantSetupPage({ params }: RestaurantSetupPag
     }
   }
 
+  if (useOnboarding) {
+    const t = await getTranslations({ locale, namespace: "onboarding" });
+
+    const copy = {
+      title: t("title"),
+      subtitle: t("subtitle"),
+      step1Title: t("step1Title"),
+      step1Subtitle: t("step1Subtitle"),
+      step2Title: t("step2Title"),
+      step2Subtitle: t("step2Subtitle"),
+      nameLabel: t("nameLabel"),
+      namePlaceholder: t("namePlaceholder"),
+      urlLabel: t("urlLabel"),
+      urlPlaceholder: t("urlPlaceholder"),
+      urlHelper: t("urlHelper", { defaultValue: "" }),
+      checkingAvailability: t("checkingAvailability"),
+      urlAvailable: t("urlAvailable"),
+      urlUnavailable: t("urlUnavailable"),
+      sizeLabel: t("sizeLabel"),
+      sizePlaceholder: t("sizePlaceholder"),
+      sizeSmall: t("sizeSmall"),
+      sizeMedium: t("sizeMedium"),
+      sizeLarge: t("sizeLarge"),
+      sizeMaxi: t("sizeMaxi"),
+      referralLabel: t("referralLabel"),
+      referralPlaceholder: t("referralPlaceholder"),
+      referralGoogle: t("referralGoogle"),
+      referralSocial: t("referralSocial"),
+      referralFriend: t("referralFriend"),
+      referralOtherRestaurant: t("referralOtherRestaurant"),
+      referralOther: t("referralOther"),
+      designUrlLabel: t("designUrlLabel"),
+      designUrlPlaceholder: t("designUrlPlaceholder"),
+      designUrlHelper: t("designUrlHelper"),
+      designDescriptionLabel: t("designDescriptionLabel"),
+      designDescriptionPlaceholder: t("designDescriptionPlaceholder"),
+      designValidationError: t("designValidationError"),
+      designInvalidUrl: t("designInvalidUrl"),
+      nextButton: t("nextButton"),
+      backButton: t("backButton"),
+      skipButton: t("skipButton"),
+      submitCta: t("submitCta"),
+      redirecting: t("redirecting"),
+      success: t("success"),
+      errorFallback: t("errorFallback"),
+    } satisfies Parameters<typeof OnboardingForm>[0]["copy"];
+
+    return (
+      <OnboardingLayout
+        subtitle={t("headerSubtitle")}
+        showTestBanner={test === "true" || onboarding === "true"}
+      >
+        <OnboardingForm locale={locale} copy={copy} />
+      </OnboardingLayout>
+    );
+  }
+
   const t = await getTranslations({ locale, namespace: "restaurantOnboarding" });
 
   const copy = {
@@ -58,16 +130,11 @@ export default async function RestaurantSetupPage({ params }: RestaurantSetupPag
   } satisfies Parameters<typeof RestaurantSetupForm>[0]["copy"];
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center py-16">
-      <div className="w-full max-w-2xl space-y-10 rounded-3xl border border-slate-200 bg-white p-12 shadow-2xl shadow-slate-200/60">
-        <div className="space-y-3 text-center">
-          <h1 className="text-3xl font-semibold text-slate-900">{copy.title}</h1>
-          <p className="text-sm text-slate-500">{copy.subtitle}</p>
-        </div>
-
-        <RestaurantSetupForm locale={locale} copy={copy} />
-      </div>
-    </div>
+    <OnboardingLayout
+      subtitle={t("subtitle")}
+    >
+      <RestaurantSetupForm locale={locale} copy={copy} />
+    </OnboardingLayout>
   );
 }
 

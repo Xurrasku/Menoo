@@ -18,6 +18,13 @@ export const subscriptionStatusEnum = pgEnum("subscription_status", [
   "trialing",
 ]);
 
+export const restaurantSizeEnum = pgEnum("restaurant_size", [
+  "small",
+  "medium",
+  "large",
+  "maxi",
+]);
+
 export const restaurants = pgTable("restaurants", {
   id: uuid("id").primaryKey().defaultRandom(),
   ownerUserId: uuid("owner_user_id").notNull(),
@@ -26,7 +33,11 @@ export const restaurants = pgTable("restaurants", {
   logoUrl: text("logo_url"),
   cuisine: varchar("cuisine", { length: 80 }),
   address: text("address"),
+  size: restaurantSizeEnum("size"),
   hours: jsonb("hours"),
+  // Design preferences from onboarding
+  designUrl: text("design_url"),
+  designDescription: text("design_description"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),

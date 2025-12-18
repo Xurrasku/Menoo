@@ -2,7 +2,7 @@ function normalizeBaseUrl(base: string) {
   return base.trim().replace(/\/+$/, "");
 }
 
-function toSlug(input: string) {
+export function toSlug(input: string) {
   const normalized = input
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")

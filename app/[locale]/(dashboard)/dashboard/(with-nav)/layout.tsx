@@ -62,7 +62,7 @@ export default async function ShellLayout({ children, params }: ShellLayoutProps
       <header className="fixed inset-x-0 top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div
           className={cn(
-            "flex h-[10vw] w-full items-center gap-[2.5%] sm:h-20 sm:gap-6",
+            "flex h-16 w-full items-center gap-4 sm:h-20 sm:gap-6",
             DASHBOARD_EDGE_PADDING
           )}
         >
@@ -80,20 +80,20 @@ export default async function ShellLayout({ children, params }: ShellLayoutProps
             />
           </Link>
 
-          <div className="flex flex-1 justify-center min-w-0 max-w-[50%] sm:max-w-none">
+          <div className="flex flex-1 justify-center min-w-0">
             <MainNav items={navItems} />
           </div>
 
-          <div className="flex flex-shrink-0 items-center gap-[1.5%] sm:gap-3">
+          <div className="flex flex-shrink-0 items-center gap-2 sm:gap-3">
             <Button
               asChild
               variant="ghost"
               size="sm"
-              className="flex items-center justify-center rounded-full border border-primary/10 bg-primary/10 px-[2%] py-[1%] font-display font-semibold tracking-tight text-primary hover:bg-primary/15 sm:gap-2 sm:px-4 sm:py-2"
+              className="flex items-center justify-center gap-2 rounded-full border border-primary/10 bg-primary/10 px-3 py-2 font-display font-semibold tracking-tight text-primary hover:bg-primary/15 sm:px-4"
             >
-              <Link href={billingHref} className="flex items-center gap-[1%] sm:gap-2">
-                <Sparkles className="h-[3vw] w-[3vw] sm:h-4 sm:w-4 flex-shrink-0" />
-                <span className="hidden min-[380px]:inline text-[2.2vw] sm:text-sm">{tBilling("pro.ctaShort")}</span>
+              <Link href={billingHref} className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 flex-shrink-0" />
+                <span className="hidden min-[480px]:inline text-sm">{tBilling("pro.ctaShort")}</span>
               </Link>
             </Button>
             <UserMenu locale={locale} />
@@ -101,7 +101,7 @@ export default async function ShellLayout({ children, params }: ShellLayoutProps
         </div>
       </header>
 
-      <main className={cn("pt-[15vw] sm:pt-[120px]", DASHBOARD_EDGE_PADDING)}>{children}</main>
+      <main className={cn("pt-20 sm:pt-28", DASHBOARD_EDGE_PADDING)}>{children}</main>
     </div>
   );
 }
