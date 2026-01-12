@@ -1,0 +1,17 @@
+agency-swarm==1.5.0
+pytest==8.3.3
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+pillow>=10.0.0
+python-dotenv>=1.0.0
+playwright>=1.40.0
+pymupdf>=1.23.0
+pdf2image>=1.16.0
+supabase>=2.0.0
+chevron>=0.14.0
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-multipart>=0.0.6

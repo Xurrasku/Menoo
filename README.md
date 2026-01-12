@@ -1,63 +1,75 @@
-## Menoo – multi-tenant restaurant dashboard
+# Menoo Monorepo
 
-Menoo is a SaaS-ready dashboard for creating, publishing, and analysing restaurant menus. The stack is optimised for velocity, maintainability, and future scale.
+This is a monorepo containing the Menoo application with both frontend and backend.
 
-### Technology stack
-
-- Next.js 15 (App Router) with TypeScript and ISR-ready public routes
-- Tailwind CSS 3.4 + shadcn/ui (Radix) component primitives
-- Drizzle ORM + Supabase (Postgres, Auth, Storage) with RLS-first schema
-- Stripe Billing (Checkout + Customer Portal) webhook integration
-- UploadThing for asset uploads, PostHog analytics, Sentry monitoring, QR generator via `qrcode`
-
-### Getting started
-
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-2. Copy the environment example and fill in credentials:
-   ```bash
-   cp .env.example .env.local
-   ```
-3. Generate the database (requires a running Postgres / Supabase instance):
-   ```bash
-   npm run db:generate
-   npm run db:push
-   ```
-4. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-### Available scripts
-
-- `npm run dev` – start the Next.js dev server
-- `npm run build` / `npm run start` – production build & launch
-- `npm run lint` – ESLint with Next.js config
-- `npm run db:generate` – generate Drizzle migration SQL
-- `npm run db:push` – push schema to the database
-- `npm run db:migrate` – execute generated migrations
-
-### Project layout
+## Structure
 
 ```
-app/                  Application routes (auth, dashboard, API handlers)
-components/           UI and dashboard components (shadcn primitives)
-db/                   Drizzle schema definitions
-i18n/, messages/      next-intl routing helpers and locale dictionaries
-lib/                  Supabase, Stripe, DB clients and shared utilities
-app/api/              REST endpoints (menus, categories, items, QR, webhooks)
+Menoo/
+  apps/
+    web/        # Next.js frontend application
+    api/        # FastAPI backend application
+  packages/     # Shared packages (future use)
 ```
 
-### Environment variables
+## Prerequisites
 
-See `.env.example` for all required keys: Supabase, Stripe, UploadThing, PostHog and Sentry. Values prefixed with `NEXT_PUBLIC_` are exposed to the client.
+- Node.js 20+ 
+- pnpm 9.0.0+
+- Python 3.11+ (for backend)
 
-### Deployment notes
+## Setup
 
-- Deploy the app on Vercel; connect Supabase for Postgres/Auth/Storage.
-- Configure Stripe webhook to point at `/api/webhooks/stripe` (Node runtime only).
-- UploadThing requires `UPLOADTHING_APP_ID` and `UPLOADTHING_SECRET`.
-- Keep Supabase RLS policies aligned with the Drizzle schema for tenant isolation.
-- Enable the Google provider in Supabase Auth and configure the redirect URLs used in Google Cloud / Supabase (e.g. `http://localhost:3000/ca/auth/callback`, `http://localhost:3000/es/auth/callback`). Add one entry per supported locale in production as well.
+1. **Install pnpm** (if not already installed):
+   ```bash
+   npm install -g pnpm@9.0.0
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   pnpm install
+   ```
+
+3. **Set up environment variables**:
+   - Copy `.env.example` to `.env.local` and fill in your values
+   - For the web app, copy `apps/web/.env.local.example` to `apps/web/.env.local`
+   - See `apps/web/README.md` for full list of required environment variables
+
+4. **Set up Python backend**:
+   ```bash
+   cd apps/api
+   python3 -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   ```
+
+## Development
+
+Run both frontend and backend in development mode:
+
+```bash
+pnpm dev
+```
+
+This will start:
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8000
+
+### Run individually
+
+- **Frontend only**: `pnpm dev:web`
+- **Backend only**: `pnpm dev:api`
+
+## Scripts
+
+- `pnpm dev` - Run both apps in parallel
+- `pnpm build` - Build all apps
+- `pnpm lint` - Lint all apps
+- `pnpm test` - Run tests for all apps
+
+## Project-specific documentation
+
+- **Frontend**: See `apps/web/README.md`
+- **Backend**: See `apps/api/` for Python FastAPI documentation
+
+
