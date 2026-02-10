@@ -30,6 +30,7 @@ export async function applyLogoWatermarkToDataUrl(
   const targetWidth = clamp(Math.round(metadata.width * 0.9), 240, metadata.width);
   const logoResizedBuffer = await sharp(logoBuffer)
     .resize({ width: targetWidth })
+    .ensureAlpha(0.4)
     .png()
     .toBuffer();
   const logoMeta = await sharp(logoResizedBuffer).metadata();
@@ -46,7 +47,6 @@ export async function applyLogoWatermarkToDataUrl(
         input: logoResizedBuffer,
         left,
         top,
-        opacity: 0.4,
       },
     ])
     .png()
