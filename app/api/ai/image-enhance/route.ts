@@ -8,6 +8,7 @@ import { applyLogoWatermarkToDataUrl } from "@/lib/images/watermark";
 const requestSchema = z.object({
   image: z.string().min(1, "Image data is required"),
   mimeType: z.string().optional(),
+  prompt: z.string().trim().min(1).optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -22,6 +23,7 @@ export async function POST(request: NextRequest) {
     const user = await getServerUser({ persistSession: true });
     const output = await generateImageEnhancement(result.data.image, {
       mimeType: result.data.mimeType,
+      prompt: result.data.prompt,
     });
 
     let outputDataUrl = output.toDataUrl();

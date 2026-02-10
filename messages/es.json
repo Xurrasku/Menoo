@@ -270,6 +270,10 @@
         "title": "Apariencia",
         "description": "Personaliza el aspecto y la apariencia de los menús."
       },
+      "visuals": {
+        "title": "Visuales",
+        "description": "Mejora las fotos de tus platos para que se vean más apetecibles."
+      },
       "languages": {
         "title": "Idiomas del menú",
         "description": "Presenta los menús en idiomas adicionales."

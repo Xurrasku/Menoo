@@ -270,6 +270,10 @@
         "title": "Appearance",
         "description": "Customize the look and feel of your menus."
       },
+      "visuals": {
+        "title": "Visuals",
+        "description": "Enhance your dish photos so they look more appetizing."
+      },
       "languages": {
         "title": "Menu languages",
         "description": "Offer your menus in additional languages."

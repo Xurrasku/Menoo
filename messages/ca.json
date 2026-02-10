@@ -270,6 +270,10 @@
         "title": "Aparença",
         "description": "Personalitza l'aspecte i l'aparença dels menús."
       },
+      "visuals": {
+        "title": "Visuals",
+        "description": "Millora les fotos dels plats perquè es vegin més apetitoses."
+      },
       "languages": {
         "title": "Idiomes del menú",
         "description": "Presenta els menús en idiomes addicionals."
