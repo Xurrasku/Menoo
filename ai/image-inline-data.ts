@@ -2,7 +2,8 @@ export type ImageSource = string | Buffer | ArrayBuffer | ArrayBufferView;
 
 export const DEFAULT_IMAGE_MIME_TYPE = "image/jpeg";
 
-const DATA_URL_PATTERN = /^data:([^;]+);base64,([A-Za-z0-9+/=]+)$/i;
+const DATA_URL_PREFIX = "data:";
+const BASE64_SEPARATOR = ";base64,";
 const BASE64_PATTERN = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}(?:==)?|[A-Za-z0-9+/]{3}=)?$/;
 
 export type InlineDataPart = {
@@ -48,13 +49,16 @@ export function encodeImageSource(image: ImageSource, mimeOverride?: string): In
 
 function buildInlineDataFromString(value: string, mimeOverride?: string): InlineDataPart {
   const trimmed = value.trim();
-  const dataUrlMatch = DATA_URL_PATTERN.exec(trimmed);
-
-  if (dataUrlMatch && dataUrlMatch.length >= 3) {
-    return {
-      mimeType: mimeOverride ?? dataUrlMatch[1],
-      data: dataUrlMatch[2],
-    };
+  if (trimmed.startsWith(DATA_URL_PREFIX)) {
+    const separatorIndex = trimmed.indexOf(BASE64_SEPARATOR);
+    if (separatorIndex > 0) {
+      const mimeType = trimmed.slice(DATA_URL_PREFIX.length, separatorIndex);
+      const data = trimmed.slice(separatorIndex + BASE64_SEPARATOR.length);
+      return {
+        mimeType: mimeOverride ?? mimeType,
+        data,
+      };
+    }
   }
 
   if (isBase64(trimmed)) {

@@ -5,6 +5,7 @@ import {
   HeroSection,
   ProblemSection,
   BenefitsSection,
+  AiImageEnhanceSection,
   DemoSection,
   CTASection,
   AnimatedFooter,
@@ -26,6 +27,37 @@ export default async function LandingPage({ params }: Props) {
     title: t(`benefits.items.${index}.title`),
     description: t(`benefits.items.${index}.description`),
   }));
+
+  const aiImageSteps = [1, 2, 3].map((index) => ({
+    title: t(`aiImage.steps.${index}.title`),
+    description: t(`aiImage.steps.${index}.description`),
+  }));
+
+  const aiImageContent = {
+    eyebrow: t("aiImage.eyebrow"),
+    title: t("aiImage.title"),
+    subtitle: t("aiImage.subtitle"),
+    steps: aiImageSteps,
+    trialNote: t("aiImage.trialNote"),
+    upload: {
+      title: t("aiImage.upload.title"),
+      description: t("aiImage.upload.description"),
+      cta: t("aiImage.upload.cta"),
+      loading: t("aiImage.upload.loading"),
+      noTrials: t("aiImage.upload.noTrials"),
+      download: t("aiImage.upload.download"),
+      secondaryCta: t("aiImage.upload.secondaryCta"),
+      empty: t("aiImage.upload.empty"),
+      maxSize: t.raw("aiImage.upload.maxSize"),
+      clear: t("aiImage.upload.clear"),
+      remaining: t.raw("aiImage.upload.remaining"),
+      error: t("aiImage.upload.error"),
+    },
+    before: t("aiImage.before"),
+    after: t("aiImage.after"),
+    placeholder: t("aiImage.placeholder"),
+    watermark: t("aiImage.watermark"),
+  };
 
   // Prepare footer data
   const footerData = {
@@ -76,6 +108,9 @@ export default async function LandingPage({ params }: Props) {
 
       {/* Benefits Section with staggered card animations */}
       <BenefitsSection title={t("benefits.title")} items={benefitItems} />
+
+      {/* AI Image Enhancement Section */}
+      <AiImageEnhanceSection locale={locale} content={aiImageContent} />
 
       {/* Demo Section with slide-in animations */}
       <DemoSection

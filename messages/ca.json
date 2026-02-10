@@ -411,6 +411,44 @@
         }
       }
     },
+    "aiImage": {
+      "eyebrow": "Millora de fotos amb IA",
+      "title": "Converteix fotos casolanes en imatges de plat professionals",
+      "subtitle": "Puja una foto feta amb el mòbil i obtén una imatge d'estudi en menys d'un minut. Sense login.",
+      "steps": {
+        "1": {
+          "title": "Puja",
+          "description": "Arrossega una foto del teu plat."
+        },
+        "2": {
+          "title": "Millora",
+          "description": "La IA millora la llum, el color i la textura."
+        },
+        "3": {
+          "title": "Descarrega",
+          "description": "Obtén un resultat professional amb marca d'aigua."
+        }
+      },
+      "trialNote": "El trial inclou 3 fotos amb marca d'aigua. Inicia sessió per treure-la.",
+      "upload": {
+        "title": "Puja la foto del teu plat",
+        "description": "JPG o PNG, fins a 10MB.",
+        "cta": "Millorar foto",
+        "loading": "Millorant...",
+        "noTrials": "Trial esgotat",
+        "download": "Descarregar",
+        "secondaryCta": "Inicia sessió per treure la marca d'aigua",
+        "empty": "Arrossega una foto o fes clic per pujar-la",
+        "maxSize": "Màx {size}MB",
+        "clear": "Treure",
+        "remaining": "Trial restant: {count}",
+        "error": "No hem pogut processar la imatge. Prova amb una altra."
+      },
+      "before": "Original",
+      "after": "Resultat professional",
+      "placeholder": "Aquí apareixerà la teva foto millorada",
+      "watermark": "Marca d'aigua en trial"
+    },
     "demo": {
       "title": "Així funciona Menoo",
       "panel": {

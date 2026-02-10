@@ -411,6 +411,44 @@
         }
       }
     },
+    "aiImage": {
+      "eyebrow": "Mejorador de fotos con IA",
+      "title": "Convierte fotos caseras en imágenes de plato profesionales",
+      "subtitle": "Sube una foto hecha con el móvil y obtén una imagen de estudio en menos de un minuto. Sin login.",
+      "steps": {
+        "1": {
+          "title": "Sube",
+          "description": "Arrastra una foto de tu plato."
+        },
+        "2": {
+          "title": "Mejora",
+          "description": "La IA mejora la luz, el color y la textura."
+        },
+        "3": {
+          "title": "Descarga",
+          "description": "Obtén un resultado profesional con marca de agua."
+        }
+      },
+      "trialNote": "El trial incluye 3 fotos con marca de agua. Inicia sesión para quitarla.",
+      "upload": {
+        "title": "Sube la foto de tu plato",
+        "description": "JPG o PNG, hasta 10MB.",
+        "cta": "Mejorar foto",
+        "loading": "Mejorando...",
+        "noTrials": "Trial agotado",
+        "download": "Descargar",
+        "secondaryCta": "Inicia sesión para quitar la marca de agua",
+        "empty": "Arrastra una foto o haz clic para subirla",
+        "maxSize": "Máx {size}MB",
+        "clear": "Quitar",
+        "remaining": "Trial restante: {count}",
+        "error": "No pudimos procesar la imagen. Prueba con otra."
+      },
+      "before": "Original",
+      "after": "Resultado profesional",
+      "placeholder": "Aquí aparecerá tu foto mejorada",
+      "watermark": "Marca de agua en trial"
+    },
     "demo": {
       "title": "Así funciona Menoo",
       "panel": {

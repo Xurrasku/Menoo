@@ -411,6 +411,44 @@
         }
       }
     },
+    "aiImage": {
+      "eyebrow": "AI photo enhancer",
+      "title": "Turn casual dish photos into pro images",
+      "subtitle": "Upload a phone shot and get a studio-quality image in under a minute. No login required.",
+      "steps": {
+        "1": {
+          "title": "Upload",
+          "description": "Drop a photo of your dish."
+        },
+        "2": {
+          "title": "Enhance",
+          "description": "AI improves lighting, color, and texture."
+        },
+        "3": {
+          "title": "Download",
+          "description": "Get a professional result with watermark."
+        }
+      },
+      "trialNote": "Trial includes 3 photos with watermark. Sign in to remove it.",
+      "upload": {
+        "title": "Upload your dish photo",
+        "description": "JPG or PNG, up to 10MB.",
+        "cta": "Enhance photo",
+        "loading": "Enhancing...",
+        "noTrials": "Trial used",
+        "download": "Download",
+        "secondaryCta": "Sign in to remove watermark",
+        "empty": "Drag and drop a photo or click to upload",
+        "maxSize": "Max {size}MB",
+        "clear": "Clear",
+        "remaining": "Trial remaining: {count}",
+        "error": "We couldn't process that image. Try another one."
+      },
+      "before": "Original",
+      "after": "Professional result",
+      "placeholder": "Your enhanced photo appears here",
+      "watermark": "Watermark in trial"
+    },
     "demo": {
       "title": "How Menoo works",
       "panel": {
