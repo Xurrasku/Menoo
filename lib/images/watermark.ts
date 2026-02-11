@@ -35,18 +35,21 @@ export async function applyLogoWatermarkToDataUrl(
   const logoMeta = await sharp(logoResizedBuffer).metadata();
   const logoWidth = logoMeta.width ?? targetWidth;
   const logoHeight = logoMeta.height ?? Math.round(targetWidth * 0.4);
+  const logoOpacity = 0.4;
 
   const margin = clamp(Math.round(metadata.height * 0.04), 16, 48);
   const left = Math.max(Math.round((metadata.width - logoWidth) / 2), 0);
   const top = Math.max(metadata.height - logoHeight - margin, 0);
+  const logoOverlaySvg = Buffer.from(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${logoWidth}" height="${logoHeight}"><image href="data:image/png;base64,${logoResizedBuffer.toString("base64")}" width="${logoWidth}" height="${logoHeight}" opacity="${logoOpacity}"/></svg>`,
+  );
 
   const watermarkedBuffer = await baseImage
     .composite([
       {
-        input: logoResizedBuffer,
+        input: logoOverlaySvg,
         left,
         top,
-        opacity: 0.4,
       },
     ])
     .png()
