@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import { SignInForm } from "@/components/forms/sign-in-form";
+import { buildPostAuthRedirect, isAuthDisabled } from "@/lib/auth/config";
 
 type SignInPageProps = {
   params: Promise<{
@@ -21,6 +23,11 @@ export default async function SignInPage({ params, searchParams }: SignInPagePro
     ? redirectParam
     : "/dashboard/restaurant";
   const initialError = resolvedSearchParams.error ?? null;
+
+  if (isAuthDisabled()) {
+    redirect(buildPostAuthRedirect({ locale, destination: redirectTo }));
+  }
+
   const t = await getTranslations({ locale, namespace: "auth.signIn" });
 
   return (

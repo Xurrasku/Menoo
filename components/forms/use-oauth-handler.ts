@@ -26,6 +26,9 @@ export function useOAuthHandler({
   onError,
   fallbackErrorMessage,
 }: UseOAuthHandlerOptions): UseOAuthHandlerResult {
+  const authDebugEnabled =
+    process.env.NEXT_PUBLIC_AUTH_DEBUG?.toLowerCase() === "1" ||
+    process.env.NEXT_PUBLIC_AUTH_DEBUG?.toLowerCase() === "true";
   const [isOAuthLoading, setIsOAuthLoading] = useState(false);
   const [activeProvider, setActiveProvider] = useState<OAuthProviderId | null>(null);
 
@@ -38,12 +41,28 @@ export function useOAuthHandler({
       onError(null);
 
       try {
+        if (authDebugEnabled) {
+          console.info("[auth-debug] handleOAuthSignIn:start", {
+            provider,
+            locale,
+            redirectTo,
+            origin: window.location.origin,
+          });
+        }
+
         const { data, error } = await signInWithOAuthProvider({
           supabase,
           provider,
           locale,
           redirectDestination: redirectTo,
         });
+
+        if (authDebugEnabled) {
+          console.info("[auth-debug] handleOAuthSignIn:response", {
+            error: error?.message ?? null,
+            dataUrl: data?.url ?? null,
+          });
+        }
 
         if (error) {
           onError(error.message);
@@ -53,6 +72,11 @@ export function useOAuthHandler({
         }
 
         if (data?.url) {
+          if (authDebugEnabled) {
+            console.info("[auth-debug] handleOAuthSignIn:window.location.assign", {
+              target: data.url,
+            });
+          }
           window.location.assign(data.url);
           return;
         }
@@ -66,7 +90,7 @@ export function useOAuthHandler({
         onError(error instanceof Error ? error.message : fallbackErrorMessage);
       }
     },
-    [fallbackErrorMessage, locale, onError, redirectTo],
+    [authDebugEnabled, fallbackErrorMessage, locale, onError, redirectTo],
   );
 
   return {

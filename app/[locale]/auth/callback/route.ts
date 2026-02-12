@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 
-import { buildPostAuthRedirect, getAppBaseUrlFromRequest } from "@/lib/auth/config";
+import {
+  buildPostAuthRedirect,
+  getAppBaseUrlFromRequest,
+  isAuthDebugEnabled,
+} from "@/lib/auth/config";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function GET(
@@ -12,13 +16,28 @@ export async function GET(
   const code = requestUrl.searchParams.get("code");
   const errorDescription = requestUrl.searchParams.get("error_description");
   const redirectToParam = requestUrl.searchParams.get("redirect_to");
-  const redirectTarget = redirectToParam && redirectToParam.length > 0
-    ? redirectToParam
-    : buildPostAuthRedirect({ locale });
+  const redirectTarget =
+    process.env.NODE_ENV !== "production"
+      ? `/${locale}/dashboard/settings`
+      : redirectToParam && redirectToParam.length > 0
+        ? redirectToParam
+        : buildPostAuthRedirect({ locale });
 
   // Use public app base URL, detecting from request headers if env vars aren't set
   // This ensures redirects go to the correct domain even after 2FA confirmation
   const appBaseUrl = getAppBaseUrlFromRequest(request);
+
+  if (isAuthDebugEnabled()) {
+    console.info("[auth-debug] callback:entry", {
+      requestUrl: requestUrl.toString(),
+      locale,
+      hasCode: Boolean(code),
+      errorDescription,
+      redirectToParam,
+      redirectTarget,
+      appBaseUrl,
+    });
+  }
 
   if (errorDescription) {
     const params = new URLSearchParams({
@@ -68,7 +87,13 @@ export async function GET(
       );
     }
 
-    return NextResponse.redirect(new URL(redirectTarget, appBaseUrl));
+    const nextUrl = new URL(redirectTarget, appBaseUrl);
+    if (isAuthDebugEnabled()) {
+      console.info("[auth-debug] callback:success-redirect", {
+        target: nextUrl.toString(),
+      });
+    }
+    return NextResponse.redirect(nextUrl);
   } catch (error) {
     // Handle any other errors (including network errors from client creation)
     const isNetworkError =

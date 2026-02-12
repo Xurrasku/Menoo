@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-import { buildPostAuthRedirect, getAppBaseUrl } from "./config";
+import { buildPostAuthRedirect, getAppBaseUrl, isAuthDebugEnabled } from "./config";
 
 type OAuthProviderId = "google";
 
@@ -27,6 +27,16 @@ export async function signInWithOAuthProvider({
     `${appBaseUrl}/${locale}/auth/callback`,
   );
   callbackUrl.searchParams.set("redirect_to", postAuthRedirect);
+
+  if (isAuthDebugEnabled()) {
+    console.info("[auth-debug] signInWithOAuthProvider", {
+      provider,
+      locale,
+      appBaseUrl,
+      postAuthRedirect,
+      callbackUrl: callbackUrl.toString(),
+    });
+  }
 
   return supabase.auth.signInWithOAuth({
     provider,

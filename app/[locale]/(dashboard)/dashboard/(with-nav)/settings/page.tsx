@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 
 import {
   SETTINGS_SECTIONS,
@@ -70,7 +71,7 @@ function SettingsSectionCard({
       ? `/${locale}/dashboard/settings/visuals`
       : undefined;
 
-  const Component = href ? "a" : "button";
+  const Component = href ? Link : "button";
   const componentProps = href 
     ? { href, className: "group flex flex-col gap-[2.5%] rounded-2xl border border-slate-200 bg-slate-50/60 p-[3.5%] text-left transition hover:border-primary/40 hover:bg-white hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 sm:gap-4 sm:p-6 w-full min-w-0 overflow-hidden" }
     : { type: "button" as const, className: "group flex flex-col gap-[2.5%] rounded-2xl border border-slate-200 bg-slate-50/60 p-[3.5%] text-left transition hover:border-primary/40 hover:bg-white hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 sm:gap-4 sm:p-6 w-full min-w-0 overflow-hidden" };

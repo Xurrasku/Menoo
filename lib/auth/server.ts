@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { cache } from "react";
 
-import { buildPostAuthRedirect } from "./config";
+import { buildPostAuthRedirect, isAuthDisabled } from "./config";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 type GetServerUserOptions = {
@@ -13,6 +13,31 @@ type GetServerUserOptions = {
    */
   persistSession?: boolean;
 };
+
+function getLocalDevUser(): User {
+  return {
+    id: "local-dev-user",
+    aud: "authenticated",
+    role: "authenticated",
+    email: "local@menoo.dev",
+    email_confirmed_at: new Date(0).toISOString(),
+    phone: "",
+    confirmed_at: new Date(0).toISOString(),
+    last_sign_in_at: new Date(0).toISOString(),
+    app_metadata: {
+      provider: "email",
+      providers: ["email"],
+    },
+    user_metadata: {
+      full_name: "Local Dev",
+      name: "Local Dev",
+    },
+    identities: [],
+    created_at: new Date(0).toISOString(),
+    updated_at: new Date(0).toISOString(),
+    is_anonymous: false,
+  } as User;
+}
 
 async function fetchServerUser(options: GetServerUserOptions = {}): Promise<User | null> {
   try {
@@ -92,6 +117,10 @@ export async function requireUser(locale: string): Promise<User> {
 
   if (user) {
     return user;
+  }
+
+  if (isAuthDisabled()) {
+    return getLocalDevUser();
   }
 
   const headersList = await headers();
