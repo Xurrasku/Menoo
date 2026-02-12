@@ -1,0 +1,619 @@
+{
+  "navigation": {
+    "brand": "nordQR",
+    "menus": "Menus",
+    "statistics": "Analytics",
+    "qr": "QR Code",
+    "settings": "Settings",
+    "customize": "Customize",
+    "viewMenu": "View menu",
+    "actions": "Actions",
+    "newMenu": "New menu",
+    "upgrade": "Upgrade plan"
+  },
+  "restaurantOnboarding": {
+    "title": "Set up your restaurant",
+    "subtitle": "We use these details to personalise your menu experience and generate its domain.",
+    "nameLabel": "Restaurant name",
+    "namePlaceholder": "e.g. La Bodega de Juan",
+    "cuisineLabel": "Cuisine (optional)",
+    "addressLabel": "Address (optional)",
+    "submitCta": "Save and continue",
+    "domainPreviewLabel": "Your menu domain",
+    "redirecting": "Redirecting...",
+    "success": "Restaurant saved! Taking you to your menus...",
+    "errorFallback": "We couldn't save your restaurant. Please try again."
+  },
+  "onboarding": {
+    "headerSubtitle": "Join 2,000+ restaurants already saving hours every week",
+    "title": "Welcome to Menoo",
+    "subtitle": "Let's set up your restaurant in a few simple steps",
+    "step1Title": "Some adjustments before starting...",
+    "step1Subtitle": "Fill in these few fields to create your first menu and start digitizing your restaurant today.",
+    "step2Title": "How would you like your menu to look?",
+    "step2Subtitle": "Share your design preferences so we can customize your menu's appearance.",
+    "nameLabel": "Restaurant name",
+    "namePlaceholder": "e.g. La Bodega de Juan",
+    "urlLabel": "URL Address",
+    "urlPlaceholder": "your-restaurant",
+    "urlHelper": "",
+    "checkingAvailability": "Checking availability...",
+    "urlAvailable": "✓ This URL is available!",
+    "urlUnavailable": "✗ This URL is already taken",
+    "sizeLabel": "Approximate capacity",
+    "sizePlaceholder": "Select capacity",
+    "sizeSmall": "Small, up to 30 guests",
+    "sizeMedium": "Medium, 30 to 60 guests",
+    "sizeLarge": "Large, 60 to 100 guests",
+    "sizeMaxi": "Maxi, 100+ guests",
+    "referralLabel": "How did you discover NordQR?",
+    "referralPlaceholder": "Select an option",
+    "referralGoogle": "Google search",
+    "referralSocial": "Social media (Instagram, TikTok...)",
+    "referralFriend": "Friend or colleague recommendation",
+    "referralOtherRestaurant": "I used NordQR at another restaurant",
+    "referralOther": "Other",
+    "designUrlLabel": "Website reference",
+    "designUrlPlaceholder": "https://your-restaurant.com",
+    "designUrlHelper": "We'll use your website's style as a reference for the menu design.",
+    "designDescriptionLabel": "Design preferences",
+    "designDescriptionPlaceholder": "Describe how you'd like your menu to look... (e.g. modern minimalist, rustic, elegant...)",
+    "designValidationError": "Please provide either a website URL or a design description",
+    "designInvalidUrl": "Please enter a valid URL",
+    "nextButton": "Continue",
+    "backButton": "Back",
+    "skipButton": "Skip for now",
+    "submitCta": "Continue",
+    "redirecting": "Redirecting...",
+    "success": "Restaurant setup complete! Taking you to your menus...",
+    "errorFallback": "We couldn't complete the setup. Please try again.",
+    "menuStep": {
+      "headerSubtitle": "Restaurants using AI import get 3x more menu views",
+      "title": "Fill your menu",
+      "subtitle": "Upload images or PDFs of your menu, or start with example data",
+      "uploadTitle": "Upload your menu",
+      "uploadSubtitle": "Upload photos or PDFs of your menu and AI will extract all the dishes",
+      "dropHere": "Drop your images here",
+      "clickOrDrag": "Click or drag to upload",
+      "fileTypes": "PNG, JPG, PDF up to 10MB",
+      "analyzing": "Analyzing your menu...",
+      "useYourData": "Use your data",
+      "useExampleData": "Use example data",
+      "continueButton": "Continue",
+      "skipButton": "Skip and use example data",
+      "redirecting": "Redirecting...",
+      "errorFallback": "We couldn't save your menu. Please try again."
+    },
+    "languagesStep": {
+      "headerSubtitle": "Multilingual menus increase tourist orders by 40%",
+      "title": "Add more languages",
+      "subtitle": "Reach international customers by offering your menu in multiple languages",
+      "uploadTitle": "Upload translated menu",
+      "uploadSubtitle": "Upload photos or PDFs of your menu in another language and AI will extract the translations",
+      "aiTranslateTitle": "AI Translation",
+      "aiTranslateSubtitle": "Let AI automatically translate your menu to any language",
+      "dropHere": "Drop your images here",
+      "clickOrDrag": "Click or drag to upload",
+      "fileTypes": "PNG, JPG, PDF up to 10MB",
+      "analyzing": "Analyzing translations...",
+      "translating": "Translating your menu...",
+      "selectLanguage": "Select language",
+      "selectedLanguages": "Selected languages",
+      "noLanguagesSelected": "No languages selected yet",
+      "addLanguage": "Add language",
+      "removeLanguage": "Remove",
+      "useUpload": "Upload translated menu",
+      "useAiTranslate": "Use AI translation",
+      "useSampleData": "Use sample translations",
+      "sampleDataDescription": "Start with sample translations to see how multi-language menus work",
+      "continueButton": "Continue",
+      "skipButton": "Skip for now",
+      "redirecting": "Redirecting...",
+      "errorFallback": "We couldn't save the translations. Please try again.",
+      "languageAdded": "Language added successfully",
+      "languageRemoved": "Language removed"
+    },
+    "enjoyStep": {
+      "headerSubtitle": "Your digital menu is ready to share with customers",
+      "title": "You're all set!",
+      "subtitle": "Your restaurant menu is now live and ready to be discovered",
+      "description": "Print this QR code and place it on your tables, at the entrance, or anywhere your customers can scan it to view your menu instantly.",
+      "scanQr": "Scan this QR code to view your menu",
+      "menuUrl": "Your menu URL",
+      "goToDashboard": "Go to Dashboard",
+      "downloadQr": "Download QR Code",
+      "back": "Back"
+    }
+  },
+  "dashboard": {
+    "menusTitle": "Menus",
+    "menusSubtitle": "Manage your restaurant menus from a single dashboard.",
+    "analyticsSubtitle": "Track how many people access your menu.",
+    "addMenu": "Add menu",
+    "analytics": {
+      "totalViews": "Total views",
+      "viewsToday": "Views today",
+      "viewsThisWeek": "Views this week",
+      "viewsThisMonth": "Views this month"
+    },
+    "menuCategories": "{count, plural, one {# category} other {# categories}}",
+    "table": {
+      "name": "Name",
+      "items": "Dishes",
+      "availability": "Availability",
+      "visibility": "Visibility"
+    },
+    "availability": {
+      "everyday": "Every day"
+    },
+    "visibility": {
+      "visible": "Visible",
+      "hidden": "Hidden"
+    },
+    "userMenu": {
+      "profile": "Profile",
+      "preferences": "Preferences",
+      "help": "Help center",
+      "signOut": "Sign out",
+      "signingOut": "Signing out...",
+      "signOutError": "We couldn't sign you out. Please try again.",
+      "userFallback": "Account"
+    },
+    "rowActions": {
+      "edit": "Edit",
+      "duplicate": "Duplicate",
+      "archive": "Archive",
+      "delete": "Delete"
+    },
+    "menuDetail": {
+      "back": "My menus",
+      "title": "Our menu",
+      "untitledCategory": "Untitled category",
+      "collapse": "Collapse",
+      "emptyDescription": "Dishes in this category will appear here.",
+      "newDish": "New dish",
+      "newCategory": "New category",
+      "save": "Save menu",
+      "saving": "Saving...",
+      "saveError": "We couldn't save the menu. Please try again.",
+      "aiUploader": {
+        "title": "Create new menu from photo",
+        "subtitle": "Upload a photo of your menu and AI will do the rest",
+        "dropHere": "Drop your image here",
+        "clickOrDrag": "Click or drag to upload",
+        "fileTypes": "PNG, JPG, or WEBP up to 10MB",
+        "analyzing": "Analyzing your menu...",
+        "createManually": "Or create it manually",
+        "process": "Process images"
+      },
+      "categoryModal": {
+        "title": "New category",
+        "nameLabel": "Category name",
+        "descriptionLabel": "Description",
+        "save": "Save",
+        "cancel": "Cancel"
+      },
+      "dishModal": {
+        "title": "New dish",
+        "nameLabel": "Dish name",
+        "descriptionLabel": "Description",
+        "priceLabel": "Price",
+        "priceHint": "Add variants",
+        "imageUpload": "Upload an image",
+        "imageHelper": "or click to browse a file",
+        "labelsTitle": "Tags",
+        "allergensTitle": "Allergens",
+        "save": "Save",
+        "cancel": "Cancel"
+      }
+    },
+    "qr": {
+      "title": "QR Code",
+      "subtitle": "Generate and customize QR codes for your menus in seconds.",
+      "copyLink": "Copy link",
+      "copied": "Link copied",
+      "frame": {
+        "title": "Frame",
+        "subtitle": "Decide where the label is placed around the QR.",
+        "typeLabel": "Frame type",
+        "options": {
+          "bottom": "Bottom",
+          "top": "Top",
+          "none": "None"
+        },
+        "backgroundColor": "Background color",
+        "textLabel": "Text",
+        "textColor": "Text color",
+        "fontFamily": "Font family",
+        "textSize": "Text size"
+      },
+      "style": {
+        "title": "Shape & color",
+        "subtitle": "Adjust the visual style of your QR code.",
+        "qrColor": "Code color",
+        "qrBackground": "Code background"
+      },
+      "download": {
+        "presetLabel": "Download format",
+        "cta": "Download QR",
+        "pdfSmall": "PDF with 16 small QRs",
+        "pdfSmallDescription": "Perfect for laminated menus or table tents.",
+        "pdfLarge": "PDF with 4 large QRs",
+        "pdfLargeDescription": "Ideal for posters and storefront signage.",
+        "stickers": "Sticker pack",
+        "stickersDescription": "Sized to print durable adhesive stickers.",
+        "tableDisplay": "Table display",
+        "tableDisplayDescription": "Ready-to-print for upright table stands.",
+        "svg": "Vector file (SVG)",
+        "svgDescription": "Maximum quality for print shops and designers."
+      },
+      "promo": {
+        "title": "Request free QR stickers",
+        "description": "We ship laminated QR stickers for your tables at no extra cost.",
+        "note": "You only need one published menu with over 20 dishes."
+      },
+      "reset": "Reset settings",
+      "previewAlt": "QR code preview"
+    }
+  },
+  "settings": {
+    "subtitle": "Configure restaurant details, integrations, and language preferences.",
+    "badges": {
+      "soon": "Coming soon"
+    },
+    "sections": {
+      "general": {
+        "title": "General",
+        "description": "Keep every venue detail up to date."
+      },
+      "appearance": {
+        "title": "Appearance",
+        "description": "Customize the look and feel of your menus."
+      },
+      "visuals": {
+        "title": "Visuals",
+        "description": "Enhance your dish photos so they look more appetizing."
+      },
+      "languages": {
+        "title": "Menu languages",
+        "description": "Offer your menus in additional languages."
+      },
+      "reviews": {
+        "title": "Reviews",
+        "description": "Collect feedback from your guests."
+      },
+      "wifi": {
+        "title": "Wi-Fi",
+        "description": "Let guests connect to your Wi-Fi network."
+      },
+      "extra": {
+        "title": "Extra information",
+        "description": "Display additional notes on the public menu page."
+      },
+      "social": {
+        "title": "Social media",
+        "description": "Share links to your social profiles."
+      }
+    },
+    "appearance": {
+      "selectMenu": "Select menu",
+      "restaurantWebsite": "Restaurant website (optional)",
+      "websitePlaceholder": "https://example.com",
+      "websiteNote": "Your website will be included in the design request to help match your brand style.",
+      "welcomeMessage": "We can adapt the menu styling to your branding.",
+      "inputPlaceholder": "Describe your design preferences...",
+      "thinking": "Thinking...",
+      "noMenus": "You need to create at least one menu before customizing its appearance.",
+      "designUpdateSuccess": "Design update request sent successfully!",
+      "designUpdateError": "Error updating design",
+      "websiteRequired": "Please enter a website URL"
+    },
+    "preview": {
+      "time": "05:28 PM",
+      "restaurant": "marcoslol",
+      "section": "Starters",
+      "cta": "Rate your experience",
+      "items": {
+        "caprese": {
+          "name": "Caprese salad",
+          "description": "A simple Italian salad with tomatoes and fresh mozzarella."
+        },
+        "gazpacho": {
+          "name": "Gazpacho",
+          "description": "Traditional chilled tomato soup with herbs."
+        },
+        "onionRings": {
+          "name": "Onion rings",
+          "description": "Crispy onion rings served with house sauce."
+        }
+      }
+    }
+  },
+  "billing": {
+    "page": {
+      "title": "Billing",
+      "subtitle": "Keep your Menoo subscription in sync and review the Pro benefits before upgrading.",
+      "cta": "See Pro benefits",
+      "backToSettings": "Back to settings",
+      "finePrint": "Billing is securely handled by Stripe. You can cancel anytime."
+    },
+    "pro": {
+      "name": "Pro plan",
+      "price": "€8 / month",
+      "description": "Unlock unlimited menus, advanced analytics, and custom QR designs.",
+      "features": {
+        "menus": "Unlimited menus",
+        "analytics": "Advanced analytics & insights",
+        "qr": "Custom QR branding",
+        "support": "Priority email support"
+      },
+      "cta": "Upgrade to Pro",
+      "ctaShort": "Upgrade plan",
+      "loading": "Opening Stripe...",
+      "error": "We couldn't start the checkout. Please try again later."
+    }
+  },
+  "auth": {
+    "common": {
+      "continueWithGoogle": "Continue with Google",
+      "redirecting": "Redirecting...",
+      "orContinueWithEmail": "Or continue with your email",
+      "oauthError": "We couldn't complete the Google sign-in. Please try again."
+    },
+    "providers": {
+      "google": "Continue with Google"
+    },
+    "signIn": {
+      "title": "Sign in to your account",
+      "subtitle": "Manage menus, QR codes and billing from one place.",
+      "cta": "Don't have an account?",
+      "ctaLink": "Create one"
+    },
+    "signUp": {
+      "title": "Create your account",
+      "subtitle": "Launch your digital menu in under two minutes.",
+      "cta": "Already have an account?",
+      "ctaLink": "Sign in"
+    }
+  },
+  "landing": {
+    "nav": {
+      "signIn": "Sign in",
+      "cta": "Create my free menu"
+    },
+    "hero": {
+      "title": "Elegant digital menus for restaurants",
+      "subtitle": "Create your digital menu in 60 seconds",
+      "cta": "Create my free menu",
+      "visualPlaceholder": "Mobile mockup + QR + menu"
+    },
+    "problem": {
+      "description": "Because every change to your printed menu costs money, time, and lost opportunities. Discover the freedom of digital."
+    },
+    "benefits": {
+      "title": "Everything you need to digitize your menu",
+      "items": {
+        "1": {
+          "title": "Update instantly",
+          "description": "Change prices, dishes, or descriptions in real-time without printing anything.",
+          "icon": "zap"
+        },
+        "2": {
+          "title": "Use AI to add all languages you want",
+          "description": "Automatically translate your menu to multiple languages with artificial intelligence.",
+          "icon": "globe"
+        },
+        "3": {
+          "title": "Scan statistics",
+          "description": "Discover how many people view your menu and optimize your offering.",
+          "icon": "chart"
+        },
+        "4": {
+          "title": "Simple dashboard",
+          "description": "Manage everything from your phone or desktop. Intuitive and easy to use.",
+          "icon": "smartphone"
+        }
+      }
+    },
+    "aiImage": {
+      "eyebrow": "AI photo enhancer",
+      "title": "Turn casual dish photos into pro images",
+      "subtitle": "Upload a phone shot and get a studio-quality image in under a minute. No login required.",
+      "steps": {
+        "1": {
+          "title": "Upload",
+          "description": "Drop a photo of your dish."
+        },
+        "2": {
+          "title": "Enhance",
+          "description": "AI improves lighting, color, and texture."
+        },
+        "3": {
+          "title": "Download",
+          "description": "Get a professional result with watermark."
+        }
+      },
+      "trialNote": "Trial includes 3 photos with watermark. Sign in to remove it.",
+      "upload": {
+        "title": "Upload your dish photo",
+        "description": "JPG or PNG, up to 10MB.",
+        "cta": "Enhance photo",
+        "loading": "Enhancing...",
+        "noTrials": "Trial used",
+        "download": "Download",
+        "secondaryCta": "Sign in to remove watermark",
+        "empty": "Drag and drop a photo or click to upload",
+        "maxSize": "Max {size}MB",
+        "clear": "Clear",
+        "remaining": "Trial remaining: {count}",
+        "error": "We couldn't process that image. Try another one."
+      },
+      "before": "Original",
+      "after": "Professional result",
+      "placeholder": "Your enhanced photo appears here",
+      "watermark": "Watermark in trial"
+    },
+    "demo": {
+      "title": "How Menoo works",
+      "panel": {
+        "title": "Control panel",
+        "description": "Manage your menus from any device",
+        "placeholder": "Dashboard screenshot"
+      },
+      "menu": {
+        "title": "Digital menu",
+        "description": "Preview of how your customers see the menu",
+        "placeholder": "Digital menu screenshot"
+      }
+    },
+    "pricing": {
+      "title": "Plans and pricing",
+      "plans": {
+        "free": {
+          "name": "Free forever",
+          "price": "Free",
+          "description": "Perfect to get started",
+          "features": {
+            "0": "1 menu",
+            "1": "Up to 20 dishes",
+            "2": "100 scans/month"
+          },
+          "cta": "Start free"
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "€8 / month",
+          "description": "For professional restaurants",
+          "features": {
+            "0": "Unlimited menus",
+            "1": "Unlimited dishes",
+            "2": "Unlimited scans",
+            "3": "Advanced statistics"
+          },
+          "cta": "Try Pro 14 days"
+        }
+      }
+    },
+    "socialProof": {
+      "title": "What our customers say",
+      "testimonials": {
+        "1": {
+          "quote": "Menoo has transformed how we manage our menu. We no longer have to reprint every time we change something.",
+          "author": "Maria Gonzalez",
+          "role": "Owner, La Bodega Restaurant"
+        },
+        "2": {
+          "quote": "Customers love being able to see the menu in their language. It has greatly improved the experience for our tourists.",
+          "author": "Carlos Ruiz",
+          "role": "Manager, Tapas & Co"
+        }
+      },
+      "logos": {
+        "title": "Trusted by",
+        "items": {
+          "1": "Restaurant A",
+          "2": "Restaurant B",
+          "3": "Restaurant C",
+          "4": "Restaurant D"
+        }
+      }
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "steps": {
+        "1": {
+          "title": "Upload your menu",
+          "description": "Import your menu from CSV or create it manually in minutes."
+        },
+        "2": {
+          "title": "Generate your QR",
+          "description": "Download your custom QR code or request free stickers for your tables."
+        },
+        "3": {
+          "title": "Share and update",
+          "description": "Customers scan the QR and see your digital menu. Update it whenever you want."
+        }
+      }
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "items": {
+        "1": {
+          "question": "Can I change the menu anytime?",
+          "answer": "Yes, you can update your menu at any time from the control panel. Changes are reflected instantly."
+        },
+        "2": {
+          "question": "Does it work without printing?",
+          "answer": "Yes, you only need to print the QR code once. The menu is displayed digitally when customers scan."
+        },
+        "3": {
+          "question": "Can I have multiple menus?",
+          "answer": "With the Pro plan you can create unlimited menus. The free plan includes 1 menu."
+        },
+        "4": {
+          "question": "How much does it cost?",
+          "answer": "We have a free forever plan. The Pro plan costs €8/month and includes advanced features."
+        },
+        "5": {
+          "question": "Do I need technical knowledge?",
+          "answer": "No, Menoo is designed to be easy to use. If you can use a phone, you can use Menoo."
+        }
+      }
+    },
+    "finalCta": {
+      "title": "Ready to digitize your menu?",
+      "cta": "Start free"
+    },
+    "footer": {
+      "description": "The easiest way to create and manage digital menus for restaurants.",
+      "product": {
+        "title": "Product",
+        "links": {
+          "1": {
+            "label": "Features",
+            "href": "#"
+          },
+          "2": {
+            "label": "Pricing",
+            "href": "#pricing"
+          },
+          "3": {
+            "label": "How it works",
+            "href": "#how-it-works"
+          }
+        }
+      },
+      "company": {
+        "title": "Company",
+        "links": {
+          "1": {
+            "label": "About us",
+            "href": "#"
+          },
+          "2": {
+            "label": "Contact",
+            "href": "#"
+          }
+        }
+      },
+      "legal": {
+        "title": "Legal",
+        "links": {
+          "1": {
+            "label": "Terms of Service",
+            "href": "#"
+          },
+          "2": {
+            "label": "Privacy Policy",
+            "href": "#"
+          },
+          "3": {
+            "label": "Cookies",
+            "href": "#"
+          }
+        }
+      },
+      "copyright": "© 2024 Menoo. All rights reserved."
+    }
+  }
+}

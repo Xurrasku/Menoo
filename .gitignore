@@ -40,7 +40,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+/lib/
 lib64/
 parts/
 sdist/
@@ -88,7 +88,7 @@ tmp/
 
 # Agency Swarm
 .agency_swarm_chats/
-messages/
+/messages/
 **/messages_*.json
 
 # Index files

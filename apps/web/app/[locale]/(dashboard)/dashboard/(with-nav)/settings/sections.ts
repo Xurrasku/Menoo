@@ -2,6 +2,7 @@ import type { LucideIcon } from "lucide-react";
 import {
   FileText,
   Globe,
+  Image as ImageIcon,
   Info,
   MessageSquare,
   Share2,
@@ -12,6 +13,7 @@ import {
 export type SettingsSectionId =
   | "general"
   | "appearance"
+  | "visuals"
   | "languages"
   | "reviews"
   | "wifi"
@@ -38,6 +40,12 @@ export const SETTINGS_SECTIONS: SettingsSection[] = [
     icon: Sparkles,
     titleKey: "sections.appearance.title",
     descriptionKey: "sections.appearance.description",
+  },
+  {
+    id: "visuals",
+    icon: ImageIcon,
+    titleKey: "sections.visuals.title",
+    descriptionKey: "sections.visuals.description",
   },
   {
     id: "languages",

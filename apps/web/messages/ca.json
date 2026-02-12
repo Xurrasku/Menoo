@@ -1,0 +1,619 @@
+{
+  "navigation": {
+    "brand": "nordQR",
+    "menus": "Menús",
+    "statistics": "Estadístiques",
+    "qr": "Codi QR",
+    "settings": "Configuració",
+    "customize": "Personalitza",
+    "viewMenu": "Veure menú",
+    "actions": "Accions",
+    "newMenu": "Nou menú",
+    "upgrade": "Millora el pla"
+  },
+  "restaurantOnboarding": {
+    "title": "Configura el teu restaurant",
+    "subtitle": "Farem servir aquestes dades per personalitzar l'experiència i crear el domini del menú.",
+    "nameLabel": "Nom del restaurant",
+    "namePlaceholder": "Ex. La Bodega d'en Joan",
+    "cuisineLabel": "Tipus de cuina (opcional)",
+    "addressLabel": "Adreça (opcional)",
+    "submitCta": "Desa i continua",
+    "domainPreviewLabel": "Domini del menú",
+    "redirecting": "Redirigint...",
+    "success": "Restaurant desat! Et portem als teus menús...",
+    "errorFallback": "No hem pogut desar el restaurant. Torna-ho a provar."
+  },
+  "onboarding": {
+    "headerSubtitle": "Uneix-te a +2.000 restaurants que ja estalvien hores cada setmana",
+    "title": "Benvingut a Menoo",
+    "subtitle": "Configurem el teu restaurant en uns passos senzills",
+    "step1Title": "Alguns ajustaments abans de començar...",
+    "step1Subtitle": "Omple aquests pocs camps per crear el teu primer menú i començar a digitalitzar el teu restaurant avui mateix.",
+    "step2Title": "Com t'agradaria que es veiés el teu menú?",
+    "step2Subtitle": "Comparteix les teves preferències de disseny per personalitzar l'aparença del teu menú.",
+    "nameLabel": "Nom del restaurant",
+    "namePlaceholder": "Ex. La Bodega d'en Joan",
+    "urlLabel": "Adreça URL",
+    "urlPlaceholder": "el-teu-restaurant",
+    "urlHelper": "",
+    "checkingAvailability": "Comprovant disponibilitat...",
+    "urlAvailable": "✓ Aquesta URL està disponible",
+    "urlUnavailable": "✗ Aquesta URL ja està en ús",
+    "sizeLabel": "Aforament aproximat",
+    "sizePlaceholder": "Selecciona aforament",
+    "sizeSmall": "Petit, fins a 30 comensals",
+    "sizeMedium": "Mitjà, de 30 a 60 comensals",
+    "sizeLarge": "Gran, de 60 a 100 comensals",
+    "sizeMaxi": "Maxi, +100 comensals",
+    "referralLabel": "Com has descobert NordQR?",
+    "referralPlaceholder": "Selecciona una opció",
+    "referralGoogle": "Cerca a Google",
+    "referralSocial": "Xarxes socials (Instagram, TikTok...)",
+    "referralFriend": "Recomanació d'amic o col·lega",
+    "referralOtherRestaurant": "He usat NordQR en un altre restaurant",
+    "referralOther": "Altre",
+    "designUrlLabel": "Web de referència",
+    "designUrlPlaceholder": "https://el-teu-restaurant.com",
+    "designUrlHelper": "Usarem l'estil de la teva web com a referència per al disseny del menú.",
+    "designDescriptionLabel": "Preferències de disseny",
+    "designDescriptionPlaceholder": "Descriu com t'agradaria que es veiés el teu menú... (ex. minimalista modern, rústic, elegant...)",
+    "designValidationError": "Si us plau, proporciona una URL web o una descripció del disseny",
+    "designInvalidUrl": "Si us plau, introdueix una URL vàlida",
+    "nextButton": "Continua",
+    "backButton": "Enrere",
+    "skipButton": "Saltar per ara",
+    "submitCta": "Continua",
+    "redirecting": "Redirigint...",
+    "success": "Configuració completada! Et portem als teus menús...",
+    "errorFallback": "No hem pogut completar la configuració. Torna-ho a provar.",
+    "menuStep": {
+      "headerSubtitle": "Restaurants amb IA obtenen 3x més visites al menú",
+      "title": "Omple el teu menú",
+      "subtitle": "Puja imatges o PDFs del teu menú, o comença amb dades d'exemple",
+      "uploadTitle": "Puja el teu menú",
+      "uploadSubtitle": "Puja fotos o PDFs del teu menú i la IA extreurà tots els plats",
+      "dropHere": "Arrossega les teves imatges aquí",
+      "clickOrDrag": "Fes clic o arrossega per pujar",
+      "fileTypes": "PNG, JPG, PDF fins a 10MB",
+      "analyzing": "Analitzant el teu menú...",
+      "useYourData": "Utilitzar les teves dades",
+      "useExampleData": "Utilitzar dades d'exemple",
+      "continueButton": "Continua",
+      "skipButton": "Saltar i utilitzar dades d'exemple",
+      "redirecting": "Redirigint...",
+      "errorFallback": "No hem pogut desar el teu menú. Torna-ho a provar."
+    },
+    "languagesStep": {
+      "headerSubtitle": "Els menús multiidioma augmenten les comandes de turistes un 40%",
+      "title": "Afegeix més idiomes",
+      "subtitle": "Arriba a clients internacionals oferint el teu menú en diversos idiomes",
+      "uploadTitle": "Puja menú traduït",
+      "uploadSubtitle": "Puja fotos o PDFs del teu menú en un altre idioma i la IA extreurà les traduccions",
+      "aiTranslateTitle": "Traducció amb IA",
+      "aiTranslateSubtitle": "Deixa que la IA tradueixi automàticament el teu menú a qualsevol idioma",
+      "dropHere": "Arrossega les teves imatges aquí",
+      "clickOrDrag": "Fes clic o arrossega per pujar",
+      "fileTypes": "PNG, JPG, PDF fins a 10MB",
+      "analyzing": "Analitzant traduccions...",
+      "translating": "Traduint el teu menú...",
+      "selectLanguage": "Selecciona idioma",
+      "selectedLanguages": "Idiomes seleccionats",
+      "noLanguagesSelected": "Cap idioma seleccionat",
+      "addLanguage": "Afegir idioma",
+      "removeLanguage": "Eliminar",
+      "useUpload": "Pujar menú traduït",
+      "useAiTranslate": "Usar traducció amb IA",
+      "useSampleData": "Usar traduccions d'exemple",
+      "sampleDataDescription": "Comença amb traduccions d'exemple per veure com funcionen els menús multiidioma",
+      "continueButton": "Continua",
+      "skipButton": "Saltar per ara",
+      "redirecting": "Redirigint...",
+      "errorFallback": "No hem pogut desar les traduccions. Torna-ho a provar.",
+      "languageAdded": "Idioma afegit correctament",
+      "languageRemoved": "Idioma eliminat"
+    },
+    "enjoyStep": {
+      "headerSubtitle": "El teu menú digital està llest per compartir amb els teus clients",
+      "title": "Tot llest!",
+      "subtitle": "El teu menú de restaurant ja està en línia i llest per ser descobert",
+      "description": "Imprimeix aquest codi QR i col·loca'l a les teves taules, a l'entrada o a qualsevol lloc on els teus clients puguin escanejar-lo per veure el teu menú a l'instant.",
+      "scanQr": "Escaneja aquest codi QR per veure el teu menú",
+      "menuUrl": "URL del teu menú",
+      "goToDashboard": "Anar al Panell",
+      "downloadQr": "Descarregar codi QR",
+      "back": "Enrere"
+    }
+  },
+  "dashboard": {
+    "menusTitle": "Menús",
+    "menusSubtitle": "Gestiona els menús del teu restaurant des d'un únic panell.",
+    "analyticsSubtitle": "Rastreja quantes persones accedeixen al teu menú.",
+    "addMenu": "Afegeix menú",
+    "analytics": {
+      "totalViews": "Visualitzacions totals",
+      "viewsToday": "Visualitzacions avui",
+      "viewsThisWeek": "Visualitzacions aquesta setmana",
+      "viewsThisMonth": "Visualitzacions aquest mes"
+    },
+    "menuCategories": "{count, plural, one {# categoria} other {# categories}}",
+    "table": {
+      "name": "Nom",
+      "items": "Plats",
+      "availability": "Disponibilitat",
+      "visibility": "Visibilitat"
+    },
+    "availability": {
+      "everyday": "Cada dia"
+    },
+    "visibility": {
+      "visible": "Publicat",
+      "hidden": "Ocult"
+    },
+    "userMenu": {
+      "profile": "Perfil",
+      "preferences": "Preferències",
+      "help": "Centre d'ajuda",
+      "signOut": "Tancar sessió",
+      "signingOut": "Tancant sessió...",
+      "signOutError": "No s'ha pogut tancar la sessió. Torna-ho a provar.",
+      "userFallback": "Usuari sense nom"
+    },
+    "rowActions": {
+      "edit": "Edita",
+      "duplicate": "Duplica",
+      "archive": "Arxiva",
+      "delete": "Elimina"
+    },
+    "menuDetail": {
+      "back": "Els meus menús",
+      "title": "El nostre menú",
+      "untitledCategory": "Categoria sense títol",
+      "collapse": "Contraure",
+      "emptyDescription": "Els plats d'aquesta categoria apareixeran aquí.",
+      "newDish": "Nou plat",
+      "newCategory": "Nova categoria",
+      "save": "Desa el menú",
+      "saving": "Desant...",
+      "saveError": "No hem pogut desar el menú. Torna-ho a provar.",
+      "aiUploader": {
+        "title": "Crea un menú nou a partir d'una foto",
+        "subtitle": "Puja una foto del teu menú i la IA farà la resta",
+        "dropHere": "Deixa la imatge aquí",
+        "clickOrDrag": "Fes clic o arrossega per pujar",
+        "fileTypes": "PNG, JPG o WEBP fins a 10MB",
+        "analyzing": "Analitzant el teu menú...",
+        "createManually": "O crea'l manualment",
+        "process": "Processar imatges"
+      },
+      "categoryModal": {
+        "title": "Nova categoria",
+        "nameLabel": "Nom de la categoria",
+        "descriptionLabel": "Descripció",
+        "save": "Desa",
+        "cancel": "Cancel·la"
+      },
+      "dishModal": {
+        "title": "Nou plat",
+        "nameLabel": "Nom del plat",
+        "descriptionLabel": "Descripció",
+        "priceLabel": "Preu",
+        "priceHint": "Afegeix variants",
+        "imageUpload": "Puja una imatge",
+        "imageHelper": "o fes clic per cercar un fitxer",
+        "labelsTitle": "Etiquetes",
+        "allergensTitle": "Al·lèrgens",
+        "save": "Desa",
+        "cancel": "Cancel·la"
+      }
+    },
+    "qr": {
+      "title": "Codi QR",
+      "subtitle": "Genera i personalitza codis QR per als teus menús en segons.",
+      "copyLink": "Copiar enllaç",
+      "copied": "Enllaç copiat",
+      "frame": {
+        "title": "Marc",
+        "subtitle": "Decideix on es mostra l'etiqueta al voltant del codi.",
+        "typeLabel": "Tipus de marc",
+        "options": {
+          "bottom": "Inferior",
+          "top": "Superior",
+          "none": "Sense marc"
+        },
+        "backgroundColor": "Color de fons",
+        "textLabel": "Text",
+        "textColor": "Color del text",
+        "fontFamily": "Tipografia",
+        "textSize": "Mida del text"
+      },
+      "style": {
+        "title": "Forma i color",
+        "subtitle": "Ajusta l'aparença del teu codi QR.",
+        "qrColor": "Color del codi",
+        "qrBackground": "Color de fons del codi"
+      },
+      "download": {
+        "presetLabel": "Format de descàrrega",
+        "cta": "Descarregar QR",
+        "pdfSmall": "PDF amb 16 QR petits",
+        "pdfSmallDescription": "Perfecte per a cartes plastificades o displays de taula.",
+        "pdfLarge": "PDF amb 4 QR grans",
+        "pdfLargeDescription": "Ideal per a pòsters o cartelleria d'aparador.",
+        "stickers": "Pack d'adhesius",
+        "stickersDescription": "Mides pensades per imprimir adhesius resistents.",
+        "tableDisplay": "Display de taula",
+        "tableDisplayDescription": "Mesures preparades per a porta-menús verticals.",
+        "svg": "Fitxer vectorial (SVG)",
+        "svgDescription": "Qualitat màxima per a impremtes i dissenyadors."
+      },
+      "promo": {
+        "title": "Demana els teus adhesius QR gratis",
+        "description": "T'enviem adhesius plastificats perquè els col·loquis a les taules del teu restaurant.",
+        "note": "Només necessites un menú publicat amb més de 20 plats."
+      },
+      "reset": "Reiniciar ajustos",
+      "previewAlt": "Previsualització del codi QR"
+    }
+  },
+  "settings": {
+    "subtitle": "Configura la informació del restaurant, les integracions i les preferències d'idioma.",
+    "badges": {
+      "soon": "Aviat"
+    },
+    "sections": {
+      "general": {
+        "title": "General",
+        "description": "Tots els detalls sobre el teu local."
+      },
+      "appearance": {
+        "title": "Aparença",
+        "description": "Personalitza l'aspecte i l'aparença dels menús."
+      },
+      "visuals": {
+        "title": "Visuals",
+        "description": "Millora les fotos dels plats perquè es vegin més apetitoses."
+      },
+      "languages": {
+        "title": "Idiomes del menú",
+        "description": "Presenta els menús en idiomes addicionals."
+      },
+      "reviews": {
+        "title": "Valoracions",
+        "description": "Rep ressenyes dels teus clients."
+      },
+      "wifi": {
+        "title": "Wi-Fi",
+        "description": "Permet que els teus clients es connectin a la teva xarxa Wi-Fi."
+      },
+      "extra": {
+        "title": "Informació extra",
+        "description": "Mostra un text amb informació addicional a la pàgina pública."
+      },
+      "social": {
+        "title": "Xarxes socials",
+        "description": "Mostra als teus clients els enllaços als teus perfils."
+      }
+    },
+    "appearance": {
+      "selectMenu": "Selecciona el menú",
+      "restaurantWebsite": "Lloc web del restaurant (opcional)",
+      "websitePlaceholder": "https://exemple.com",
+      "websiteNote": "El teu lloc web s'inclourà a la sol·licitud de disseny per ajudar a coincidir amb l'estil de la teva marca.",
+      "welcomeMessage": "Podem adaptar l'estil del menú a la teva marca.",
+      "inputPlaceholder": "Descriu les teves preferències de disseny...",
+      "thinking": "Pensant...",
+      "noMenus": "Has de crear almenys un menú abans de personalitzar la seva aparença.",
+      "designUpdateSuccess": "Sol·licitud d'actualització de disseny enviada amb èxit!",
+      "designUpdateError": "Error en actualitzar el disseny",
+      "websiteRequired": "Si us plau, introdueix una URL del lloc web"
+    },
+    "preview": {
+      "time": "05:28 PM",
+      "restaurant": "marcoslol",
+      "section": "Aperitius",
+      "cta": "Valora la teva experiència",
+      "items": {
+        "caprese": {
+          "name": "Amanida caprese",
+          "description": "Una amanida italiana senzilla amb tomàquet i mozzarella fresca."
+        },
+        "gazpacho": {
+          "name": "Gaspatxo",
+          "description": "Gaspatxo tradicional servit ben fred."
+        },
+        "onionRings": {
+          "name": "Anelles de ceba",
+          "description": "Anelles de ceba cruixents amb salsa de la casa."
+        }
+      }
+    }
+  },
+  "billing": {
+    "page": {
+      "title": "Facturació",
+      "subtitle": "Repassa els avantatges de Pro i gestiona la subscripció abans de fer el salt.",
+      "cta": "Veure avantatges Pro",
+      "backToSettings": "Torna a configuració",
+      "finePrint": "Stripe gestiona els pagaments de forma segura. Pots cancel·lar quan vulguis."
+    },
+    "pro": {
+      "name": "Pla Pro",
+      "price": "8 € / mes",
+      "description": "Desbloqueja menús il·limitats, analítiques avançades i codis QR personalitzats.",
+      "features": {
+        "menus": "Menús il·limitats",
+        "analytics": "Analítiques i estadístiques avançades",
+        "qr": "QR amb marca personalitzada",
+        "support": "Suport prioritari per correu"
+      },
+      "cta": "Millora a Pro",
+      "ctaShort": "Millora el pla",
+      "loading": "Obrint Stripe...",
+      "error": "No hem pogut iniciar el pagament. Torna-ho a provar més tard."
+    }
+  },
+  "auth": {
+    "common": {
+      "continueWithGoogle": "Continua amb Google",
+      "redirecting": "Redirigint...",
+      "orContinueWithEmail": "O inicia sessió amb el teu email",
+      "oauthError": "No s'ha pogut iniciar sessió amb Google. Torna-ho a provar."
+    },
+    "providers": {
+      "google": "Continua amb Google"
+    },
+    "signIn": {
+      "title": "Accedeix al teu compte",
+      "subtitle": "Gestiona menús, QR i subscripcions des d'un únic panell.",
+      "cta": "Encara no tens compte?",
+      "ctaLink": "Crea'n un"
+    },
+    "signUp": {
+      "title": "Crea el teu compte",
+      "subtitle": "Digitalitza la carta del teu restaurant en minuts.",
+      "cta": "Ja tens compte?",
+      "ctaLink": "Inicia sessió"
+    }
+  },
+  "landing": {
+    "nav": {
+      "signIn": "Iniciar sessió",
+      "cta": "Crea el meu menú gratis"
+    },
+    "hero": {
+      "title": "Menús digitals elegants per a restaurants",
+      "subtitle": "Crea el teu menú digital en 60 segons",
+      "cta": "Crea el meu menú gratis",
+      "visualPlaceholder": "Mockup mòbil + QR + carta"
+    },
+    "problem": {
+      "description": "Perquè cada canvi a la teva carta impresa costa diners, temps i oportunitats perdudes. Descobreix la llibertat del digital."
+    },
+    "benefits": {
+      "title": "Tot el que necessites per digitalitzar la teva carta",
+      "items": {
+        "1": {
+          "title": "Actualitza instantàniament",
+          "description": "Canvia preus, plats o descripcions en temps real sense imprimir res.",
+          "icon": "zap"
+        },
+        "2": {
+          "title": "Utilitza IA per afegir tots els idiomes que vulguis",
+          "description": "Tradueix automàticament el teu menú a múltiples idiomes amb intel·ligència artificial.",
+          "icon": "globe"
+        },
+        "3": {
+          "title": "Estadístiques d'escanejos",
+          "description": "Descobreix quantes persones veuen el teu menú i optimitza la teva oferta.",
+          "icon": "chart"
+        },
+        "4": {
+          "title": "Panell simple",
+          "description": "Gestiona tot des del teu mòbil o escriptori. Interfície intuïtiva i fàcil d'usar.",
+          "icon": "smartphone"
+        }
+      }
+    },
+    "aiImage": {
+      "eyebrow": "Millora de fotos amb IA",
+      "title": "Converteix fotos casolanes en imatges de plat professionals",
+      "subtitle": "Puja una foto feta amb el mòbil i obtén una imatge d'estudi en menys d'un minut. Sense login.",
+      "steps": {
+        "1": {
+          "title": "Puja",
+          "description": "Arrossega una foto del teu plat."
+        },
+        "2": {
+          "title": "Millora",
+          "description": "La IA millora la llum, el color i la textura."
+        },
+        "3": {
+          "title": "Descarrega",
+          "description": "Obtén un resultat professional amb marca d'aigua."
+        }
+      },
+      "trialNote": "El trial inclou 3 fotos amb marca d'aigua. Inicia sessió per treure-la.",
+      "upload": {
+        "title": "Puja la foto del teu plat",
+        "description": "JPG o PNG, fins a 10MB.",
+        "cta": "Millorar foto",
+        "loading": "Millorant...",
+        "noTrials": "Trial esgotat",
+        "download": "Descarregar",
+        "secondaryCta": "Inicia sessió per treure la marca d'aigua",
+        "empty": "Arrossega una foto o fes clic per pujar-la",
+        "maxSize": "Màx {size}MB",
+        "clear": "Treure",
+        "remaining": "Trial restant: {count}",
+        "error": "No hem pogut processar la imatge. Prova amb una altra."
+      },
+      "before": "Original",
+      "after": "Resultat professional",
+      "placeholder": "Aquí apareixerà la teva foto millorada",
+      "watermark": "Marca d'aigua en trial"
+    },
+    "demo": {
+      "title": "Així funciona Menoo",
+      "panel": {
+        "title": "Panell de control",
+        "description": "Gestiona els teus menús des de qualsevol dispositiu",
+        "placeholder": "Captura del panell de control"
+      },
+      "menu": {
+        "title": "Carta digital",
+        "description": "Vista prèvia de com veuen els teus clients el menú",
+        "placeholder": "Captura de la carta digital"
+      }
+    },
+    "pricing": {
+      "title": "Plans i preus",
+      "plans": {
+        "free": {
+          "name": "Gratis per sempre",
+          "price": "Gratis",
+          "description": "Perfecte per començar",
+          "features": {
+            "0": "1 carta",
+            "1": "Fins a 20 plats",
+            "2": "100 escanejos/mes"
+          },
+          "cta": "Comença gratis"
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "8 € / mes",
+          "description": "Per a restaurants professionals",
+          "features": {
+            "0": "Menús il·limitats",
+            "1": "Plats il·limitats",
+            "2": "Escanejos il·limitats",
+            "3": "Estadístiques avançades"
+          },
+          "cta": "Prova Pro 14 dies"
+        }
+      }
+    },
+    "socialProof": {
+      "title": "El que diuen els nostres clients",
+      "testimonials": {
+        "1": {
+          "quote": "Menoo ha transformat com gestionem el nostre menú. Ja no hem de reimprimir cada vegada que canviem alguna cosa.",
+          "author": "Maria González",
+          "role": "Propietària, Restaurant La Bodega"
+        },
+        "2": {
+          "quote": "Els clients adoren poder veure el menú en el seu idioma. Ha millorat molt l'experiència dels nostres turistes.",
+          "author": "Carlos Ruiz",
+          "role": "Gerent, Tapas & Co"
+        }
+      },
+      "logos": {
+        "title": "Confien en nosaltres",
+        "items": {
+          "1": "Restaurant A",
+          "2": "Restaurant B",
+          "3": "Restaurant C",
+          "4": "Restaurant D"
+        }
+      }
+    },
+    "howItWorks": {
+      "title": "Com funciona",
+      "steps": {
+        "1": {
+          "title": "Puja la teva carta",
+          "description": "Importa el teu menú des de CSV o crea'l manualment en minuts."
+        },
+        "2": {
+          "title": "Genera el teu QR",
+          "description": "Descarrega el teu codi QR personalitzat o demana adhesius gratis per a les teves taules."
+        },
+        "3": {
+          "title": "Comparteix i actualitza",
+          "description": "Els clients escanegen el QR i veuen la teva carta digital. Actualitza-la quan vulguis."
+        }
+      }
+    },
+    "faq": {
+      "title": "Preguntes freqüents",
+      "items": {
+        "1": {
+          "question": "Puc canviar el menú sempre?",
+          "answer": "Sí, pots actualitzar el teu menú en qualsevol moment des del panell de control. Els canvis es reflecteixen instantàniament."
+        },
+        "2": {
+          "question": "Funciona sense imprimir?",
+          "answer": "Sí, només necessites imprimir el codi QR una vegada. La carta es mostra digitalment quan els clients escanegen."
+        },
+        "3": {
+          "question": "Puc tenir diversos menús?",
+          "answer": "Amb el pla Pro pots crear menús il·limitats. El pla gratuït inclou 1 menú."
+        },
+        "4": {
+          "question": "Quant costa?",
+          "answer": "Tenim un pla gratuït per sempre. El pla Pro costa 8€/mes i inclou funcions avançades."
+        },
+        "5": {
+          "question": "Necessito coneixements tècnics?",
+          "answer": "No, Menoo està dissenyat per ser fàcil d'usar. Si pots usar un telèfon, pots usar Menoo."
+        }
+      }
+    },
+    "finalCta": {
+      "title": "Llest per digitalitzar la teva carta?",
+      "cta": "Comença gratis"
+    },
+    "footer": {
+      "description": "La forma més senzilla de crear i gestionar menús digitals per a restaurants.",
+      "product": {
+        "title": "Producte",
+        "links": {
+          "1": {
+            "label": "Característiques",
+            "href": "#"
+          },
+          "2": {
+            "label": "Preus",
+            "href": "#pricing"
+          },
+          "3": {
+            "label": "Com funciona",
+            "href": "#how-it-works"
+          }
+        }
+      },
+      "company": {
+        "title": "Empresa",
+        "links": {
+          "1": {
+            "label": "Sobre nosaltres",
+            "href": "#"
+          },
+          "2": {
+            "label": "Contacte",
+            "href": "#"
+          }
+        }
+      },
+      "legal": {
+        "title": "Legal",
+        "links": {
+          "1": {
+            "label": "Termes de servei",
+            "href": "#"
+          },
+          "2": {
+            "label": "Política de privacitat",
+            "href": "#"
+          },
+          "3": {
+            "label": "Cookies",
+            "href": "#"
+          }
+        }
+      },
+      "copyright": "© 2024 Menoo. Tots els drets reservats."
+    }
+  }
+}

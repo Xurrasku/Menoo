@@ -29,7 +29,7 @@ export default async function SettingsPage({
   ]);
 
   const visibleSections = SETTINGS_SECTIONS.filter((section) =>
-    ["appearance", "languages", "wifi", "social"].includes(section.id)
+    ["appearance", "visuals", "languages", "wifi", "social"].includes(section.id)
   );
 
   return (
@@ -66,7 +66,9 @@ function SettingsSectionCard({
   const Icon = section.icon;
   const href = section.id === "appearance" 
     ? `/${locale}/dashboard/settings/appearance`
-    : undefined;
+    : section.id === "visuals"
+      ? `/${locale}/dashboard/settings/visuals`
+      : undefined;
 
   const Component = href ? "a" : "button";
   const componentProps = href 
