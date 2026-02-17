@@ -51,7 +51,7 @@ const GLOBAL_PRESETS: GlobalPreset[] = [
       perspective: "angle_45",
       camera: "smartphone",
     },
-    previewImageDataUrl: null,
+    previewImageDataUrl: "/visuals/presets/natural-modern.jpg",
   },
   {
     id: "minimal-studio",
@@ -63,7 +63,7 @@ const GLOBAL_PRESETS: GlobalPreset[] = [
       perspective: "angle_45",
       camera: "dslr",
     },
-    previewImageDataUrl: null,
+    previewImageDataUrl: "/visuals/presets/minimal-studio.jpg",
   },
   {
     id: "bright-casual",
@@ -75,7 +75,7 @@ const GLOBAL_PRESETS: GlobalPreset[] = [
       perspective: "angle_45",
       camera: "smartphone",
     },
-    previewImageDataUrl: null,
+    previewImageDataUrl: "/visuals/presets/bright-casual.jpg",
   },
   {
     id: "moody-fine-dining",
@@ -88,7 +88,7 @@ const GLOBAL_PRESETS: GlobalPreset[] = [
       camera: "dslr",
       textureBoost: true,
     },
-    previewImageDataUrl: null,
+    previewImageDataUrl: "/visuals/presets/moody-fine-dining.jpg",
   },
   {
     id: "rustic-warm",
@@ -100,7 +100,7 @@ const GLOBAL_PRESETS: GlobalPreset[] = [
       perspective: "table_level",
       camera: "dslr",
     },
-    previewImageDataUrl: null,
+    previewImageDataUrl: "/visuals/presets/rustic-warm.jpg",
   },
   {
     id: "macro-texture",
@@ -113,7 +113,7 @@ const GLOBAL_PRESETS: GlobalPreset[] = [
       camera: "macro",
       textureBoost: true,
     },
-    previewImageDataUrl: null,
+    previewImageDataUrl: "/visuals/presets/macro-texture.jpg",
   },
 ];
 
@@ -632,14 +632,16 @@ export function VisualsImageEnhancer({
                           <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">Angle: {labelPerspective(preset.config.perspective)}</span>
                         </div>
                         <div className="mt-3">
-                          {preset.previewImageDataUrl ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img src={preset.previewImageDataUrl} alt="" className="h-24 w-full rounded-xl border border-border object-cover" />
-                          ) : (
-                            <div className="flex h-24 w-full items-center justify-center rounded-xl border border-dashed border-border bg-muted/30 text-xs font-medium text-muted-foreground">
-                              Preview próximamente
-                            </div>
-                          )}
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={preset.previewImageDataUrl ?? "/visuals/presets/placeholder.jpg"}
+                            alt=""
+                            className="h-24 w-full rounded-xl border border-border object-cover"
+                            onError={(event) => {
+                              const target = event.currentTarget;
+                              target.src = "/visuals/presets/placeholder.jpg";
+                            }}
+                          />
                         </div>
                       </button>
                     );
