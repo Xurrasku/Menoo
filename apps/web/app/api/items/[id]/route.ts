@@ -11,7 +11,7 @@ const itemUpdateSchema = z.object({
   name: z.string().min(1).optional(),
   description: z.string().optional(),
   priceCents: z.number().int().nonnegative().optional(),
-  imageUrl: z.string().url().optional().nullable(),
+  imageUrl: z.string().min(1).optional().nullable(),
   tags: z.array(z.string()).optional(),
 });
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 type MobilePreviewWrapperProps = {
   children: ReactNode;
@@ -15,12 +15,14 @@ const PHONE_BORDER_RADIUS_OUTER = 48; // rounded-[3rem]
 
 export function MobilePreviewWrapper({ children, hasHtmlMenu }: MobilePreviewWrapperProps) {
   const [isDesktop, setIsDesktop] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [mounted] = useState(() => typeof window !== "undefined");
   const [frameScale, setFrameScale] = useState(1);
 
   useEffect(() => {
-    setMounted(true);
-    
+    if (typeof window === "undefined") {
+      return;
+    }
+
     const updateLayout = () => {
       const isNowDesktop = window.innerWidth >= DESKTOP_BREAKPOINT;
       setIsDesktop(isNowDesktop);

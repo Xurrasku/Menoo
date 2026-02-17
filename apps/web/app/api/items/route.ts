@@ -14,7 +14,7 @@ const itemCreateSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
   priceCents: z.number().int().nonnegative(),
-  imageUrl: z.string().url().optional(),
+  imageUrl: z.string().min(1).optional(),
   tags: z.array(z.string()).optional().default([]),
 });
 

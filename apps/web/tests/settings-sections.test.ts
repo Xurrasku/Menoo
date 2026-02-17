@@ -26,7 +26,7 @@ const resolveKey = (messages: Messages, key: string) => {
 };
 
 test("settings page exposes expected number of sections", () => {
-  assert.equal(SETTINGS_SECTIONS.length, 7);
+  assert.equal(SETTINGS_SECTIONS.length, 8);
 });
 
 test("settings sections expose unique identifiers", () => {

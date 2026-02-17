@@ -48,7 +48,20 @@ function normalizeBaseUrl(base: string) {
  * Falls back to https://menoo.app if none are set.
  */
 export function getAppBaseUrl() {
-  return normalizeBaseUrl(LOCALHOST_BASE_URL);
+  const candidates = [
+    process.env.NEXT_PUBLIC_SITE_URL,
+    process.env.NEXT_PUBLIC_APP_URL,
+    process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : undefined,
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined,
+  ];
+
+  for (const candidate of candidates) {
+    if (candidate && candidate.trim().length > 0) {
+      return normalizeBaseUrl(candidate);
+    }
+  }
+
+  return normalizeBaseUrl("https://menoo.app");
 }
 
 /**
@@ -57,8 +70,23 @@ export function getAppBaseUrl() {
  * Prioritizes environment variables, but falls back to request detection if env vars aren't set.
  */
 export function getAppBaseUrlFromRequest(request: Request): string {
-  void request;
-  return normalizeBaseUrl(LOCALHOST_BASE_URL);
+  const envResolved = getAppBaseUrl();
+  if (envResolved !== normalizeBaseUrl("https://menoo.app")) {
+    return envResolved;
+  }
+
+  const forwardedHost = request.headers.get("x-forwarded-host");
+  const forwardedProto = request.headers.get("x-forwarded-proto");
+  if (forwardedHost) {
+    const proto = forwardedProto?.split(",")[0]?.trim() || "https";
+    return normalizeBaseUrl(`${proto}://${forwardedHost}`);
+  }
+
+  try {
+    return normalizeBaseUrl(new URL(request.url).origin);
+  } catch {
+    return normalizeBaseUrl(LOCALHOST_BASE_URL);
+  }
 }
 
 type BuildPostAuthRedirectOptions = {

@@ -84,12 +84,20 @@ type PendingImage = {
   previewUrl: string;
 };
 
+type VisualAssetPick = {
+  id: string;
+  imageDataUrl: string;
+  originalFileName: string | null;
+  createdAt: string;
+};
+
 type NewMenuScreenProps = {
   locale: string;
   menu: MenuDetailMessages;
   restaurantId: string;
   initialMenu?: MenuDetailData | null;
   hasExistingMenus?: boolean;
+  visualAssets?: VisualAssetPick[];
 };
 
 const LABEL_OPTIONS: Record<string, string[]> = {
@@ -156,6 +164,7 @@ export function NewMenuScreen({
   menu,
   restaurantId,
   initialMenu,
+  visualAssets = [],
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   hasExistingMenus: _hasExistingMenus,
 }: NewMenuScreenProps) {
@@ -197,6 +206,7 @@ export function NewMenuScreen({
 
   const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
   const [isDishModalOpen, setDishModalOpen] = useState(false);
+  const [isDishGalleryOpen, setDishGalleryOpen] = useState(false);
   const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
   const [editingDishId, setEditingDishId] = useState<string | null>(null);
   const [activeDishCategoryId, setActiveDishCategoryId] = useState<string | null>(null);
@@ -213,6 +223,8 @@ export function NewMenuScreen({
     labels: [],
     allergens: [],
   });
+
+  const dishThumbnailIsImage = dishForm.thumbnail.startsWith("data:image") || dishForm.thumbnail.startsWith("http");
 
   const labelOptions = useMemo(() => LABEL_OPTIONS[locale] ?? LABEL_OPTIONS.es, [locale]);
   const allergenOptions = useMemo(() => ALLERGEN_OPTIONS[locale] ?? ALLERGEN_OPTIONS.es, [locale]);
@@ -908,6 +920,50 @@ export function NewMenuScreen({
       {isDishModalOpen ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
           <div className="w-full max-w-3xl rounded-3xl border border-border bg-card p-8 shadow-2xl">
+            {isDishGalleryOpen ? (
+              <div className="fixed inset-0 z-[60] flex items-center justify-center bg-background/80 backdrop-blur-sm">
+                <div className="w-full max-w-4xl rounded-3xl border border-border bg-card p-6 shadow-2xl">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold text-foreground">Selecciona una imagen</h3>
+                      <p className="text-sm text-muted-foreground">Desde tu galería de Visuales</p>
+                    </div>
+                    <Button type="button" variant="ghost" className="rounded-full" onClick={() => setDishGalleryOpen(false)}>
+                      Cerrar
+                    </Button>
+                  </div>
+
+                  {visualAssets.length === 0 ? (
+                    <div className="mt-6 rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
+                      No hay imágenes todavía. Ve a Personalizar → Visuales y genera algunas.
+                    </div>
+                  ) : (
+                    <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+                      {visualAssets.map((asset) => (
+                        <button
+                          key={asset.id}
+                          type="button"
+                          className="group rounded-2xl border border-border bg-muted/20 p-2 text-left transition hover:border-primary/40 hover:bg-muted/40"
+                          onClick={() => {
+                            setDishForm((prev) => ({ ...prev, thumbnail: asset.imageDataUrl }));
+                            setDishGalleryOpen(false);
+                          }}
+                        >
+                          <div className="relative aspect-square overflow-hidden rounded-xl border border-border bg-muted">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={asset.imageDataUrl} alt="" className="h-full w-full object-cover" />
+                          </div>
+                          <p className="mt-2 truncate text-xs font-medium text-foreground">
+                            {asset.originalFileName ?? "Imagen"}
+                          </p>
+                          <p className="truncate text-[11px] text-muted-foreground">{new Date(asset.createdAt).toLocaleString()}</p>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : null}
             <div className="flex items-start justify-between">
               <h2 className="text-lg font-semibold text-foreground">
                 {editingDishId
@@ -1027,23 +1083,38 @@ export function NewMenuScreen({
               </div>
 
               <div className="flex flex-col items-center justify-start gap-4">
-                <div className="flex h-44 w-40 flex-col items-center justify-center rounded-3xl border-2 border-dashed border-border bg-muted/50 text-center text-sm text-muted-foreground opacity-60">
-                  <span className="mb-2 text-3xl" aria-hidden>
-                    {dishForm.thumbnail}
-                  </span>
+                <div className="flex h-44 w-40 flex-col items-center justify-center rounded-3xl border-2 border-dashed border-border bg-muted/50 text-center text-sm text-muted-foreground">
+                  <div className="mb-3 flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border border-border bg-background">
+                    {dishThumbnailIsImage ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={dishForm.thumbnail} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      <span className="text-3xl" aria-hidden>
+                        {dishForm.thumbnail}
+                      </span>
+                    )}
+                  </div>
                   <p className="font-semibold text-foreground">{menu.dishModal.imageUpload}</p>
                   <p className="mt-1 px-6 text-xs text-muted-foreground">{menu.dishModal.imageHelper}</p>
-                  <button
-                    type="button"
-                    disabled
-                    className="mt-3 rounded-full border border-border px-3 py-1 text-xs text-muted-foreground cursor-not-allowed"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                  >
-                    {menu.dishModal.imageUpload}
-                  </button>
+
+                  <div className="mt-3 flex flex-col gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="rounded-full"
+                      onClick={() => setDishGalleryOpen(true)}
+                    >
+                      Elegir de Visuales
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      className="rounded-full text-muted-foreground"
+                      onClick={() => setDishForm((prev) => ({ ...prev, thumbnail: "🍽️" }))}
+                    >
+                      Quitar
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

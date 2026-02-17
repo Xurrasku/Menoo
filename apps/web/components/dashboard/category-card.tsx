@@ -206,7 +206,16 @@ export function CategoryCard({
                         aria-label={`Toggle visibility for ${dish.name}`}
                       />
                       <div className="flex h-[8vw] w-[8vw] items-center justify-center overflow-hidden rounded-xl border border-border bg-muted text-base sm:h-10 sm:w-10">
-                        {dish.thumbnail ? dish.thumbnail : <UtensilsCrossed className="h-[3.5vw] w-[3.5vw] text-muted-foreground sm:h-4 sm:w-4" />}
+                        {dish.thumbnail ? (
+                          dish.thumbnail.startsWith("data:image") || dish.thumbnail.startsWith("http") ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={dish.thumbnail} alt="" className="h-full w-full object-cover" />
+                          ) : (
+                            dish.thumbnail
+                          )
+                        ) : (
+                          <UtensilsCrossed className="h-[3.5vw] w-[3.5vw] text-muted-foreground sm:h-4 sm:w-4" />
+                        )}
                       </div>
                     </div>
 
