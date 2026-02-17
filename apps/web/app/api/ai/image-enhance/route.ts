@@ -7,12 +7,15 @@ import { restaurants, visualAssets, visualPromptGallery } from "@/db/schema";
 import { getServerUser } from "@/lib/auth/server";
 import { db } from "@/lib/db";
 
+const styleConfigSchema = z.record(z.string(), z.unknown()).optional();
+
 const requestSchema = z.object({
   image: z.string().min(1, "Image data is required"),
   mimeType: z.string().optional(),
   prompt: z.string().trim().min(1).optional(),
   fileName: z.string().trim().min(1).max(255).optional(),
   promptGalleryId: z.string().uuid().optional(),
+  styleConfig: styleConfigSchema,
 });
 
 export async function POST(request: NextRequest) {
@@ -56,6 +59,8 @@ export async function POST(request: NextRequest) {
             imageDataUrl: outputDataUrl,
             originalFileName: result.data.fileName ?? null,
             prompt: result.data.prompt ?? null,
+            promptGalleryId: result.data.promptGalleryId ?? null,
+            styleConfig: result.data.styleConfig ?? null,
           })
           .returning({
             id: visualAssets.id,

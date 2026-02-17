@@ -183,6 +183,10 @@ export const visualAssets = pgTable("visual_assets", {
     .references(() => restaurants.id, { onDelete: "cascade" }),
   originalFileName: varchar("original_file_name", { length: 255 }),
   prompt: text("prompt"),
+  promptGalleryId: uuid("prompt_gallery_id").references(() => visualPromptGallery.id, {
+    onDelete: "set null",
+  }),
+  styleConfig: jsonb("style_config"),
   imageDataUrl: text("image_data_url").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
@@ -206,6 +210,7 @@ export const visualPromptGallery = pgTable("visual_prompt_gallery", {
     .references(() => restaurants.id, { onDelete: "cascade" }),
   title: varchar("title", { length: 120 }).notNull(),
   prompt: text("prompt").notNull(),
+  styleConfig: jsonb("style_config"),
   previewImageDataUrl: text("preview_image_data_url"),
   sourceAssetId: uuid("source_asset_id").references(() => visualAssets.id, {
     onDelete: "set null",

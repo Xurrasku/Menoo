@@ -5,6 +5,17 @@ import { Loader2, Plus, Sparkles, UploadCloud, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {
+  buildPromptFromStyle,
+  labelBackground,
+  labelLighting,
+  labelPerspective,
+  type BackgroundStyle,
+  type LightingStyle,
+  type PerspectiveStyle,
+  type CameraStyle,
+  type VisualStyleConfig,
+} from "./visuals-style-prompt";
 
 const MAX_SIZE_MB = 10;
 const PREVIEW_TARGET_SIZE = 1024;
@@ -12,6 +23,99 @@ const PREVIEW_TARGET_SIZE = 1024;
 // Duplicated from ai/image-enhance.ts (server module). Keep in sync.
 const DEFAULT_IMAGE_ENHANCE_PROMPT =
   "Enhance this dish photo into professional food photography. Preserve the exact dish, ingredients, portion size, plating, and arrangement. Do not add, remove, or replace any ingredients or garnishes. Improve lighting, color balance, texture, and sharpness to look appetizing yet photorealistic. Remove distracting background objects and clutter, keeping a clean, neutral setting that matches the original plate or bowl. No stylization, no text, no logos, no watermark.";
+
+const DEFAULT_STYLE_CONFIG: VisualStyleConfig = {
+  background: "neutral",
+  lighting: "natural",
+  perspective: "angle_45",
+  camera: "smartphone",
+  textureBoost: true,
+  consistentMenu: true,
+};
+
+type GlobalPreset = {
+  id: string;
+  title: string;
+  config: VisualStyleConfig;
+  previewImageDataUrl?: string | null;
+};
+
+const GLOBAL_PRESETS: GlobalPreset[] = [
+  {
+    id: "natural-modern",
+    title: "Natural Modern",
+    config: {
+      ...DEFAULT_STYLE_CONFIG,
+      background: "neutral",
+      lighting: "natural",
+      perspective: "angle_45",
+      camera: "smartphone",
+    },
+    previewImageDataUrl: null,
+  },
+  {
+    id: "minimal-studio",
+    title: "Minimal Studio",
+    config: {
+      ...DEFAULT_STYLE_CONFIG,
+      background: "neutral",
+      lighting: "studio",
+      perspective: "angle_45",
+      camera: "dslr",
+    },
+    previewImageDataUrl: null,
+  },
+  {
+    id: "bright-casual",
+    title: "Bright Casual",
+    config: {
+      ...DEFAULT_STYLE_CONFIG,
+      background: "neutral",
+      lighting: "bright",
+      perspective: "angle_45",
+      camera: "smartphone",
+    },
+    previewImageDataUrl: null,
+  },
+  {
+    id: "moody-fine-dining",
+    title: "Moody Fine‑Dining",
+    config: {
+      ...DEFAULT_STYLE_CONFIG,
+      background: "dark",
+      lighting: "moody",
+      perspective: "angle_45",
+      camera: "dslr",
+      textureBoost: true,
+    },
+    previewImageDataUrl: null,
+  },
+  {
+    id: "rustic-warm",
+    title: "Rustic Warm",
+    config: {
+      ...DEFAULT_STYLE_CONFIG,
+      background: "bokeh",
+      lighting: "natural",
+      perspective: "table_level",
+      camera: "dslr",
+    },
+    previewImageDataUrl: null,
+  },
+  {
+    id: "macro-texture",
+    title: "Macro Texture",
+    config: {
+      ...DEFAULT_STYLE_CONFIG,
+      background: "neutral",
+      lighting: "studio",
+      perspective: "angle_45",
+      camera: "macro",
+      textureBoost: true,
+    },
+    previewImageDataUrl: null,
+  },
+];
 
 type PendingImage = {
   id: string;
@@ -35,6 +139,7 @@ type PromptGalleryItem = {
   id: string;
   title: string;
   prompt: string;
+  styleConfig: Record<string, unknown> | null;
   previewImageDataUrl: string | null;
   sourceAssetId: string | null;
   createdAt: string;
@@ -50,6 +155,11 @@ export function VisualsImageEnhancer({
   initialPromptGallery = [],
 }: VisualsImageEnhancerProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [styleTab, setStyleTab] = useState<"presets" | "builder">("presets");
+  const [promptEditMode, setPromptEditMode] = useState(false);
+  const [styleConfig, setStyleConfig] = useState<VisualStyleConfig>(DEFAULT_STYLE_CONFIG);
+  const [selectedGlobalPresetId, setSelectedGlobalPresetId] = useState<string | null>("natural-modern");
+
   const [prompt, setPrompt] = useState(DEFAULT_IMAGE_ENHANCE_PROMPT);
   const [promptTitle, setPromptTitle] = useState("");
   const [selectedPromptGalleryId, setSelectedPromptGalleryId] = useState<string | null>(null);
@@ -60,6 +170,16 @@ export function VisualsImageEnhancer({
   const [savingPromptOnly, setSavingPromptOnly] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [globalError, setGlobalError] = useState<string | null>(null);
+
+  const generatedPrompt = useMemo(() => buildPromptFromStyle(styleConfig), [styleConfig]);
+
+  const effectivePrompt = useMemo(() => {
+    if (promptEditMode) {
+      return prompt.trim().length > 0 ? prompt.trim() : generatedPrompt;
+    }
+
+    return generatedPrompt;
+  }, [generatedPrompt, prompt, promptEditMode]);
 
   const canEnhance = useMemo(
     () => items.length > 0 && items.some((item) => item.status === "idle" || item.status === "error"),
@@ -198,7 +318,7 @@ export function VisualsImageEnhancer({
     });
 
   async function enhanceOne(id: string) {
-    const currentPrompt = prompt.trim() || DEFAULT_IMAGE_ENHANCE_PROMPT;
+    const currentPrompt = effectivePrompt;
     const currentPromptTitle = promptTitle.trim();
     setItems((prev) =>
       prev.map((item) =>
@@ -228,6 +348,7 @@ export function VisualsImageEnhancer({
           prompt: currentPrompt,
           fileName: item.file.name,
           promptGalleryId: selectedPromptGalleryId ?? undefined,
+          styleConfig,
         }),
       });
 
@@ -301,7 +422,7 @@ export function VisualsImageEnhancer({
 
   async function savePromptResult(item: PendingImage) {
     if (!item.outputUrl) return;
-    const trimmedPrompt = (item.promptUsed ?? prompt).trim();
+    const trimmedPrompt = (item.promptUsed ?? effectivePrompt).trim();
     const trimmedTitle = (item.promptTitleUsed ?? promptTitle).trim();
     if (!trimmedPrompt) {
       setGlobalError("Escribe un prompt antes de guardarlo en la galeria.");
@@ -321,6 +442,7 @@ export function VisualsImageEnhancer({
         body: JSON.stringify({
           title: trimmedTitle,
           prompt: trimmedPrompt,
+          styleConfig,
           previewImageDataUrl: item.outputUrl,
         }),
       });
@@ -349,7 +471,7 @@ export function VisualsImageEnhancer({
   }
 
   async function savePromptOnly() {
-    const trimmedPrompt = prompt.trim();
+    const trimmedPrompt = effectivePrompt.trim();
     const trimmedTitle = promptTitle.trim();
     if (!trimmedPrompt) {
       setGlobalError("Escribe un prompt para guardarlo.");
@@ -369,6 +491,7 @@ export function VisualsImageEnhancer({
         body: JSON.stringify({
           title: trimmedTitle,
           prompt: trimmedPrompt,
+          styleConfig,
         }),
       });
       const responseText = await response.text();
@@ -439,16 +562,272 @@ export function VisualsImageEnhancer({
           </div>
         </div>
 
+        {/* Style selector */}
+        <div className="mt-6 rounded-2xl border border-border bg-muted/20 p-4 sm:p-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold text-foreground">Estilo</p>
+              <p className="text-xs text-muted-foreground">Elige un preset o ajusta opciones. El prompt se genera automáticamente.</p>
+            </div>
+            <div className="inline-flex rounded-full border border-border bg-background p-1">
+              <button
+                type="button"
+                onClick={() => setStyleTab("presets")}
+                className={cn(
+                  "rounded-full px-3 py-1 text-xs font-semibold transition",
+                  styleTab === "presets" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                Presets
+              </button>
+              <button
+                type="button"
+                onClick={() => setStyleTab("builder")}
+                className={cn(
+                  "rounded-full px-3 py-1 text-xs font-semibold transition",
+                  styleTab === "builder" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                Personalizado
+              </button>
+            </div>
+          </div>
+
+          {styleTab === "presets" ? (
+            <div className="mt-4 space-y-6">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Menoo presets</p>
+                <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {GLOBAL_PRESETS.map((preset) => {
+                    const selected = selectedGlobalPresetId === preset.id && !selectedPromptGalleryId;
+                    return (
+                      <button
+                        key={preset.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedGlobalPresetId(preset.id);
+                          setSelectedPromptGalleryId(null);
+                          setPromptEditMode(false);
+                          setPromptTitle(preset.title);
+                          setStyleConfig(preset.config);
+                          setPrompt("");
+                        }}
+                        className={cn(
+                          "rounded-2xl border p-3 text-left transition",
+                          selected ? "border-primary bg-primary/5" : "border-border bg-background hover:border-primary/40",
+                        )}
+                      >
+                        <div className="flex items-center justify-between gap-3">
+                          <p className="text-sm font-semibold text-foreground">{preset.title}</p>
+                          <span className={cn(
+                            "rounded-full px-2 py-0.5 text-[10px] font-semibold",
+                            selected ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground",
+                          )}>
+                            {selected ? "Activo" : "Usar"}
+                          </span>
+                        </div>
+                        <div className="mt-2 flex flex-wrap gap-1">
+                          <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">Fons: {labelBackground(preset.config.background)}</span>
+                          <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">Llum: {labelLighting(preset.config.lighting)}</span>
+                          <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">Angle: {labelPerspective(preset.config.perspective)}</span>
+                        </div>
+                        <div className="mt-3">
+                          {preset.previewImageDataUrl ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={preset.previewImageDataUrl} alt="" className="h-24 w-full rounded-xl border border-border object-cover" />
+                          ) : (
+                            <div className="flex h-24 w-full items-center justify-center rounded-xl border border-dashed border-border bg-muted/30 text-xs font-medium text-muted-foreground">
+                              Preview próximamente
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tus presets</p>
+                  <Button type="button" variant="ghost" className="h-8 rounded-full text-xs" onClick={() => setStyleTab("builder")}>Editar</Button>
+                </div>
+                {promptGallery.length === 0 ? (
+                  <div className="mt-3 rounded-xl border border-dashed border-border bg-muted/30 p-4 text-xs text-muted-foreground">
+                    Todavía no has guardado presets. Ajusta el estilo y pulsa “Guardar preset”.
+                  </div>
+                ) : (
+                  <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {promptGallery.map((preset) => {
+                      const selected = selectedPromptGalleryId === preset.id;
+                      return (
+                        <button
+                          key={preset.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedGlobalPresetId(null);
+                            setSelectedPromptGalleryId(preset.id);
+                            setPromptTitle(preset.title);
+                            setPromptEditMode(false);
+
+                            if (preset.styleConfig) {
+                              setStyleConfig(preset.styleConfig as VisualStyleConfig);
+                              setPrompt("");
+                            } else {
+                              setStyleConfig(DEFAULT_STYLE_CONFIG);
+                              setPrompt(preset.prompt);
+                              setPromptEditMode(true);
+                            }
+                          }}
+                          className={cn(
+                            "rounded-2xl border p-3 text-left transition",
+                            selected ? "border-primary bg-primary/5" : "border-border bg-background hover:border-primary/40",
+                          )}
+                        >
+                          <div className="flex items-center justify-between gap-3">
+                            <p className="text-sm font-semibold text-foreground">{preset.title}</p>
+                            <span className={cn(
+                              "rounded-full px-2 py-0.5 text-[10px] font-semibold",
+                              selected ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground",
+                            )}>
+                              {selected ? "Activo" : "Usar"}
+                            </span>
+                          </div>
+                          <div className="mt-3">
+                            {preset.previewImageDataUrl ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img src={preset.previewImageDataUrl} alt="" className="h-24 w-full rounded-xl border border-border object-cover" />
+                            ) : (
+                              <div className="flex h-24 w-full items-center justify-center rounded-xl border border-dashed border-border bg-muted/30 text-xs font-medium text-muted-foreground">
+                                Preview próximamente
+                              </div>
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <label className="space-y-1">
+                <span className="text-xs font-semibold text-muted-foreground">Fons</span>
+                <select
+                  value={styleConfig.background}
+                  onChange={(e) => {
+                    setStyleConfig((prev) => ({ ...prev, background: e.target.value as BackgroundStyle }));
+                    setSelectedGlobalPresetId(null);
+                    setSelectedPromptGalleryId(null);
+                    setPromptEditMode(false);
+                  }}
+                  className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                >
+                  <option value="neutral">Net neutre</option>
+                  <option value="bokeh">Restaurant subtil (bokeh)</option>
+                  <option value="dark">Fosc elegant</option>
+                  <option value="keep">Respecta fons original</option>
+                </select>
+              </label>
+
+              <label className="space-y-1">
+                <span className="text-xs font-semibold text-muted-foreground">Llum</span>
+                <select
+                  value={styleConfig.lighting}
+                  onChange={(e) => {
+                    setStyleConfig((prev) => ({ ...prev, lighting: e.target.value as LightingStyle }));
+                    setSelectedGlobalPresetId(null);
+                    setSelectedPromptGalleryId(null);
+                    setPromptEditMode(false);
+                  }}
+                  className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                >
+                  <option value="natural">Natural suau</option>
+                  <option value="studio">Estudi (softbox)</option>
+                  <option value="moody">Moody (low‑key)</option>
+                  <option value="bright">Bright (high‑key)</option>
+                </select>
+              </label>
+
+              <label className="space-y-1">
+                <span className="text-xs font-semibold text-muted-foreground">Perspectiva</span>
+                <select
+                  value={styleConfig.perspective}
+                  onChange={(e) => {
+                    setStyleConfig((prev) => ({ ...prev, perspective: e.target.value as PerspectiveStyle }));
+                    setSelectedGlobalPresetId(null);
+                    setSelectedPromptGalleryId(null);
+                    setPromptEditMode(false);
+                  }}
+                  className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                >
+                  <option value="angle_45">45° clàssic</option>
+                  <option value="top_down">Zenital (top‑down)</option>
+                  <option value="table_level">A nivell de taula</option>
+                </select>
+              </label>
+
+              <label className="space-y-1">
+                <span className="text-xs font-semibold text-muted-foreground">Càmera</span>
+                <select
+                  value={styleConfig.camera}
+                  onChange={(e) => {
+                    setStyleConfig((prev) => ({ ...prev, camera: e.target.value as CameraStyle }));
+                    setSelectedGlobalPresetId(null);
+                    setSelectedPromptGalleryId(null);
+                    setPromptEditMode(false);
+                  }}
+                  className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                >
+                  <option value="smartphone">Smartphone premium</option>
+                  <option value="dslr">DSLR editorial</option>
+                  <option value="macro">Macro (textura)</option>
+                </select>
+              </label>
+
+              <div className="flex flex-col gap-2 sm:col-span-2">
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={styleConfig.textureBoost}
+                    onChange={(e) => {
+                      setStyleConfig((prev) => ({ ...prev, textureBoost: e.target.checked }));
+                      setSelectedGlobalPresetId(null);
+                      setSelectedPromptGalleryId(null);
+                      setPromptEditMode(false);
+                    }}
+                  />
+                  <span className="text-sm text-foreground">Millora textura (sense canviar ingredients)</span>
+                </label>
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={styleConfig.consistentMenu}
+                    onChange={(e) => {
+                      setStyleConfig((prev) => ({ ...prev, consistentMenu: e.target.checked }));
+                      setSelectedGlobalPresetId(null);
+                      setSelectedPromptGalleryId(null);
+                      setPromptEditMode(false);
+                    }}
+                  />
+                  <span className="text-sm text-foreground">Mantén coherència entre plats del menú</span>
+                </label>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Save preset */}
         <div className="mt-5 space-y-2">
-          <label className="text-sm font-medium text-foreground">Titulo del prompt</label>
+          <label className="text-sm font-medium text-foreground">Título del preset</label>
           <input
             value={promptTitle}
             onChange={(event) => {
               setPromptTitle(event.target.value);
-              setSelectedPromptGalleryId(null);
             }}
             className="w-full rounded-2xl border border-input bg-muted px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none"
-            placeholder="Ej: Fotos premium luz natural"
+            placeholder="Ej: Natural Modern (mi carta)"
             disabled={anyEnhancing || savingPromptOnly}
           />
         </div>
@@ -461,22 +840,54 @@ export function VisualsImageEnhancer({
             onClick={() => void savePromptOnly()}
             disabled={anyEnhancing || savingPromptOnly}
           >
-            {savingPromptOnly ? "Guardando..." : "Guardar prompt sin imagen"}
+            {savingPromptOnly ? "Guardando..." : "Guardar preset"}
           </Button>
         </div>
 
+        {/* Prompt (advanced) */}
         <div className="mt-5 space-y-2">
-          <label className="text-sm font-medium text-foreground">Prompt</label>
+          <div className="flex items-center justify-between gap-3">
+            <label className="text-sm font-medium text-foreground">Prompt generado (avanzado)</label>
+            <div className="flex gap-2">
+              {promptEditMode ? (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="h-8 rounded-full text-xs"
+                  onClick={() => {
+                    setPromptEditMode(false);
+                    setPrompt("");
+                  }}
+                >
+                  Revertir
+                </Button>
+              ) : null}
+              <Button
+                type="button"
+                variant="ghost"
+                className="h-8 rounded-full text-xs"
+                onClick={() => {
+                  setPromptEditMode(true);
+                  setPrompt(generatedPrompt);
+                }}
+              >
+                {promptEditMode ? "Editando" : "Editar prompt"}
+              </Button>
+            </div>
+          </div>
+
           <textarea
-            value={prompt}
+            value={promptEditMode ? prompt : generatedPrompt}
             onChange={(event) => {
               setPrompt(event.target.value);
+              setPromptEditMode(true);
+              setSelectedGlobalPresetId(null);
               setSelectedPromptGalleryId(null);
             }}
             rows={4}
             className="w-full rounded-2xl border border-input bg-muted px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none"
-            placeholder="Describe cómo quieres mejorar las fotos..."
-            disabled={anyEnhancing}
+            placeholder="El prompt se genera automáticamente..."
+            disabled={anyEnhancing || !promptEditMode}
           />
         </div>
 

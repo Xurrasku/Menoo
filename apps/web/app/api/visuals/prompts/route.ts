@@ -6,9 +6,14 @@ import { restaurants, visualPromptGallery } from "@/db/schema";
 import { getServerUser } from "@/lib/auth/server";
 import { db } from "@/lib/db";
 
+const styleConfigSchema = z
+  .record(z.string(), z.unknown())
+  .optional();
+
 const createPromptSchema = z.object({
   title: z.string().trim().min(1, "Title is required").max(120, "Title is too long"),
   prompt: z.string().trim().min(1, "Prompt is required"),
+  styleConfig: styleConfigSchema,
   previewImageDataUrl: z.string().min(1).optional(),
   sourceAssetId: z.string().uuid().optional(),
 });
@@ -44,6 +49,7 @@ export async function GET() {
       id: visualPromptGallery.id,
       title: visualPromptGallery.title,
       prompt: visualPromptGallery.prompt,
+      styleConfig: visualPromptGallery.styleConfig,
       previewImageDataUrl: visualPromptGallery.previewImageDataUrl,
       sourceAssetId: visualPromptGallery.sourceAssetId,
       createdAt: visualPromptGallery.createdAt,
@@ -59,6 +65,7 @@ export async function GET() {
         id: entry.id,
         title: entry.title,
         prompt: entry.prompt,
+        styleConfig: entry.styleConfig,
         previewImageDataUrl: entry.previewImageDataUrl,
         sourceAssetId: entry.sourceAssetId,
         createdAt: entry.createdAt.toISOString(),
@@ -97,6 +104,7 @@ export async function POST(request: NextRequest) {
       restaurantId,
       title: parsed.data.title,
       prompt: parsed.data.prompt,
+      styleConfig: parsed.data.styleConfig ?? null,
       previewImageDataUrl: parsed.data.previewImageDataUrl ?? null,
       sourceAssetId: parsed.data.sourceAssetId ?? null,
     })
@@ -104,6 +112,7 @@ export async function POST(request: NextRequest) {
       id: visualPromptGallery.id,
       title: visualPromptGallery.title,
       prompt: visualPromptGallery.prompt,
+      styleConfig: visualPromptGallery.styleConfig,
       previewImageDataUrl: visualPromptGallery.previewImageDataUrl,
       sourceAssetId: visualPromptGallery.sourceAssetId,
       createdAt: visualPromptGallery.createdAt,
@@ -115,6 +124,7 @@ export async function POST(request: NextRequest) {
         id: created.id,
         title: created.title,
         prompt: created.prompt,
+        styleConfig: created.styleConfig,
         previewImageDataUrl: created.previewImageDataUrl,
         sourceAssetId: created.sourceAssetId,
         createdAt: created.createdAt.toISOString(),

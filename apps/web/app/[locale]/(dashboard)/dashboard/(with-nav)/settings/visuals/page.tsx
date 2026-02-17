@@ -25,6 +25,7 @@ export default async function VisualsPage({ params }: VisualsPageProps) {
     id: string;
     title: string;
     prompt: string;
+    styleConfig: Record<string, unknown> | null;
     previewImageDataUrl: string | null;
     sourceAssetId: string | null;
     createdAt: string;
@@ -62,6 +63,7 @@ export default async function VisualsPage({ params }: VisualsPageProps) {
           id: visualPromptGallery.id,
           title: visualPromptGallery.title,
           prompt: visualPromptGallery.prompt,
+          styleConfig: visualPromptGallery.styleConfig,
           previewImageDataUrl: visualPromptGallery.previewImageDataUrl,
           sourceAssetId: visualPromptGallery.sourceAssetId,
           createdAt: visualPromptGallery.createdAt,
@@ -75,6 +77,7 @@ export default async function VisualsPage({ params }: VisualsPageProps) {
         id: entry.id,
         title: entry.title,
         prompt: entry.prompt,
+        styleConfig: (entry.styleConfig ?? null) as Record<string, unknown> | null,
         previewImageDataUrl: entry.previewImageDataUrl,
         sourceAssetId: entry.sourceAssetId,
         createdAt: entry.createdAt.toISOString(),
