@@ -58,26 +58,54 @@ export default async function VisualsPage({ params }: VisualsPageProps) {
         createdAt: asset.createdAt.toISOString(),
       }));
 
-      const prompts = await db
-        .select({
-          id: visualPromptGallery.id,
-          title: visualPromptGallery.title,
-          prompt: visualPromptGallery.prompt,
-          styleConfig: visualPromptGallery.styleConfig,
-          previewImageDataUrl: visualPromptGallery.previewImageDataUrl,
-          sourceAssetId: visualPromptGallery.sourceAssetId,
-          createdAt: visualPromptGallery.createdAt,
-        })
-        .from(visualPromptGallery)
-        .where(eq(visualPromptGallery.restaurantId, restaurant.id))
-        .orderBy(desc(visualPromptGallery.createdAt))
-        .limit(30);
+      let prompts: Array<{
+        id: string;
+        title: string;
+        prompt: string;
+        styleConfig?: unknown;
+        previewImageDataUrl: string | null;
+        sourceAssetId: string | null;
+        createdAt: Date;
+      }> = [];
+
+      try {
+        prompts = await db
+          .select({
+            id: visualPromptGallery.id,
+            title: visualPromptGallery.title,
+            prompt: visualPromptGallery.prompt,
+            styleConfig: visualPromptGallery.styleConfig,
+            previewImageDataUrl: visualPromptGallery.previewImageDataUrl,
+            sourceAssetId: visualPromptGallery.sourceAssetId,
+            createdAt: visualPromptGallery.createdAt,
+          })
+          .from(visualPromptGallery)
+          .where(eq(visualPromptGallery.restaurantId, restaurant.id))
+          .orderBy(desc(visualPromptGallery.createdAt))
+          .limit(30);
+      } catch (error) {
+        // Backwards-compatible: DB might not have style_config yet.
+        console.warn("Visual prompts query failed; retrying without styleConfig", error);
+        prompts = await db
+          .select({
+            id: visualPromptGallery.id,
+            title: visualPromptGallery.title,
+            prompt: visualPromptGallery.prompt,
+            previewImageDataUrl: visualPromptGallery.previewImageDataUrl,
+            sourceAssetId: visualPromptGallery.sourceAssetId,
+            createdAt: visualPromptGallery.createdAt,
+          })
+          .from(visualPromptGallery)
+          .where(eq(visualPromptGallery.restaurantId, restaurant.id))
+          .orderBy(desc(visualPromptGallery.createdAt))
+          .limit(30);
+      }
 
       initialPromptGallery = prompts.map((entry) => ({
         id: entry.id,
         title: entry.title,
         prompt: entry.prompt,
-        styleConfig: (entry.styleConfig ?? null) as Record<string, unknown> | null,
+        styleConfig: ("styleConfig" in entry ? (entry.styleConfig ?? null) : null) as Record<string, unknown> | null,
         previewImageDataUrl: entry.previewImageDataUrl,
         sourceAssetId: entry.sourceAssetId,
         createdAt: entry.createdAt.toISOString(),

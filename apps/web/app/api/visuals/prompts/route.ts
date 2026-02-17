@@ -44,20 +44,47 @@ export async function GET() {
     return Response.json({ data: [] }, { status: 200 });
   }
 
-  const prompts = await db
-    .select({
-      id: visualPromptGallery.id,
-      title: visualPromptGallery.title,
-      prompt: visualPromptGallery.prompt,
-      styleConfig: visualPromptGallery.styleConfig,
-      previewImageDataUrl: visualPromptGallery.previewImageDataUrl,
-      sourceAssetId: visualPromptGallery.sourceAssetId,
-      createdAt: visualPromptGallery.createdAt,
-    })
-    .from(visualPromptGallery)
-    .where(eq(visualPromptGallery.restaurantId, restaurantId))
-    .orderBy(desc(visualPromptGallery.createdAt))
-    .limit(30);
+  let prompts: Array<{
+    id: string;
+    title: string;
+    prompt: string;
+    styleConfig?: unknown;
+    previewImageDataUrl: string | null;
+    sourceAssetId: string | null;
+    createdAt: Date;
+  }> = [];
+
+  try {
+    prompts = await db
+      .select({
+        id: visualPromptGallery.id,
+        title: visualPromptGallery.title,
+        prompt: visualPromptGallery.prompt,
+        styleConfig: visualPromptGallery.styleConfig,
+        previewImageDataUrl: visualPromptGallery.previewImageDataUrl,
+        sourceAssetId: visualPromptGallery.sourceAssetId,
+        createdAt: visualPromptGallery.createdAt,
+      })
+      .from(visualPromptGallery)
+      .where(eq(visualPromptGallery.restaurantId, restaurantId))
+      .orderBy(desc(visualPromptGallery.createdAt))
+      .limit(30);
+  } catch (error) {
+    console.warn("Visual prompts query failed; retrying without styleConfig", error);
+    prompts = await db
+      .select({
+        id: visualPromptGallery.id,
+        title: visualPromptGallery.title,
+        prompt: visualPromptGallery.prompt,
+        previewImageDataUrl: visualPromptGallery.previewImageDataUrl,
+        sourceAssetId: visualPromptGallery.sourceAssetId,
+        createdAt: visualPromptGallery.createdAt,
+      })
+      .from(visualPromptGallery)
+      .where(eq(visualPromptGallery.restaurantId, restaurantId))
+      .orderBy(desc(visualPromptGallery.createdAt))
+      .limit(30);
+  }
 
   return Response.json(
     {
@@ -65,7 +92,7 @@ export async function GET() {
         id: entry.id,
         title: entry.title,
         prompt: entry.prompt,
-        styleConfig: entry.styleConfig,
+        styleConfig: ("styleConfig" in entry ? (entry.styleConfig ?? null) : null) as Record<string, unknown> | null,
         previewImageDataUrl: entry.previewImageDataUrl,
         sourceAssetId: entry.sourceAssetId,
         createdAt: entry.createdAt.toISOString(),
@@ -98,25 +125,62 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: "Restaurant not configured" }, { status: 409 });
   }
 
-  const [created] = await db
-    .insert(visualPromptGallery)
-    .values({
-      restaurantId,
-      title: parsed.data.title,
-      prompt: parsed.data.prompt,
-      styleConfig: parsed.data.styleConfig ?? null,
-      previewImageDataUrl: parsed.data.previewImageDataUrl ?? null,
-      sourceAssetId: parsed.data.sourceAssetId ?? null,
-    })
-    .returning({
-      id: visualPromptGallery.id,
-      title: visualPromptGallery.title,
-      prompt: visualPromptGallery.prompt,
-      styleConfig: visualPromptGallery.styleConfig,
-      previewImageDataUrl: visualPromptGallery.previewImageDataUrl,
-      sourceAssetId: visualPromptGallery.sourceAssetId,
-      createdAt: visualPromptGallery.createdAt,
-    });
+  let created:
+    | {
+        id: string;
+        title: string;
+        prompt: string;
+        styleConfig?: unknown;
+        previewImageDataUrl: string | null;
+        sourceAssetId: string | null;
+        createdAt: Date;
+      }
+    | undefined;
+
+  try {
+    [created] = await db
+      .insert(visualPromptGallery)
+      .values({
+        restaurantId,
+        title: parsed.data.title,
+        prompt: parsed.data.prompt,
+        styleConfig: parsed.data.styleConfig ?? null,
+        previewImageDataUrl: parsed.data.previewImageDataUrl ?? null,
+        sourceAssetId: parsed.data.sourceAssetId ?? null,
+      })
+      .returning({
+        id: visualPromptGallery.id,
+        title: visualPromptGallery.title,
+        prompt: visualPromptGallery.prompt,
+        styleConfig: visualPromptGallery.styleConfig,
+        previewImageDataUrl: visualPromptGallery.previewImageDataUrl,
+        sourceAssetId: visualPromptGallery.sourceAssetId,
+        createdAt: visualPromptGallery.createdAt,
+      });
+  } catch (error) {
+    console.warn("Visual prompts insert failed; retrying without styleConfig", error);
+    [created] = await db
+      .insert(visualPromptGallery)
+      .values({
+        restaurantId,
+        title: parsed.data.title,
+        prompt: parsed.data.prompt,
+        previewImageDataUrl: parsed.data.previewImageDataUrl ?? null,
+        sourceAssetId: parsed.data.sourceAssetId ?? null,
+      })
+      .returning({
+        id: visualPromptGallery.id,
+        title: visualPromptGallery.title,
+        prompt: visualPromptGallery.prompt,
+        previewImageDataUrl: visualPromptGallery.previewImageDataUrl,
+        sourceAssetId: visualPromptGallery.sourceAssetId,
+        createdAt: visualPromptGallery.createdAt,
+      });
+  }
+
+  if (!created) {
+    return Response.json({ error: "Unable to save preset." }, { status: 500 });
+  }
 
   return Response.json(
     {
@@ -124,7 +188,7 @@ export async function POST(request: NextRequest) {
         id: created.id,
         title: created.title,
         prompt: created.prompt,
-        styleConfig: created.styleConfig,
+        styleConfig: ("styleConfig" in created ? (created.styleConfig ?? null) : null) as Record<string, unknown> | null,
         previewImageDataUrl: created.previewImageDataUrl,
         sourceAssetId: created.sourceAssetId,
         createdAt: created.createdAt.toISOString(),
