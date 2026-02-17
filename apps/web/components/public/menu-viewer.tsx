@@ -49,9 +49,13 @@ function CategoryDishes({ category }: { category: RestaurantMenuDetail["categori
 
   return (
     <div className="flex flex-col gap-[2.5%] sm:gap-4">
-      {visibleDishes.map((dish) => (
-        <article key={dish.id} className="flex gap-[3%] pb-[3.5%] last:pb-0 sm:gap-5 sm:pb-6">
-          <div className="min-w-0 flex-1">
+      {visibleDishes.map((dish) => {
+        const thumbnail = dish.thumbnail?.trim();
+        const hasImage = Boolean(thumbnail) && (thumbnail!.startsWith("data:image") || thumbnail!.startsWith("http"));
+
+        return (
+          <article key={dish.id} className="flex gap-[3%] pb-[3.5%] last:pb-0 sm:gap-5 sm:pb-6">
+            <div className="min-w-0 flex-1">
             <div className="mb-[1%] flex items-baseline justify-between gap-[3%] sm:mb-1.5">
               <h3 className="font-display text-[3.2vw] font-bold leading-tight tracking-tight text-[#1a1a1a] sm:text-lg">
                 {dish.name}
@@ -82,9 +86,19 @@ function CategoryDishes({ category }: { category: RestaurantMenuDetail["categori
                 Alérgenos: {dish.allergens.join(", ")}
               </p>
             ) : null}
-          </div>
-        </article>
-      ))}
+            </div>
+
+            {hasImage ? (
+              <div className="flex-shrink-0">
+                <div className="h-[18vw] w-[18vw] overflow-hidden rounded-2xl border border-[#e5e5e5] bg-[#f5f5f5] sm:h-24 sm:w-24">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={thumbnail!} alt="" className="h-full w-full object-cover" />
+                </div>
+              </div>
+            ) : null}
+          </article>
+        );
+      })}
     </div>
   );
 }
