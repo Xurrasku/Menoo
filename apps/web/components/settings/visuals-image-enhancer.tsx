@@ -20,12 +20,44 @@ type PendingImage = {
   status: "idle" | "enhancing" | "done" | "error";
   error?: string;
   outputUrl?: string;
+  promptUsed?: string;
+  promptTitleUsed?: string;
 };
 
-export function VisualsImageEnhancer() {
+type GalleryImage = {
+  id: string;
+  imageDataUrl: string;
+  originalFileName: string | null;
+  createdAt: string;
+};
+
+type PromptGalleryItem = {
+  id: string;
+  title: string;
+  prompt: string;
+  previewImageDataUrl: string | null;
+  sourceAssetId: string | null;
+  createdAt: string;
+};
+
+type VisualsImageEnhancerProps = {
+  initialGallery?: GalleryImage[];
+  initialPromptGallery?: PromptGalleryItem[];
+};
+
+export function VisualsImageEnhancer({
+  initialGallery = [],
+  initialPromptGallery = [],
+}: VisualsImageEnhancerProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [prompt, setPrompt] = useState(DEFAULT_IMAGE_ENHANCE_PROMPT);
+  const [promptTitle, setPromptTitle] = useState("");
+  const [selectedPromptGalleryId, setSelectedPromptGalleryId] = useState<string | null>(null);
   const [items, setItems] = useState<PendingImage[]>([]);
+  const [gallery, setGallery] = useState<GalleryImage[]>(initialGallery);
+  const [promptGallery, setPromptGallery] = useState<PromptGalleryItem[]>(initialPromptGallery);
+  const [savingPromptItemId, setSavingPromptItemId] = useState<string | null>(null);
+  const [savingPromptOnly, setSavingPromptOnly] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [globalError, setGlobalError] = useState<string | null>(null);
 
@@ -166,8 +198,20 @@ export function VisualsImageEnhancer() {
     });
 
   async function enhanceOne(id: string) {
+    const currentPrompt = prompt.trim() || DEFAULT_IMAGE_ENHANCE_PROMPT;
+    const currentPromptTitle = promptTitle.trim();
     setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, status: "enhancing", error: undefined } : item))
+      prev.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              status: "enhancing",
+              error: undefined,
+              promptUsed: currentPrompt,
+              promptTitleUsed: currentPromptTitle,
+            }
+          : item
+      )
     );
 
     const item = items.find((it) => it.id === id);
@@ -178,15 +222,39 @@ export function VisualsImageEnhancer() {
       const response = await fetch("/api/ai/image-enhance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: dataUrl, mimeType, prompt: prompt.trim() || undefined }),
+        body: JSON.stringify({
+          image: dataUrl,
+          mimeType,
+          prompt: currentPrompt,
+          fileName: item.file.name,
+          promptGalleryId: selectedPromptGalleryId ?? undefined,
+        }),
       });
 
-      const payload = (await response.json().catch(() => null)) as
-        | { data?: { output?: string }; error?: string }
-        | null;
+      const responseText = await response.text();
+      let payload: {
+        data?: {
+          output?: string;
+          savedAsset?: GalleryImage | null;
+        };
+        error?: string;
+      } | null = null;
+      try {
+        payload = JSON.parse(responseText) as {
+          data?: {
+            output?: string;
+            savedAsset?: GalleryImage | null;
+          };
+          error?: string;
+        };
+      } catch {
+        payload = null;
+      }
 
       if (!response.ok) {
-        throw new Error(payload?.error ?? "Enhance request failed");
+        const fallback = responseText.trim().slice(0, 240);
+        const details = payload?.error || fallback;
+        throw new Error(details ? `Enhance request failed (${response.status}): ${details}` : `Enhance request failed (${response.status})`);
       }
       if (!payload?.data?.output) {
         throw new Error("Invalid response");
@@ -197,6 +265,24 @@ export function VisualsImageEnhancer() {
           it.id === id ? { ...it, status: "done", outputUrl: payload.data!.output } : it
         )
       );
+
+      if (payload.data.savedAsset) {
+        const savedAsset = payload.data.savedAsset;
+        setGallery((prev) => [savedAsset, ...prev.filter((entry) => entry.id !== savedAsset.id)]);
+        if (selectedPromptGalleryId) {
+          setPromptGallery((prev) =>
+            prev.map((entry) =>
+              entry.id === selectedPromptGalleryId && !entry.previewImageDataUrl
+                ? {
+                    ...entry,
+                    previewImageDataUrl: savedAsset.imageDataUrl,
+                    sourceAssetId: savedAsset.id,
+                  }
+                : entry
+            )
+          );
+        }
+      }
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unable to enhance image.";
       setItems((prev) => prev.map((it) => (it.id === id ? { ...it, status: "error", error: message } : it)));
@@ -210,6 +296,102 @@ export function VisualsImageEnhancer() {
       if (item.status === "enhancing") continue;
       if (item.status === "done") continue;
         await enhanceOne(item.id);
+    }
+  }
+
+  async function savePromptResult(item: PendingImage) {
+    if (!item.outputUrl) return;
+    const trimmedPrompt = (item.promptUsed ?? prompt).trim();
+    const trimmedTitle = (item.promptTitleUsed ?? promptTitle).trim();
+    if (!trimmedPrompt) {
+      setGlobalError("Escribe un prompt antes de guardarlo en la galeria.");
+      return;
+    }
+    if (!trimmedTitle) {
+      setGlobalError("Pon un titulo para guardar el prompt.");
+      return;
+    }
+
+    setSavingPromptItemId(item.id);
+    setGlobalError(null);
+    try {
+      const response = await fetch("/api/visuals/prompts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: trimmedTitle,
+          prompt: trimmedPrompt,
+          previewImageDataUrl: item.outputUrl,
+        }),
+      });
+
+      const responseText = await response.text();
+      let payload: { data?: PromptGalleryItem; error?: string } | null = null;
+      try {
+        payload = JSON.parse(responseText) as { data?: PromptGalleryItem; error?: string };
+      } catch {
+        payload = null;
+      }
+
+      if (!response.ok || !payload?.data) {
+        const fallback = payload?.error ?? responseText.slice(0, 220) ?? "Unable to save prompt.";
+        throw new Error(fallback);
+      }
+
+      const savedPrompt = payload.data;
+      setPromptGallery((prev) => [savedPrompt, ...prev.filter((entry) => entry.id !== savedPrompt.id)]);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unable to save prompt.";
+      setGlobalError(message);
+    } finally {
+      setSavingPromptItemId(null);
+    }
+  }
+
+  async function savePromptOnly() {
+    const trimmedPrompt = prompt.trim();
+    const trimmedTitle = promptTitle.trim();
+    if (!trimmedPrompt) {
+      setGlobalError("Escribe un prompt para guardarlo.");
+      return;
+    }
+    if (!trimmedTitle) {
+      setGlobalError("Pon un titulo para guardar el prompt.");
+      return;
+    }
+
+    setSavingPromptOnly(true);
+    setGlobalError(null);
+    try {
+      const response = await fetch("/api/visuals/prompts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: trimmedTitle,
+          prompt: trimmedPrompt,
+        }),
+      });
+      const responseText = await response.text();
+      let payload: { data?: PromptGalleryItem; error?: string } | null = null;
+      try {
+        payload = JSON.parse(responseText) as { data?: PromptGalleryItem; error?: string };
+      } catch {
+        payload = null;
+      }
+
+      if (!response.ok || !payload?.data) {
+        const fallback = payload?.error ?? responseText.slice(0, 220) ?? "Unable to save prompt.";
+        throw new Error(fallback);
+      }
+
+      const savedPrompt = payload.data;
+      setPromptGallery((prev) => [savedPrompt, ...prev.filter((entry) => entry.id !== savedPrompt.id)]);
+      setSelectedPromptGalleryId(savedPrompt.id);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unable to save prompt.";
+      setGlobalError(message);
+    } finally {
+      setSavingPromptOnly(false);
     }
   }
 
@@ -258,10 +440,39 @@ export function VisualsImageEnhancer() {
         </div>
 
         <div className="mt-5 space-y-2">
+          <label className="text-sm font-medium text-foreground">Titulo del prompt</label>
+          <input
+            value={promptTitle}
+            onChange={(event) => {
+              setPromptTitle(event.target.value);
+              setSelectedPromptGalleryId(null);
+            }}
+            className="w-full rounded-2xl border border-input bg-muted px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none"
+            placeholder="Ej: Fotos premium luz natural"
+            disabled={anyEnhancing || savingPromptOnly}
+          />
+        </div>
+
+        <div className="mt-3 flex justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            className="rounded-full"
+            onClick={() => void savePromptOnly()}
+            disabled={anyEnhancing || savingPromptOnly}
+          >
+            {savingPromptOnly ? "Guardando..." : "Guardar prompt sin imagen"}
+          </Button>
+        </div>
+
+        <div className="mt-5 space-y-2">
           <label className="text-sm font-medium text-foreground">Prompt</label>
           <textarea
             value={prompt}
-            onChange={(event) => setPrompt(event.target.value)}
+            onChange={(event) => {
+              setPrompt(event.target.value);
+              setSelectedPromptGalleryId(null);
+            }}
             rows={4}
             className="w-full rounded-2xl border border-input bg-muted px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none"
             placeholder="Describe cómo quieres mejorar las fotos..."
@@ -328,13 +539,25 @@ export function VisualsImageEnhancer() {
 
                       <div className="flex gap-1">
                         {item.outputUrl ? (
-                          <a
-                            href={item.outputUrl}
-                            download={`enhanced-${item.file.name.replace(/\.[^.]+$/, "")}.png`}
-                            className="rounded-full border border-border bg-background px-3 py-1 text-xs font-semibold text-foreground hover:bg-muted"
-                          >
-                            Descargar
-                          </a>
+                          <>
+                            <a
+                              href={item.outputUrl}
+                              download={`enhanced-${item.file.name.replace(/\.[^.]+$/, "")}.png`}
+                              className="rounded-full border border-border bg-background px-3 py-1 text-xs font-semibold text-foreground hover:bg-muted"
+                            >
+                              Descargar
+                            </a>
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="outline"
+                              className="rounded-full"
+                              onClick={() => void savePromptResult(item)}
+                              disabled={savingPromptItemId === item.id || anyEnhancing}
+                            >
+                              {savingPromptItemId === item.id ? "Guardando..." : "Guardar prompt"}
+                            </Button>
+                          </>
                         ) : null}
                         <Button
                           type="button"
@@ -387,6 +610,84 @@ export function VisualsImageEnhancer() {
             </div>
           ) : null}
         </div>
+      </div>
+
+      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
+        <div className="space-y-1">
+          <h3 className="text-lg font-semibold text-foreground">Galeria</h3>
+          <p className="text-sm text-muted-foreground">
+            Aqui se guardan automaticamente las fotos mejoradas.
+          </p>
+        </div>
+
+        {gallery.length === 0 ? (
+          <p className="mt-4 text-sm text-muted-foreground">
+            Todavia no hay imagenes guardadas.
+          </p>
+        ) : (
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {gallery.map((asset) => (
+              <div key={asset.id} className="rounded-xl border border-border bg-muted/30 p-2">
+                <div className="relative aspect-square overflow-hidden rounded-lg border border-border bg-muted">
+                  <img src={asset.imageDataUrl} alt="" className="h-full w-full object-cover" />
+                </div>
+                <div className="mt-2 min-w-0">
+                  <p className="truncate text-xs font-medium text-foreground">
+                    {asset.originalFileName || "Imagen mejorada"}
+                  </p>
+                  <p className="text-[11px] text-muted-foreground">
+                    {new Date(asset.createdAt).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
+        <div className="space-y-1">
+          <h3 className="text-lg font-semibold text-foreground">Galeria de prompts</h3>
+          <p className="text-sm text-muted-foreground">
+            Guarda los prompts que te funcionen y pulsa uno para reutilizarlo.
+          </p>
+        </div>
+
+        {promptGallery.length === 0 ? (
+          <p className="mt-4 text-sm text-muted-foreground">
+            Aun no has guardado prompts.
+          </p>
+        ) : (
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {promptGallery.map((entry) => (
+              <button
+                key={entry.id}
+                type="button"
+                onClick={() => {
+                  setPrompt(entry.prompt);
+                  setPromptTitle(entry.title);
+                  setSelectedPromptGalleryId(entry.id);
+                }}
+                className="rounded-xl border border-border bg-muted/30 p-3 text-left transition hover:border-primary/50 hover:bg-primary/5"
+              >
+                {entry.previewImageDataUrl ? (
+                  <div className="relative mb-2 aspect-[4/3] overflow-hidden rounded-lg border border-border bg-muted">
+                    <img src={entry.previewImageDataUrl} alt="" className="h-full w-full object-cover" />
+                  </div>
+                ) : (
+                  <div className="mb-2 flex aspect-[4/3] items-center justify-center rounded-lg border border-dashed border-border bg-muted text-xs text-muted-foreground">
+                    Sin imagen asociada
+                  </div>
+                )}
+                <p className="truncate text-xs font-semibold text-foreground">{entry.title}</p>
+                <p className="line-clamp-3 text-xs font-medium text-foreground">{entry.prompt}</p>
+                <p className="mt-1 text-[11px] text-muted-foreground">
+                  {new Date(entry.createdAt).toLocaleString()}
+                </p>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

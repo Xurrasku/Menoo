@@ -8,6 +8,7 @@ const withNextIntl = createNextIntlPlugin({
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   typedRoutes: true,
+  serverExternalPackages: ["sharp"],
   images: {
     remotePatterns: [
       {

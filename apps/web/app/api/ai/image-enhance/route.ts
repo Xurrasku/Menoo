@@ -1,14 +1,18 @@
 import { NextRequest } from "next/server";
+import { and, eq, isNull } from "drizzle-orm";
 import { z } from "zod";
 
 import { generateImageEnhancement } from "@/ai/image-enhance";
+import { restaurants, visualAssets, visualPromptGallery } from "@/db/schema";
 import { getServerUser } from "@/lib/auth/server";
-import { applyLogoWatermarkToDataUrl } from "@/lib/images/watermark";
+import { db } from "@/lib/db";
 
 const requestSchema = z.object({
   image: z.string().min(1, "Image data is required"),
   mimeType: z.string().optional(),
   prompt: z.string().trim().min(1).optional(),
+  fileName: z.string().trim().min(1).max(255).optional(),
+  promptGalleryId: z.string().uuid().optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -26,9 +30,66 @@ export async function POST(request: NextRequest) {
       prompt: result.data.prompt,
     });
 
-    let outputDataUrl = output.toDataUrl();
-    if (!user) {
-      outputDataUrl = await applyLogoWatermarkToDataUrl(outputDataUrl);
+    const outputDataUrl = output.toDataUrl();
+    // NOTE: Watermarking was disabled here to avoid sharp/libvips resolution
+    // issues in local dev bundling. Authenticated dashboard users are the
+    // primary path for this endpoint.
+    let savedAsset: {
+      id: string;
+      imageDataUrl: string;
+      originalFileName: string | null;
+      createdAt: string;
+    } | null = null;
+
+    if (user && db) {
+      const [restaurant] = await db
+        .select({ id: restaurants.id })
+        .from(restaurants)
+        .where(eq(restaurants.ownerUserId, user.id))
+        .limit(1);
+
+      if (restaurant) {
+        const [asset] = await db
+          .insert(visualAssets)
+          .values({
+            restaurantId: restaurant.id,
+            imageDataUrl: outputDataUrl,
+            originalFileName: result.data.fileName ?? null,
+            prompt: result.data.prompt ?? null,
+          })
+          .returning({
+            id: visualAssets.id,
+            imageDataUrl: visualAssets.imageDataUrl,
+            originalFileName: visualAssets.originalFileName,
+            createdAt: visualAssets.createdAt,
+          });
+
+        if (asset) {
+          savedAsset = {
+            id: asset.id,
+            imageDataUrl: asset.imageDataUrl,
+            originalFileName: asset.originalFileName,
+            createdAt: asset.createdAt.toISOString(),
+          };
+
+          if (result.data.promptGalleryId) {
+            await db
+              .update(visualPromptGallery)
+              .set({
+                previewImageDataUrl: asset.imageDataUrl,
+                sourceAssetId: asset.id,
+                updatedAt: new Date(),
+              })
+              .where(
+                and(
+                  eq(visualPromptGallery.id, result.data.promptGalleryId),
+                  eq(visualPromptGallery.restaurantId, restaurant.id),
+                  isNull(visualPromptGallery.previewImageDataUrl),
+                ),
+              );
+          }
+        }
+      }
     }
 
     const jobId = typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -41,6 +102,7 @@ export async function POST(request: NextRequest) {
           jobId,
           status: "completed",
           output: outputDataUrl,
+          savedAsset,
         },
       },
       { status: 200 }

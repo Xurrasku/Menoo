@@ -48,6 +48,8 @@ export const restaurants = pgTable("restaurants", {
 
 export const restaurantsRelations = relations(restaurants, ({ many, one }) => ({
   menus: many(menus),
+  visualAssets: many(visualAssets),
+  visualPromptGallery: many(visualPromptGallery),
   subscription: one(subscriptions, {
     fields: [restaurants.id],
     references: [subscriptions.restaurantId],
@@ -174,10 +176,65 @@ export const menuViewsRelations = relations(menuViews, ({ one }) => ({
   }),
 }));
 
+export const visualAssets = pgTable("visual_assets", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  restaurantId: uuid("restaurant_id")
+    .notNull()
+    .references(() => restaurants.id, { onDelete: "cascade" }),
+  originalFileName: varchar("original_file_name", { length: 255 }),
+  prompt: text("prompt"),
+  imageDataUrl: text("image_data_url").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export const visualAssetsRelations = relations(visualAssets, ({ one }) => ({
+  restaurant: one(restaurants, {
+    fields: [visualAssets.restaurantId],
+    references: [restaurants.id],
+  }),
+}));
+
+export const visualPromptGallery = pgTable("visual_prompt_gallery", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  restaurantId: uuid("restaurant_id")
+    .notNull()
+    .references(() => restaurants.id, { onDelete: "cascade" }),
+  title: varchar("title", { length: 120 }).notNull(),
+  prompt: text("prompt").notNull(),
+  previewImageDataUrl: text("preview_image_data_url"),
+  sourceAssetId: uuid("source_asset_id").references(() => visualAssets.id, {
+    onDelete: "set null",
+  }),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export const visualPromptGalleryRelations = relations(visualPromptGallery, ({ one }) => ({
+  restaurant: one(restaurants, {
+    fields: [visualPromptGallery.restaurantId],
+    references: [restaurants.id],
+  }),
+  sourceAsset: one(visualAssets, {
+    fields: [visualPromptGallery.sourceAssetId],
+    references: [visualAssets.id],
+  }),
+}));
+
 export type Restaurant = typeof restaurants.$inferSelect;
 export type Menu = typeof menus.$inferSelect;
 export type Category = typeof categories.$inferSelect;
 export type Item = typeof items.$inferSelect;
 export type Subscription = typeof subscriptions.$inferSelect;
 export type MenuView = typeof menuViews.$inferSelect;
+export type VisualAsset = typeof visualAssets.$inferSelect;
+export type VisualPromptGalleryItem = typeof visualPromptGallery.$inferSelect;
 
